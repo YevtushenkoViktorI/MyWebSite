@@ -1,0 +1,1485 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Manrope", system-ui, sans-serif;
+  color: var(--colorTextMain);
+  background:
+    radial-gradient(1400px 900px at 10% -10%, color-mix(in srgb, var(--colorPrimary) 16%, transparent), transparent 68%),
+    radial-gradient(1000px 760px at 78% 120%, color-mix(in srgb, var(--colorPrimary) 10%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--colorPrimary) 4%, transparent) 0%, transparent 20%),
+    var(--colorBackground);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.myPageRoot {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.myPageRoot::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(1200px 700px at 50% 45%, color-mix(in srgb, var(--colorPrimary) 10%, transparent), transparent 72%),
+    color-mix(in srgb, var(--colorSurface) 16%, transparent);
+  transition: opacity 280ms ease;
+}
+
+.myPageRoot.myUiTransitionLanguage .myHeader,
+.myPageRoot.myUiTransitionLanguage .myMainGrid {
+  transition: opacity 320ms ease, transform 460ms cubic-bezier(0.22, 1, 0.36, 1), filter 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
+}
+
+.myPageRoot.myUiTransitionLanguage.myUiTransitionExiting .myHeader,
+.myPageRoot.myUiTransitionLanguage.myUiTransitionExiting .myMainGrid {
+  opacity: 0.5;
+  transform: translateY(4px) scale(0.998);
+  filter: blur(2px);
+}
+
+.myPageRoot.myUiTransitionLanguage.myUiTransitionEntering .myHeader,
+.myPageRoot.myUiTransitionLanguage.myUiTransitionEntering .myMainGrid {
+  animation: myUiLanguageEnter 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.myPageRoot.myUiTransitionTheme,
+.myPageRoot.myUiTransitionTheme * {
+  transition:
+    color 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    fill 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.myPageRoot.myUiTransitionTheme.myUiTransitionExiting::before {
+  opacity: 0.26;
+}
+
+.myPageRoot.myUiTransitionTheme.myUiTransitionEntering::before {
+  opacity: 0;
+  transition-duration: 760ms;
+}
+
+.myPageRoot.myUiTransitionTheme.myUiTransitionExiting .myHeader,
+.myPageRoot.myUiTransitionTheme.myUiTransitionExiting .myMainGrid {
+  opacity: 0.7;
+}
+
+.myPageRoot.myUiTransitionTheme.myUiTransitionEntering .myHeader,
+.myPageRoot.myUiTransitionTheme.myUiTransitionEntering .myMainGrid {
+  animation: myUiThemeEnter 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.myContainer {
+  width: min(1432px, calc(100% - 1.2rem));
+  margin: 0 auto;
+}
+
+.myHeader {
+  position: sticky;
+  top: 0.35rem;
+  z-index: 40;
+  margin-bottom: 0.95rem;
+}
+
+.myHeaderRow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.82rem 1.45rem;
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 88%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--colorSurface) 84%, transparent);
+  backdrop-filter: blur(12px);
+  animation: myHeaderBorderBreath 6200ms ease-in-out infinite;
+}
+
+.myHeaderRow::before {
+  content: "";
+  position: absolute;
+  inset: -35% -14%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 36%, color-mix(in srgb, var(--colorPrimary) 16%, transparent), transparent 56%),
+    radial-gradient(circle at 84% 20%, color-mix(in srgb, #84b7ff 12%, transparent), transparent 58%);
+  opacity: 0.72;
+  animation: myHeaderAmbientDrift 18s linear infinite alternate;
+}
+
+.myLogo {
+  font-family: "Sora", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--colorPrimary);
+}
+
+.myNav {
+  display: flex;
+  gap: 1.2rem;
+  color: var(--colorTextMuted);
+  font-size: 1.02rem;
+}
+
+.myNav a {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.22rem;
+}
+
+.myNav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--colorTextMain) 92%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.92;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+}
+
+.myNav a:hover {
+  color: var(--colorTextMain);
+}
+
+.myNav a:hover::after,
+.myNav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.myHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.myIconButton {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--colorBorder);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 72%, transparent);
+  color: var(--colorTextMain);
+  cursor: pointer;
+}
+
+.myHeaderCta {
+  padding-inline: 1.3rem;
+}
+
+.myLanguageWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mySelect {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid var(--colorBorder);
+  border-radius: 12px;
+  padding: 0.35rem 2.05rem 0.35rem 0.48rem;
+  background-color: var(--colorSurface);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="%23d9e3f2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 10px 6px;
+  color: var(--colorTextMain);
+}
+
+.myMainGrid {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.mySection {
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 90%, transparent);
+  border-radius: var(--radiusMain);
+  background: color-mix(in srgb, var(--colorSurface) 90%, transparent);
+  box-shadow: 0 24px 45px var(--colorShadow);
+  padding: 1.6rem;
+}
+
+.myHeroSectionWrap {
+  display: grid;
+  grid-template-columns: 1.55fr 0.95fr;
+  gap: 1.7rem;
+  min-height: 79vh;
+  align-items: center;
+}
+
+.myHeroName,
+.myHeroGradientTitle,
+.mySectionTitle,
+.myProjectTitle,
+.myCtaTitle {
+  font-family: "Sora", sans-serif;
+  margin: 0;
+}
+
+.myHeroName {
+  margin-top: 0.3rem;
+  font-size: clamp(2.5rem, 5.7vw, 5.2rem);
+  line-height: 1;
+}
+
+.myHeroGradientTitle {
+  font-size: clamp(2.2rem, 5.4vw, 5rem);
+  line-height: 1.02;
+  background: linear-gradient(135deg, var(--colorHeroGradientA), var(--colorHeroGradientB));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.myHeroText,
+.mySectionText,
+.myProjectText,
+.mySmallLabel {
+  color: var(--colorTextMuted);
+  line-height: 1.45;
+}
+
+.mySectionTitle {
+  font-size: clamp(2.1rem, 3.3vw, 4rem);
+}
+
+.mySectionTitleWrap {
+  margin-bottom: 1rem;
+}
+
+.myHeroVisual {
+  position: relative;
+}
+
+.myHeroPhoto {
+  width: 100%;
+  min-height: 560px;
+  border-radius: 28px;
+  background-image: linear-gradient(170deg, color-mix(in srgb, var(--colorPrimary) 20%, transparent), transparent 48%), url("/myHeroPortrait.jpg");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--colorBorder);
+  transform: scale(1) translateY(0);
+  transform-origin: center;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.myHeroPhoto:hover {
+  transform: scale(1.02) translateY(-4px);
+  filter: brightness(1.02) saturate(1.05);
+  animation: myHeroPhotoHoverPulse 1700ms ease-in-out infinite;
+}
+
+[data-theme="dark"] .myHeroPhoto:hover {
+  animation: myHeroPhotoHoverPulseDark 1800ms ease-in-out infinite;
+}
+
+@keyframes myHeroPhotoHoverPulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 36%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 16%, transparent),
+      0 16px 30px color-mix(in srgb, var(--colorPrimary) 16%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 62%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 30%, transparent),
+      0 22px 40px color-mix(in srgb, var(--colorPrimary) 24%, transparent);
+  }
+}
+
+@keyframes myHeroPhotoHoverPulseDark {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 28%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 11%, transparent),
+      0 14px 26px color-mix(in srgb, var(--colorPrimary) 12%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 46%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 20%, transparent),
+      0 18px 34px color-mix(in srgb, var(--colorPrimary) 18%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myPageRoot::before {
+    animation: none;
+    transition: none;
+    opacity: 0;
+  }
+
+  .myPageRoot.myUiTransitionLanguage .myHeader,
+  .myPageRoot.myUiTransitionLanguage .myMainGrid,
+  .myPageRoot.myUiTransitionTheme .myHeader,
+  .myPageRoot.myUiTransitionTheme .myMainGrid {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .myHeaderRow,
+  .myHeaderRow::before {
+    animation: none;
+    transition: none;
+  }
+
+  .myHeroPhoto {
+    transition: none;
+  }
+
+  .myHeroPhoto:hover {
+    transform: none;
+    filter: none;
+    border-color: var(--colorBorder);
+    box-shadow: none;
+    animation: none;
+  }
+
+  .myJourneyButton,
+  .myJourneyButton::before,
+  .myJourneyButton::after {
+    transition: none;
+    animation: none;
+  }
+
+  .myJourneyButtonActive {
+    animation: none;
+  }
+
+  .myJourneyCard,
+  .myJourneyCard::before,
+  .myJourneyCard::after,
+  .myJourneyContent,
+  .myJourneyPreview,
+  .myJourneyPreview::before,
+  .myJourneyPreview::after {
+    animation: none;
+    transition: none;
+  }
+
+  .myJourneyContentExiting,
+  .myJourneyContentEntering {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes myUiLanguageEnter {
+  from {
+    opacity: 0.22;
+    transform: translateY(8px) scale(0.996);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes myUiThemeEnter {
+  from {
+    opacity: 0.84;
+    transform: scale(0.999);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes myHeaderBorderBreath {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 22%, var(--colorBorder));
+    box-shadow: 0 7px 16px color-mix(in srgb, var(--colorPrimary) 5%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 34%, var(--colorBorder));
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+  }
+}
+
+@keyframes myHeaderAmbientDrift {
+  0% {
+    transform: translate3d(-2.2%, -1.2%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(2.2%, 1.2%, 0) scale(1.04);
+  }
+}
+
+.myStatusCard {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  background: color-mix(in srgb, var(--colorSurface) 90%, transparent);
+  border: 1px solid var(--colorBorder);
+  border-radius: 14px;
+  padding: 0.7rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.myStatusDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--colorPrimary);
+}
+
+.myChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.myChip {
+  border: 1px solid var(--colorBorder);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 1rem;
+  color: var(--colorTextMuted);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 55%, transparent);
+}
+
+.myButtonRow,
+.mySocialRow {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-top: 1.1rem;
+}
+
+.myPrimaryButton,
+.mySecondaryButton,
+.myGhostButton {
+  border-radius: 14px;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid var(--colorBorder);
+  font-weight: 700;
+}
+
+.myPrimaryButton {
+  background: var(--colorPrimary);
+  border-color: var(--colorPrimary);
+  color: #071825;
+}
+
+.myPrimaryButton:hover {
+  background: var(--colorPrimaryStrong);
+  border-color: var(--colorPrimaryStrong);
+}
+
+.mySecondaryButton,
+.myGhostButton,
+.myLinkButton {
+  background: transparent;
+  color: var(--colorTextMain);
+}
+
+.mySecondaryButton:hover,
+.myGhostButton:hover,
+.myLinkButton:hover {
+  border-color: var(--colorPrimary);
+  color: var(--colorPrimary);
+}
+
+.myLinkButton {
+  border: none;
+  padding: 0.85rem 0.5rem;
+}
+
+.myJourneyLayout {
+  display: grid;
+  grid-template-columns: 370px 1fr;
+  gap: 1rem;
+}
+
+.myJourneyList {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.myJourneyButton {
+  position: relative;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 68%, transparent);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 22%, transparent);
+  color: var(--colorTextMuted);
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  font-size: 1.04rem;
+  cursor: pointer;
+  transition: color 220ms ease, background-color 220ms ease, box-shadow 260ms ease, border-color 220ms ease;
+}
+
+.myJourneyButton:hover {
+  color: var(--colorTextMain);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 46%, transparent);
+  border-color: color-mix(in srgb, var(--colorPrimary) 46%, var(--colorBorder));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--colorPrimary) 20%, transparent),
+    0 8px 18px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+}
+
+.myJourneyButton:hover:not(.myJourneyButtonActive),
+.myJourneyButton:focus-visible:not(.myJourneyButtonActive) {
+  animation: myJourneyHoverBorderPulse 1300ms ease-in-out infinite;
+}
+
+.myJourneyButton:focus-visible {
+  outline: none;
+  color: var(--colorTextMain);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 50%, transparent);
+  border-color: color-mix(in srgb, var(--colorPrimary) 52%, var(--colorBorder));
+}
+
+.myJourneyButtonActive {
+  border-color: color-mix(in srgb, var(--colorPrimary) 46%, var(--colorBorder));
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 52%, transparent);
+  color: var(--colorTextMain);
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--colorPrimary) 7%, transparent);
+  animation: myJourneyActiveBorderPulse 2600ms ease-in-out infinite;
+}
+
+.myJourneyButtonActive:hover,
+.myJourneyButtonActive:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 62%, var(--colorBorder));
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 52%, transparent);
+  color: var(--colorTextMain);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--colorPrimary) 34%, transparent),
+    0 10px 20px color-mix(in srgb, var(--colorPrimary) 14%, transparent);
+  animation: myJourneyActiveHoverBorderPulse 1200ms ease-in-out infinite;
+}
+
+[data-theme="dark"] .myJourneyButtonActive {
+  animation: myJourneyActiveBorderPulseDark 3000ms ease-in-out infinite;
+}
+
+@keyframes myJourneyActiveBorderPulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 42%, var(--colorBorder));
+    box-shadow: 0 8px 16px color-mix(in srgb, var(--colorPrimary) 6%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 52%, var(--colorBorder));
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+  }
+}
+
+@keyframes myJourneyHoverBorderPulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 30%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 12%, transparent),
+      0 6px 14px color-mix(in srgb, var(--colorPrimary) 6%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 70%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 34%, transparent),
+      0 9px 19px color-mix(in srgb, var(--colorPrimary) 14%, transparent);
+  }
+}
+
+[data-theme="dark"] .myJourneyButton:hover:not(.myJourneyButtonActive),
+[data-theme="dark"] .myJourneyButton:focus-visible:not(.myJourneyButtonActive) {
+  animation: myJourneyHoverBorderPulseDark 1400ms ease-in-out infinite;
+}
+
+@keyframes myJourneyHoverBorderPulseDark {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 26%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 9%, transparent),
+      0 5px 10px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 56%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 24%, transparent),
+      0 7px 14px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+  }
+}
+
+@keyframes myJourneyActiveHoverBorderPulse {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 50%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 22%, transparent),
+      0 8px 16px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 82%, var(--colorBorder));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--colorPrimary) 44%, transparent),
+      0 11px 22px color-mix(in srgb, var(--colorPrimary) 18%, transparent);
+  }
+}
+
+@keyframes myJourneyActiveBorderPulseDark {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 34%, var(--colorBorder));
+    box-shadow: 0 6px 12px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 42%, var(--colorBorder));
+    box-shadow: 0 8px 16px color-mix(in srgb, var(--colorPrimary) 6%, transparent);
+  }
+}
+
+.myJourneyCard,
+.myProjectCard,
+.myTimelineItem {
+  border: 1px solid var(--colorBorder);
+  border-radius: 16px;
+  padding: 1.2rem;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 70%, transparent);
+}
+
+.myJourneyCard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --myJourneyPreviewBreathDuration: 36s;
+  --myJourneyMatterDriftDurationA: 52s;
+  --myJourneyMatterDriftDurationB: 68s;
+  --myJourneyPreviewLiftStart: 1;
+  --myJourneyPreviewLiftPeak: 1.006;
+  --myJourneyBlobAOpacity: 10%;
+  --myJourneyBlobBOpacity: 9%;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+}
+
+.myJourneyCard::before {
+  content: "";
+  position: absolute;
+  inset: -35% -18%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 24%, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 60%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #8ab9ff 12%, transparent), transparent 56%);
+  opacity: 0.3;
+  animation: myJourneyCardMatterDrift var(--myJourneyMatterDriftDurationA) linear infinite alternate;
+}
+
+.myJourneyContent {
+  position: relative;
+  z-index: 1;
+  transition: opacity 240ms cubic-bezier(0.4, 0, 0.2, 1), transform 320ms cubic-bezier(0.2, 0.65, 0.2, 1), filter 320ms cubic-bezier(0.2, 0.65, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+.myJourneyContentExiting {
+  opacity: 0;
+  transform: translateY(6px) scale(0.996);
+  filter: blur(3px);
+}
+
+.myJourneyContentEntering {
+  animation: myJourneyContentAppleIn 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.myCardIcon {
+  display: inline-block;
+  margin-right: 0.55rem;
+  color: var(--colorPrimary);
+}
+
+.myJourneyPreview {
+  margin-top: 1rem;
+  min-height: 190px;
+  border-radius: 14px;
+  border: 1px solid var(--colorBorder);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--colorPrimary) 12%, transparent), transparent 58%),
+    radial-gradient(circle at 72% 32%, color-mix(in srgb, #4d82d2 22%, transparent), transparent 44%),
+    var(--colorSurface);
+  background-size: 170% 170%, 150% 150%, 100% 100%;
+  will-change: transform, background-position;
+  animation: myJourneyPreviewBreath var(--myJourneyPreviewBreathDuration) linear infinite alternate;
+}
+
+.myJourneyPreview::before {
+  content: "";
+  position: absolute;
+  inset: -30% -26%;
+  pointer-events: none;
+  background: radial-gradient(circle at 24% 42%, color-mix(in srgb, #7fd9d2 var(--myJourneyBlobAOpacity), transparent), transparent 58%);
+  filter: blur(8px);
+  opacity: 0.72;
+  will-change: transform;
+  animation: myJourneyPreviewMatterDriftA var(--myJourneyMatterDriftDurationA) linear infinite alternate;
+}
+
+.myJourneyPreview::after {
+  content: "";
+  position: absolute;
+  inset: -32% -22%;
+  pointer-events: none;
+  background: radial-gradient(circle at 78% 24%, color-mix(in srgb, #9fc5ff var(--myJourneyBlobBOpacity), transparent), transparent 54%);
+  opacity: 0.68;
+  will-change: transform;
+  animation: myJourneyPreviewMatterDriftB var(--myJourneyMatterDriftDurationB) linear infinite alternate;
+}
+
+@keyframes myJourneyCardMatterDrift {
+  0% {
+    transform: translate3d(-1.2%, -0.9%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.2%, 0.9%, 0) scale(1.015);
+  }
+}
+
+@keyframes myJourneyContentAppleIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.992);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes myJourneyPreviewBreath {
+  0% {
+    background-position: 8% 49%, 80% 30%, 0 0;
+    transform: scale(var(--myJourneyPreviewLiftStart));
+  }
+  100% {
+    background-position: 22% 54%, 66% 36%, 0 0;
+    transform: scale(var(--myJourneyPreviewLiftPeak));
+  }
+}
+
+@keyframes myJourneyPreviewMatterDriftA {
+  0% {
+    transform: translate3d(-1.6%, -0.8%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.6%, 1.2%, 0) scale(1.02);
+  }
+}
+
+@keyframes myJourneyPreviewMatterDriftB {
+  0% {
+    transform: translate3d(1.4%, -1%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-1.7%, 1.3%, 0) scale(1.02);
+  }
+}
+
+.myJourneyPreset-subtle .myJourneyCard {
+  --myJourneyPreviewBreathDuration: 46s;
+  --myJourneyMatterDriftDurationA: 64s;
+  --myJourneyMatterDriftDurationB: 82s;
+  --myJourneyPreviewLiftStart: 1;
+  --myJourneyPreviewLiftPeak: 1.004;
+  --myJourneyBlobAOpacity: 8%;
+  --myJourneyBlobBOpacity: 7%;
+}
+
+.myJourneyPreset-balanced .myJourneyCard {
+  --myJourneyPreviewBreathDuration: 36s;
+  --myJourneyMatterDriftDurationA: 52s;
+  --myJourneyMatterDriftDurationB: 68s;
+  --myJourneyPreviewLiftStart: 1;
+  --myJourneyPreviewLiftPeak: 1.006;
+  --myJourneyBlobAOpacity: 10%;
+  --myJourneyBlobBOpacity: 9%;
+}
+
+.myJourneyPreset-showcase .myJourneyCard {
+  --myJourneyPreviewBreathDuration: 28s;
+  --myJourneyMatterDriftDurationA: 40s;
+  --myJourneyMatterDriftDurationB: 52s;
+  --myJourneyPreviewLiftStart: 1.001;
+  --myJourneyPreviewLiftPeak: 1.01;
+  --myJourneyBlobAOpacity: 14%;
+  --myJourneyBlobBOpacity: 12%;
+}
+
+[data-theme="dark"] .myJourneyPreset-subtle .myJourneyCard {
+  --myJourneyBlobAOpacity: 6%;
+  --myJourneyBlobBOpacity: 5%;
+}
+
+[data-theme="dark"] .myJourneyPreset-balanced .myJourneyCard {
+  --myJourneyBlobAOpacity: 8%;
+  --myJourneyBlobBOpacity: 7%;
+}
+
+[data-theme="dark"] .myJourneyPreset-showcase .myJourneyCard {
+  --myJourneyBlobAOpacity: 11%;
+  --myJourneyBlobBOpacity: 9%;
+}
+
+/* Variant #2: Breathing border with static content/background */
+.myJourneyVariantBorderOnly .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 28%, var(--colorBorder));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 6%, transparent);
+  animation: myJourneyBorderOnlyBreath 4200ms ease-in-out infinite;
+}
+
+.myJourneyVariantBorderOnly .myJourneyCard::before,
+.myJourneyVariantBorderOnly .myJourneyPreview::before,
+.myJourneyVariantBorderOnly .myJourneyPreview::after {
+  animation: none;
+  content: none;
+}
+
+.myJourneyVariantBorderOnly .myJourneyPreview {
+  animation: none;
+  transform: none;
+  background:
+    linear-gradient(130deg, color-mix(in srgb, var(--colorPrimary) 12%, transparent), transparent 58%),
+    radial-gradient(circle at 72% 32%, color-mix(in srgb, #4d82d2 22%, transparent), transparent 44%),
+    var(--colorSurface);
+}
+
+.myJourneyVariantBorderOnly .myJourneyContent,
+.myJourneyVariantBorderOnly .myJourneyContentExiting,
+.myJourneyVariantBorderOnly .myJourneyContentEntering {
+  animation: none;
+  transition: none;
+  transform: none;
+  filter: none;
+  opacity: 1;
+}
+
+[data-theme="dark"] .myJourneyVariantBorderOnly .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 22%, var(--colorBorder));
+  animation: myJourneyBorderOnlyBreathDark 4800ms ease-in-out infinite;
+}
+
+@keyframes myJourneyBorderOnlyBreath {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 24%, var(--colorBorder));
+    box-shadow: 0 7px 16px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 40%, var(--colorBorder));
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--colorPrimary) 9%, transparent);
+  }
+}
+
+@keyframes myJourneyBorderOnlyBreathDark {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 18%, var(--colorBorder));
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--colorPrimary) 3%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--colorPrimary) 30%, var(--colorBorder));
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 6%, transparent);
+  }
+}
+
+/* Variant #3: Aurora Band Sweep */
+.myJourneyVariantAurora .myJourneyCard {
+  animation: none;
+  border-color: color-mix(in srgb, var(--colorPrimary) 24%, var(--colorBorder));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+}
+
+.myJourneyVariantAurora .myJourneyCard::before,
+.myJourneyVariantAurora .myJourneyPreview::after {
+  animation: none;
+  content: none;
+}
+
+.myJourneyVariantAurora .myJourneyPreview {
+  animation: none;
+  transform: none;
+  background:
+    linear-gradient(130deg, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 58%),
+    radial-gradient(circle at 72% 32%, color-mix(in srgb, #4d82d2 26%, transparent), transparent 44%),
+    var(--colorSurface);
+}
+
+.myJourneyVariantAurora .myJourneyPreview::before {
+  content: "";
+  position: absolute;
+  inset: -12% -44%;
+  pointer-events: none;
+  background: linear-gradient(
+    106deg,
+    transparent 0%,
+    transparent 34%,
+    color-mix(in srgb, #87d8ff 22%, transparent) 50%,
+    transparent 66%,
+    transparent 100%
+  );
+  filter: blur(8px);
+  transform: translateX(-56%);
+  opacity: 0;
+  animation: myJourneyAuroraSweep 6800ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+[data-theme="dark"] .myJourneyVariantAurora .myJourneyPreview::before {
+  background: linear-gradient(
+    106deg,
+    transparent 0%,
+    transparent 34%,
+    color-mix(in srgb, #8ccfff 16%, transparent) 50%,
+    transparent 66%,
+    transparent 100%
+  );
+  animation-duration: 7600ms;
+}
+
+@keyframes myJourneyAuroraSweep {
+  0% {
+    transform: translateX(-56%);
+    opacity: 0;
+  }
+  16% {
+    opacity: 0.56;
+  }
+  84% {
+    opacity: 0.56;
+  }
+  100% {
+    transform: translateX(56%);
+    opacity: 0;
+  }
+}
+
+/* Variant #4: Depth Parallax (cursor driven) */
+.myJourneyVariantParallax .myJourneyCard {
+  animation: none;
+  border-color: color-mix(in srgb, var(--colorPrimary) 24%, var(--colorBorder));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+}
+
+.myJourneyVariantParallax .myJourneyCard::before,
+.myJourneyVariantParallax .myJourneyPreview::after {
+  animation: none;
+  content: none;
+}
+
+.myJourneyVariantParallax .myJourneyPreview {
+  animation: none;
+  background:
+    linear-gradient(132deg, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 58%),
+    radial-gradient(circle at 72% 32%, color-mix(in srgb, #4d82d2 24%, transparent), transparent 44%),
+    var(--colorSurface);
+  transform:
+    perspective(900px)
+    rotateX(var(--myPreviewTiltX, 0deg))
+    rotateY(var(--myPreviewTiltY, 0deg))
+    scale(1.008);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 12px 22px color-mix(in srgb, var(--colorPrimary) 7%, transparent);
+  will-change: transform, box-shadow;
+}
+
+.myJourneyVariantParallax .myJourneyPreview::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--myPreviewGlowX, 50%) var(--myPreviewGlowY, 42%),
+    color-mix(in srgb, #a9dcff 22%, transparent) 0%,
+    color-mix(in srgb, #7fdad4 14%, transparent) 24%,
+    transparent 58%
+  );
+  opacity: 0.82;
+  transition: opacity 260ms ease;
+}
+
+[data-theme="dark"] .myJourneyVariantParallax .myJourneyPreview {
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--colorPrimary) 5%, transparent);
+}
+
+[data-theme="dark"] .myJourneyVariantParallax .myJourneyPreview::before {
+  background: radial-gradient(
+    circle at var(--myPreviewGlowX, 50%) var(--myPreviewGlowY, 42%),
+    color-mix(in srgb, #9ccfff 16%, transparent) 0%,
+    color-mix(in srgb, #7fdad4 10%, transparent) 24%,
+    transparent 56%
+  );
+  opacity: 0.74;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myJourneyVariantParallax .myJourneyPreview {
+    transform: none;
+  }
+
+  .myJourneyVariantContentReveal .myJourneyContent > * {
+    animation: none;
+  }
+}
+
+/* Variant #5: Content Reveal on Selection */
+.myJourneyVariantContentReveal .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 22%, var(--colorBorder));
+}
+
+.myJourneyVariantContentReveal .myJourneyContent {
+  transition: opacity 180ms ease, transform 220ms ease, filter 220ms ease;
+}
+
+.myJourneyVariantContentReveal .myJourneyContentExiting {
+  opacity: 0;
+  transform: translateY(4px);
+  filter: blur(2px);
+}
+
+.myJourneyVariantContentReveal .myJourneyContentEntering {
+  animation: none;
+}
+
+.myJourneyVariantContentReveal .myJourneyContentEntering > * {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(4px);
+  animation: myJourneyContentItemIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.myJourneyVariantContentReveal .myJourneyContentEntering > :nth-child(2) {
+  animation-delay: 45ms;
+}
+
+.myJourneyVariantContentReveal .myJourneyContentEntering > :nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.myJourneyVariantContentReveal .myJourneyContentEntering > :nth-child(4) {
+  animation-delay: 135ms;
+}
+
+@keyframes myJourneyContentItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Variant #6: Mesh Gradient Live Poster */
+.myJourneyVariantMesh .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 24%, var(--colorBorder));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--colorPrimary) 5%, transparent);
+}
+
+.myJourneyVariantMesh .myJourneyCard::before {
+  animation: none;
+  opacity: 0.22;
+}
+
+.myJourneyVariantMesh .myJourneyPreview {
+  border-color: color-mix(in srgb, var(--colorPrimary) 20%, var(--colorBorder));
+  background:
+    radial-gradient(circle at 14% 20%, color-mix(in srgb, #6bd2c8 18%, transparent), transparent 58%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #7ea8ff 22%, transparent), transparent 54%),
+    radial-gradient(circle at 56% 82%, color-mix(in srgb, var(--colorPrimary) 16%, transparent), transparent 60%),
+    linear-gradient(138deg, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 62%),
+    var(--colorSurface);
+  background-size: 190% 190%, 170% 170%, 180% 180%, 140% 140%, 100% 100%;
+  background-position: 8% 18%, 86% 12%, 52% 84%, 12% 42%, 0 0;
+  animation: myJourneyMeshFlow 42s linear infinite alternate;
+}
+
+.myJourneyVariantMesh .myJourneyPreview::before {
+  content: "";
+  position: absolute;
+  inset: -26% -22%;
+  pointer-events: none;
+  background: radial-gradient(circle at 24% 40%, color-mix(in srgb, #8ad8ff 14%, transparent), transparent 60%);
+  filter: blur(10px);
+  opacity: 0.72;
+  animation: myJourneyMeshBlobA 52s linear infinite alternate;
+}
+
+.myJourneyVariantMesh .myJourneyPreview::after {
+  content: "";
+  position: absolute;
+  inset: -30% -24%;
+  pointer-events: none;
+  background: radial-gradient(circle at 78% 28%, color-mix(in srgb, #72d0c7 13%, transparent), transparent 58%);
+  filter: blur(12px);
+  opacity: 0.68;
+  animation: myJourneyMeshBlobB 64s linear infinite alternate;
+}
+
+[data-theme="dark"] .myJourneyVariantMesh .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 20%, var(--colorBorder));
+  box-shadow: 0 7px 15px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+}
+
+[data-theme="dark"] .myJourneyVariantMesh .myJourneyPreview {
+  background:
+    radial-gradient(circle at 14% 20%, color-mix(in srgb, #6bd2c8 12%, transparent), transparent 58%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #7ea8ff 16%, transparent), transparent 54%),
+    radial-gradient(circle at 56% 82%, color-mix(in srgb, var(--colorPrimary) 11%, transparent), transparent 60%),
+    linear-gradient(138deg, color-mix(in srgb, var(--colorPrimary) 10%, transparent), transparent 62%),
+    var(--colorSurface);
+}
+
+[data-theme="dark"] .myJourneyVariantMesh .myJourneyPreview::before {
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .myJourneyVariantMesh .myJourneyPreview::after {
+  opacity: 0.54;
+}
+
+@keyframes myJourneyMeshFlow {
+  0% {
+    background-position: 8% 18%, 86% 12%, 52% 84%, 12% 42%, 0 0;
+    transform: scale(1.004);
+  }
+  100% {
+    background-position: 26% 36%, 70% 26%, 42% 68%, 30% 56%, 0 0;
+    transform: scale(1.012);
+  }
+}
+
+@keyframes myJourneyMeshBlobA {
+  0% {
+    transform: translate3d(-1.6%, -1%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.8%, 1.4%, 0) scale(1.03);
+  }
+}
+
+@keyframes myJourneyMeshBlobB {
+  0% {
+    transform: translate3d(1.4%, -1.2%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-1.8%, 1.6%, 0) scale(1.03);
+  }
+}
+
+/* Finalized preset: Apple strong casual */
+.myJourneyVariantAppleStrongCasual .myJourneyCard {
+  --myPreviewMouseX: 50%;
+  --myPreviewMouseY: 58%;
+  border-color: color-mix(in srgb, var(--colorPrimary) 22%, var(--colorBorder));
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--colorPrimary) 4%, transparent);
+}
+
+.myJourneyVariantAppleStrongCasual .myJourneyCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    42% 36% at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #9ad6ff 8%, transparent) 0%,
+    color-mix(in srgb, #7fdad4 5%, transparent) 28%,
+    transparent 70%
+  );
+  opacity: 0.42;
+  animation: myJourneyCardAuraIdle 22s ease-in-out infinite alternate;
+}
+
+.myJourneyVariantAppleStrongCasual .myJourneyPreview {
+  animation: myJourneyMeshFlowCasual 34s linear infinite alternate;
+  border-color: color-mix(in srgb, var(--colorPrimary) 28%, var(--colorBorder));
+  background:
+    radial-gradient(circle at 14% 20%, color-mix(in srgb, #6bd2c8 16%, transparent), transparent 58%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #7ea8ff 18%, transparent), transparent 54%),
+    radial-gradient(circle at 56% 82%, color-mix(in srgb, var(--colorPrimary) 12%, transparent), transparent 60%),
+    linear-gradient(138deg, color-mix(in srgb, var(--colorPrimary) 10%, transparent), transparent 62%),
+    radial-gradient(130% 52% at 50% 122%, color-mix(in srgb, #69d8ce 20%, transparent), transparent 72%),
+    var(--colorSurface);
+  background-size: 190% 190%, 170% 170%, 180% 180%, 140% 140%, 170% 115%, 100% 100%;
+  background-position: 8% 18%, 86% 12%, 52% 84%, 12% 42%, 48% 104%, 0 0;
+}
+
+.myJourneyVariantAppleStrongCasual .myJourneyPreview::before {
+  animation: myJourneyMeshBlobA 48s linear infinite alternate;
+  opacity: 0.68;
+}
+
+.myJourneyVariantAppleStrongCasual .myJourneyPreview::after {
+  inset: -24% -20%;
+  filter: blur(12px);
+  background: radial-gradient(
+    circle at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #97d8ff 24%, transparent) 0%,
+    color-mix(in srgb, #7fdad4 16%, transparent) 23%,
+    transparent 58%
+  );
+  animation: myJourneyPreviewMouseAuraIdle 18s ease-in-out infinite alternate;
+  opacity: 0.62;
+  transition: opacity 280ms ease;
+}
+
+[data-theme="light"] .myJourneyVariantAppleStrongCasual .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 34%, var(--colorBorder));
+  box-shadow: 0 9px 18px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+}
+
+[data-theme="light"] .myJourneyVariantAppleStrongCasual .myJourneyCard::after {
+  background: radial-gradient(
+    44% 38% at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #5ba8ff 18%, transparent) 0%,
+    color-mix(in srgb, #4fd3c8 12%, transparent) 30%,
+    transparent 72%
+  );
+  opacity: 0.58;
+}
+
+[data-theme="light"] .myJourneyVariantAppleStrongCasual .myJourneyPreview::after {
+  background: radial-gradient(
+    circle at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #5caeff 28%, transparent) 0%,
+    color-mix(in srgb, #52d4ca 18%, transparent) 24%,
+    transparent 60%
+  );
+  opacity: 0.74;
+}
+
+[data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyCard {
+  border-color: color-mix(in srgb, var(--colorPrimary) 18%, var(--colorBorder));
+  box-shadow: 0 7px 14px color-mix(in srgb, var(--colorPrimary) 3%, transparent);
+}
+
+[data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyCard::after {
+  background: radial-gradient(
+    42% 36% at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #93cbff 6%, transparent) 0%,
+    color-mix(in srgb, #79d5cf 4%, transparent) 28%,
+    transparent 70%
+  );
+  opacity: 0.34;
+}
+
+[data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyPreview {
+  background:
+    radial-gradient(circle at 14% 20%, color-mix(in srgb, #6bd2c8 11%, transparent), transparent 58%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #7ea8ff 13%, transparent), transparent 54%),
+    radial-gradient(circle at 56% 82%, color-mix(in srgb, var(--colorPrimary) 9%, transparent), transparent 60%),
+    linear-gradient(138deg, color-mix(in srgb, var(--colorPrimary) 8%, transparent), transparent 62%),
+    radial-gradient(130% 52% at 50% 122%, color-mix(in srgb, #69d8ce 14%, transparent), transparent 74%),
+    var(--colorSurface);
+}
+
+[data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyPreview::before {
+  opacity: 0.56;
+}
+
+[data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyPreview::after {
+  background: radial-gradient(
+    circle at var(--myPreviewMouseX) var(--myPreviewMouseY),
+    color-mix(in srgb, #93cbff 16%, transparent) 0%,
+    color-mix(in srgb, #79d5cf 11%, transparent) 23%,
+    transparent 58%
+  );
+  opacity: 0.46;
+}
+
+@keyframes myJourneyCardAuraIdle {
+  0% {
+    transform: translate3d(-1.2%, -0.8%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.2%, 0.9%, 0) scale(1.02);
+  }
+}
+
+@keyframes myJourneyPreviewMouseAuraIdle {
+  0% {
+    transform: translate3d(-1%, 0.6%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.1%, -0.7%, 0) scale(1.025);
+  }
+}
+
+@keyframes myJourneyMeshFlowCasual {
+  0% {
+    background-position: 8% 18%, 86% 12%, 52% 84%, 12% 42%, 43% 104%, 0 0;
+    transform: scale(1.003);
+  }
+  100% {
+    background-position: 28% 36%, 66% 28%, 42% 68%, 32% 56%, 58% 100%, 0 0;
+    transform: scale(1.014);
+  }
+}
+
+.myProjectGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.myProjectGridWide {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.myExpertiseGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.myPointList {
+  margin: 0.8rem 0 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--colorTextMuted);
+}
+
+.myPointList li::marker {
+  color: var(--colorPrimary);
+}
+
+.myTimelineCol {
+  display: grid;
+  gap: 1rem;
+  position: relative;
+}
+
+.myTimelineCol::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: color-mix(in srgb, var(--colorPrimary) 40%, var(--colorBorder));
+}
+
+.myTimelineItem {
+  position: relative;
+  margin-left: 1.25rem;
+}
+
+.myTimelineItem::before {
+  content: "";
+  position: absolute;
+  left: -1.66rem;
+  top: 1.42rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--colorPrimary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--colorPrimary) 20%, transparent);
+}
+
+.myTimelineHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.myTimelineGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.myTimelinePlace {
+  margin-top: 0.2rem;
+  color: var(--colorPrimary);
+}
+
+.myCtaSection {
+  text-align: center;
+  padding-block: 5rem;
+}
+
+.myCtaTitle {
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
+}
+
+.myCtaButtons {
+  justify-content: center;
+}
+
+@media (max-width: 1120px) {
+  .myNav,
+  .myLanguageWrap span {
+    display: none;
+  }
+
+  .myHeroSectionWrap,
+  .myJourneyLayout,
+  .myProjectGridWide,
+  .myExpertiseGrid,
+  .myTimelineGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .myHeroPhoto {
+    min-height: 420px;
+  }
+}
