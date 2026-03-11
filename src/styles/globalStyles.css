@@ -212,11 +212,11 @@ a {
   appearance: none;
   border: 1px solid var(--colorBorder);
   border-radius: 12px;
-  padding: 0.35rem 2.05rem 0.35rem 0.48rem;
+  padding: 0.35rem 1.6rem 0.35rem 0.64rem;
   background-color: var(--colorSurface);
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="%23d9e3f2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 0.8rem center;
+  background-position: right 0.64rem center;
   background-size: 10px 6px;
   color: var(--colorTextMain);
 }
@@ -238,8 +238,10 @@ a {
   display: grid;
   grid-template-columns: 1.55fr 0.95fr;
   gap: 1.7rem;
-  min-height: 79vh;
-  align-items: center;
+  min-height: 67vh;
+  padding-top: 1.36rem;
+  padding-bottom: 1.36rem;
+  align-items: start;
 }
 
 .myHeroName,
@@ -253,12 +255,12 @@ a {
 
 .myHeroName {
   margin-top: 0.3rem;
-  font-size: clamp(2.5rem, 5.7vw, 5.2rem);
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
   line-height: 1;
 }
 
 .myHeroGradientTitle {
-  font-size: clamp(2.2rem, 5.4vw, 5rem);
+  font-size: clamp(2rem, 4.8vw, 4.3rem);
   line-height: 1.02;
   background: linear-gradient(135deg, var(--colorHeroGradientA), var(--colorHeroGradientB));
   -webkit-background-clip: text;
@@ -406,6 +408,15 @@ a {
     transform: none;
     filter: none;
   }
+
+  .mySkillsModalOverlay,
+  .mySkillsModal,
+  .myJourneyDetailOverlay,
+  .myJourneyDetailModal,
+  .myJourneyDetailOverlay.myIsClosing,
+  .myJourneyDetailModal.myIsClosing {
+    animation: none;
+  }
 }
 
 @keyframes myUiLanguageEnter {
@@ -489,6 +500,133 @@ a {
   background: color-mix(in srgb, var(--colorSurfaceSoft) 55%, transparent);
 }
 
+.myChipButton {
+  cursor: pointer;
+  color: var(--colorTextMain);
+  transition: border-color 220ms ease, color 220ms ease, background-color 220ms ease;
+}
+
+.myChipButton:hover,
+.myChipButton:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 62%, var(--colorBorder));
+  color: var(--colorPrimary);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 70%, transparent);
+}
+
+.mySkillsModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, #030917 58%, transparent);
+  backdrop-filter: blur(6px);
+  animation: mySkillsOverlayIn 300ms ease-out both;
+}
+
+.mySkillsModal {
+  width: min(760px, calc(100vw - 2rem));
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 90%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--colorSurface) 96%, transparent);
+  box-shadow: 0 24px 52px color-mix(in srgb, #000 24%, transparent);
+  padding: 1rem 1rem 1.1rem;
+  transform-origin: center top;
+  animation: mySkillsModalIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mySkillsModalOverlay.myIsClosing {
+  animation: mySkillsOverlayOut 280ms ease-in both;
+}
+
+.mySkillsModal.myIsClosing {
+  animation: mySkillsModalOut 280ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.mySkillsModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.mySkillsModalClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--colorBorder);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 56%, transparent);
+  color: var(--colorTextMain);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mySkillsModalClose:hover,
+.mySkillsModalClose:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 62%, var(--colorBorder));
+  color: var(--colorPrimary);
+}
+
+@keyframes mySkillsOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes mySkillsModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes mySkillsOverlayOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes mySkillsModalOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mySkillsModalOverlay,
+  .mySkillsModal,
+  .mySkillsModalOverlay.myIsClosing,
+  .mySkillsModal.myIsClosing {
+    animation: none !important;
+  }
+}
+
 .myButtonRow,
 .mySocialRow {
   display: flex;
@@ -550,6 +688,9 @@ a {
 
 .myJourneyButton {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
   text-align: left;
   border: 1px solid color-mix(in srgb, var(--colorBorder) 68%, transparent);
   background: color-mix(in srgb, var(--colorSurfaceSoft) 22%, transparent);
@@ -561,6 +702,33 @@ a {
   transition: color 220ms ease, background-color 220ms ease, box-shadow 260ms ease, border-color 220ms ease;
 }
 
+.myJourneyButtonIcon {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--colorTextMuted) 90%, transparent);
+}
+
+.myJourneyButtonIconSvg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.myJourneyButtonIconSvgHeavy {
+  stroke-width: 2.4;
+}
+
+.myJourneyButtonLabel {
+  line-height: 1.25;
+}
+
 .myJourneyButton:hover {
   color: var(--colorTextMain);
   background: color-mix(in srgb, var(--colorSurfaceSoft) 46%, transparent);
@@ -568,6 +736,12 @@ a {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--colorPrimary) 20%, transparent),
     0 8px 18px color-mix(in srgb, var(--colorPrimary) 10%, transparent);
+}
+
+.myJourneyButton:hover .myJourneyButtonIcon,
+.myJourneyButton:focus-visible .myJourneyButtonIcon,
+.myJourneyButtonActive .myJourneyButtonIcon {
+  color: var(--colorPrimary);
 }
 
 .myJourneyButton:hover:not(.myJourneyButtonActive),
@@ -725,6 +899,125 @@ a {
   will-change: opacity, transform, filter;
 }
 
+.myJourneyCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.myJourneyDetailButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  border: 1px solid var(--colorBorder);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 50%, transparent);
+  color: var(--colorPrimary);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
+}
+
+.myJourneyDetailButton svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.myJourneyDetailButton:hover,
+.myJourneyDetailButton:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 68%, var(--colorBorder));
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 68%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 7px 16px color-mix(in srgb, var(--colorPrimary) 12%, transparent);
+}
+
+.myJourneyDetailOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  padding: 1rem;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, #040b1a 62%, transparent);
+  backdrop-filter: blur(6px);
+  animation: myJourneyDetailOverlayIn 240ms ease-out both;
+}
+
+.myJourneyDetailModal {
+  width: min(1020px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 90%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--colorSurface) 96%, transparent);
+  box-shadow: 0 26px 58px color-mix(in srgb, #000 28%, transparent);
+  padding: 1rem;
+  animation: myJourneyDetailModalIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.myJourneyDetailOverlay.myIsClosing {
+  animation: myJourneyDetailOverlayOut 220ms ease-in both;
+}
+
+.myJourneyDetailModal.myIsClosing {
+  animation: myJourneyDetailModalOut 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.myJourneyDetailHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.55rem;
+}
+
+.myJourneyDetailClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--colorBorder);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 52%, transparent);
+  color: var(--colorTextMain);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.myJourneyDetailClose:hover,
+.myJourneyDetailClose:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 65%, var(--colorBorder));
+  color: var(--colorPrimary);
+}
+
+.myJourneyDetailGallery {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.myJourneyDetailFigure {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--colorBorder);
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 35%, transparent);
+}
+
+.myJourneyDetailFigure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .myJourneyContentExiting {
   opacity: 0;
   transform: translateY(6px) scale(0.996);
@@ -799,6 +1092,42 @@ a {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
+  }
+}
+
+@keyframes myJourneyDetailOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes myJourneyDetailOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes myJourneyDetailModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.986);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes myJourneyDetailModalOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.986);
+    filter: blur(2px);
   }
 }
 
@@ -1481,5 +1810,9 @@ a {
 
   .myHeroPhoto {
     min-height: 420px;
+  }
+
+  .myJourneyDetailGallery {
+    grid-template-columns: 1fr;
   }
 }

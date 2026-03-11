@@ -15,6 +15,19 @@ export type myTimelineItem = {
   mySummary: string;
 };
 
+export type myJourneyItem = {
+  myOrder: number;
+  myTitle: string;
+  myDescription: string;
+  myPoints: string[];
+  myDetailTitle: string;
+  myDetailText: string;
+  myDetailImages: Array<{
+    mySrc: string;
+    myAlt: string;
+  }>;
+};
+
 export type myTranslation = {
   myLanguageName: string;
   myLabelLanguage: string;
@@ -29,15 +42,28 @@ export type myTranslation = {
   myHero: {
     myGreeting: string;
     myName: string;
+    myHeadlineLineOne: string;
+    myHeadlineLineTwo: string;
     myTitle: string;
     myDescription: string;
     myLocation: string;
+    myStatusLabel: string;
+    myMoreSkillsLabel: string;
+    mySkillsModalTitle: string;
+    mySkillsVisible: string[];
+    mySkillsAll: string[];
     myPrimaryButton: string;
     mySecondaryButton: string;
   };
   myAboutSection: {
     myTitle: string;
     myText: string;
+  };
+  myJourneySection: {
+    myTitle: string;
+    mySubtitle: string;
+    myOpenDetailsLabel: string;
+    myItems: myJourneyItem[];
   };
   myProjectSection: {
     myTitle: string;

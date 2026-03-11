@@ -1,125 +1,116 @@
 export const myJourneyData = [
   {
     myTitle: "Nanoelectronics Research",
-    myDescription: "Studied nano-scale semiconductor structures and quantum effects in thin-film devices at the university research lab.",
+    myDescription: "Built a strong engineering base in vacuum processes and thin-film research at NTU KhPI.",
     myPoints: [
-      "Conducted research on ZnO and TiO2 nanostructured thin films",
-      "Published scientific paper on vacuum-deposited semiconductor properties",
-      "Mastered electron microscopy and spectroscopy techniques"
+      "Worked with close-space sublimation (CSS) and deposition workflows",
+      "Analyzed materials with XRD and UV-Vis spectroscopy",
+      "Researched aluminum oxide morphology with microscopy methods"
     ]
   },
   {
     myTitle: "Vacuum Deposition Systems",
-    myDescription: "Built and tuned thin-film deposition workflows for stable and repeatable output.",
+    myDescription: "Operated and optimized lab-grade vacuum systems for repeatable material deposition.",
     myPoints: [
-      "Configured vacuum chambers for controlled deposition",
-      "Reduced process variability with calibration standards",
-      "Improved coating consistency across test batches"
+      "Configured deposition equipment and process parameters",
+      "Improved fabrication quality through iterative process tuning",
+      "Documented practical methods for stable output"
     ]
   },
   {
-    myTitle: "Semiconductor Thin Films",
-    myDescription: "Worked on material behavior analysis and precision measurements in thin-film structures.",
+    myTitle: "Telecom & Field Engineering",
+    myDescription: "Transitioned to telecom infrastructure with focus on reliability, commissioning, and safety.",
     myPoints: [
-      "Measured conductivity and film quality metrics",
-      "Documented test protocols for repeatability",
-      "Built structured reports for lab teams"
+      "Installed and commissioned wired subscriber networks",
+      "Performed cable cross-connections and fault troubleshooting",
+      "Led daily planning and coordination of a 4-person technician team"
     ]
   },
   {
-    myTitle: "Telecom Infrastructure",
-    myDescription: "Moved to systems-scale engineering with focus on reliability and uptime.",
+    myTitle: "Mobile Network Equipment",
+    myDescription: "Worked on high-altitude mobile communication installations and base station activation.",
     myPoints: [
-      "Maintained network nodes and transport links",
-      "Monitored incident patterns and preventive actions",
-      "Executed upgrades with minimal downtime"
-    ]
-  },
-  {
-    myTitle: "Electrical Installations (1000V)",
-    myDescription: "Delivered industrial power projects with strict safety compliance.",
-    myPoints: [
-      "Designed power routes and load balancing",
-      "Completed installations under safety protocols",
-      "Performed commissioning and documentation"
-    ]
-  },
-  {
-    myTitle: "Scientific Equipment",
-    myDescription: "Integrated and serviced lab-grade equipment for continuous operation.",
-    myPoints: [
-      "Performed diagnostics and preventive maintenance",
-      "Implemented service checklists",
-      "Reduced downtime through proactive replacement"
+      "Installed and activated mobile communication equipment on towers",
+      "Conducted antenna alignment and calibration for signal quality",
+      "Followed strict high-voltage and work-at-height safety protocols"
     ]
   },
   {
     myTitle: "iOS Architecture",
-    myDescription: "Applied engineering precision to scalable Apple-platform software.",
+    myDescription: "Applied engineering rigor to iOS products, system architecture, and performance.",
     myPoints: [
-      "Designed modular app architectures",
-      "Shipped high-quality product features",
-      "Focused on performance and system reliability"
+      "Built production apps with Swift, SwiftUI, UIKit, Core Data, and ARKit",
+      "Implemented modular architectures (MVC, MVVM, MVP, VIPER)",
+      "Delivered multilingual features, deep links, and scalable API layers"
+    ]
+  },
+  {
+    myTitle: "Real-time Product Delivery",
+    myDescription: "Focused on user-facing mobile features with payments, maps, and cloud-backed real-time flows.",
+    myPoints: [
+      "Implemented Apple Wallet / Apple Pay and subscription flows",
+      "Integrated Firebase services and push-based state updates",
+      "Shipped features involving Apple Maps, Google Maps, and ArcGIS"
     ]
   }
 ];
 
 export const mySelectedWorkData = [
   {
-    myTitle: "Streaming Platform App",
-    myText: "Real-time video streaming with adaptive bitrate and offline mode",
-    myTags: ["Swift", "AVFoundation", "HLS", "Core Data"],
-    myPoints: ["50K+ daily active users", "Sub-second stream start time"]
+    myTitle: "JOIN Stories iOS SDK",
+    myText: "Built and distributed an SPM SDK with a customizable Instagram-like stories module for client apps.",
+    myTags: ["Swift", "SwiftUI", "SPM", "UIKit"],
+    myPoints: ["Reusable client integration module", "UIKit and SwiftUI support"]
   },
   {
-    myTitle: "Fintech Wallet",
-    myText: "Secure payment and wallet management with biometric auth",
-    myTags: ["SwiftUI", "Combine", "PassKit", "StoreKit"],
-    myPoints: ["PCI DSS compliant architecture", "4.8 App Store rating"]
+    myTitle: "Bridgit (TechWings)",
+    myText: "Social networking iOS app focused on real-time location, presence, and premium subscriptions.",
+    myTags: ["SwiftUI", "UIKit", "Firebase", "Apple Pay"],
+    myPoints: ["Presence and notification logic", "Subscription and transaction flow"]
   },
   {
-    myTitle: "AR Navigation System",
-    myText: "Indoor navigation with augmented reality wayfinding",
-    myTags: ["ARKit", "RealityKit", "Core Location", "Metal"],
-    myPoints: ["Real-time 3D spatial mapping", "Sub-meter positioning accuracy"]
+    myTitle: "SpeakingHub MVP",
+    myText: "Language-learning MVP with video calls, chat, matching filters, and custom VoIP infrastructure.",
+    myTags: ["Swift", "Firebase", "Alamofire", "WebRTC/TURN"],
+    myPoints: ["Integrated own TURN/STUN setup", "Built call and chat product MVP"]
   },
   {
-    myTitle: "IoT Control Dashboard",
-    myText: "Remote monitoring and control for industrial IoT devices",
-    myTags: ["UIKit", "MQTT", "Charts", "WebSocket"],
-    myPoints: ["500+ connected devices managed", "99.9% uptime monitoring"]
+    myTitle: "Multilingual Consumer Apps",
+    myText: "Delivered app features for international products with RTL support and clean architecture patterns.",
+    myTags: ["Swift", "RTL", "Deep Linking", "REST APIs"],
+    myPoints: ["Arabic UI support in production", "Scalable modular codebase"]
   }
 ];
 
 export const myExpertiseData = [
   {
     myTitle: "System Architecture",
-    myText: "Modular, scalable architectures built for long-term maintainability.",
+    myText: "Production iOS architecture focused on maintainability and predictable delivery.",
     myTags: ["MVVM", "Clean Architecture", "Coordinator", "Dependency Injection"]
   },
   {
     myTitle: "Performance Optimization",
-    myText: "Profiling, memory management, and rendering pipeline tuning.",
-    myTags: ["Instruments", "Memory Graphs", "Frame Rate", "Concurrency"]
+    myText: "Performance tuning for networking, sync flows, and UI responsiveness.",
+    myTags: ["Instruments", "Concurrency", "Networking", "Profiling"]
   },
   {
     myTitle: "Realtime Systems",
-    myText: "Low-latency streaming and live data synchronization.",
-    myTags: ["WebSocket", "HLS", "AVFoundation", "Combine"]
+    myText: "Real-time presence, notifications, and communication features.",
+    myTags: ["Firebase", "Cloud Functions", "Push", "Twilio/Agora"]
   },
   {
-    myTitle: "AI & AR",
-    myText: "On-device intelligence and spatial computing experiences.",
-    myTags: ["Core ML", "ARKit", "Vision", "RealityKit"]
+    myTitle: "Maps & Geo Features",
+    myText: "User-facing geo capabilities across Apple and cross-platform mapping stacks.",
+    myTags: ["Apple Maps", "Google Maps", "ArcGIS", "Core Location"]
   },
   {
     myTitle: "Payments & Wallet",
-    myText: "Secure financial transactions and digital wallet integration.",
-    myTags: ["StoreKit", "PassKit", "Apple Pay", "PCI DSS"]
+    myText: "End-to-end monetization features on iOS apps.",
+    myTags: ["StoreKit", "PassKit", "Apple Pay", "Subscriptions"]
   },
   {
     myTitle: "Cloud & Backend",
-    myText: "Server-side integration and cloud-native service orchestration.",
-    myTags: ["REST", "GraphQL", "Firebase", "CloudKit"]
+    myText: "API and backend integration for scalable mobile apps.",
+    myTags: ["REST", "GraphQL", "Firebase", "Git"]
   }
 ];

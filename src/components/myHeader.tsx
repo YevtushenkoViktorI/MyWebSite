@@ -48,7 +48,7 @@ export function MyHeader({
             {myIsDarkMode ? "☀" : "☾"}
           </button>
 
-          <a href="#myContact" className="myPrimaryButton myHeaderCta">{myDownloadLabel}</a>
+          <a href="/YevtushenkoCV.pdf" download="Viktor-Yevtushenko-CV.pdf" className="myPrimaryButton myHeaderCta">{myDownloadLabel}</a>
 
           <MyLanguageSelect
             myValue={myLanguageValue}
