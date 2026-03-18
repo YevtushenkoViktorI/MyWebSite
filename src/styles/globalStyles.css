@@ -10,7 +10,9 @@ body,
 }
 
 html {
+  --myAnchorOffset: 7rem;
   scroll-behavior: smooth;
+  scroll-padding-top: var(--myAnchorOffset);
 }
 
 body {
@@ -227,6 +229,7 @@ a {
 }
 
 .mySection {
+  scroll-margin-top: var(--myAnchorOffset);
   border: 1px solid color-mix(in srgb, var(--colorBorder) 90%, transparent);
   border-radius: var(--radiusMain);
   background: color-mix(in srgb, var(--colorSurface) 90%, transparent);
@@ -491,6 +494,18 @@ a {
   margin-top: 1rem;
 }
 
+.myChipRowWrap {
+  position: relative;
+}
+
+.myChipRowMeasure {
+  position: absolute;
+  inset: 0 auto auto 0;
+  visibility: hidden;
+  pointer-events: none;
+  margin-top: 0;
+}
+
 .myChip {
   border: 1px solid var(--colorBorder);
   border-radius: 999px;
@@ -511,6 +526,51 @@ a {
   border-color: color-mix(in srgb, var(--colorPrimary) 62%, var(--colorBorder));
   color: var(--colorPrimary);
   background: color-mix(in srgb, var(--colorSurfaceSoft) 70%, transparent);
+}
+
+.myHeroText {
+  white-space: normal;
+  margin: 1rem 0 0;
+}
+
+.myHeroDetailTrigger {
+  display: inline;
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: var(--colorPrimary);
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.myHeroDetailTrigger:hover,
+.myHeroDetailTrigger:focus-visible {
+  color: var(--colorPrimaryStrong);
+  text-decoration: underline;
+}
+
+.myHeroDetailBody {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.myHeroDetailParagraph,
+.myHeroDetailHeading {
+  margin: 0;
+}
+
+.myHeroDetailHeading {
+  font-weight: 600;
+  color: var(--colorTextMain);
+}
+
+.myHeroDetailList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.38rem;
 }
 
 .mySkillsModalOverlay {
@@ -642,6 +702,7 @@ a {
   padding: 0.85rem 1.2rem;
   border: 1px solid var(--colorBorder);
   font-weight: 700;
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease, box-shadow 260ms ease, transform 220ms ease;
 }
 
 .myPrimaryButton {
@@ -653,6 +714,25 @@ a {
 .myPrimaryButton:hover {
   background: var(--colorPrimaryStrong);
   border-color: var(--colorPrimaryStrong);
+}
+
+[data-theme="light"] .myPrimaryButton {
+  background: linear-gradient(135deg, #2bd5c9 0%, #1e9fc3 52%, #2478ba 100%);
+  border-color: color-mix(in srgb, #1e9fc3 78%, #ffffff);
+  color: #ffffff;
+  box-shadow:
+    0 10px 20px color-mix(in srgb, #1e9fc3 24%, transparent),
+    0 2px 6px color-mix(in srgb, #2bd5c9 16%, transparent);
+}
+
+[data-theme="light"] .myPrimaryButton:hover,
+[data-theme="light"] .myPrimaryButton:focus-visible {
+  background: linear-gradient(135deg, #1fc8bc 0%, #188eb3 52%, #1f6cab 100%);
+  border-color: color-mix(in srgb, #188eb3 76%, #ffffff);
+  box-shadow:
+    0 14px 26px color-mix(in srgb, #1e9fc3 30%, transparent),
+    0 3px 8px color-mix(in srgb, #2bd5c9 24%, transparent);
+  transform: translateY(-1px);
 }
 
 .mySecondaryButton,
@@ -962,6 +1042,12 @@ a {
   animation: myJourneyDetailModalIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.myCertificateDetailModal {
+  width: min(1240px, calc(100vw - 1.4rem));
+  max-height: calc(100vh - 1.2rem);
+  padding: 1.15rem;
+}
+
 .myJourneyDetailOverlay.myIsClosing {
   animation: myJourneyDetailOverlayOut 220ms ease-in both;
 }
@@ -1001,6 +1087,10 @@ a {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.7rem;
+}
+
+.myJourneyDetailText {
+  white-space: pre-line;
 }
 
 .myJourneyDetailFigure {
@@ -1048,6 +1138,1291 @@ a {
   background-size: 170% 170%, 150% 150%, 100% 100%;
   will-change: transform, background-position;
   animation: myJourneyPreviewBreath var(--myJourneyPreviewBreathDuration) linear infinite alternate;
+}
+
+.myJourneyNanoScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.myJourneyGlowScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.myJourneyFlowScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.myJourneyFlowField {
+  width: min(94%, 1080px);
+  height: min(78%, 250px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 18% 50%, color-mix(in srgb, #7fe7e0 10%, transparent), transparent 56%),
+    radial-gradient(circle at 82% 48%, color-mix(in srgb, #85afff 10%, transparent), transparent 60%);
+}
+
+.myJourneyFlowLine {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, #86dcff 70%, transparent) 12%, color-mix(in srgb, #86dcff 68%, transparent) 88%, transparent 100%);
+  opacity: 0.34;
+}
+
+.myJourneyFlowLineA { top: 18%; }
+.myJourneyFlowLineB { top: 34%; }
+.myJourneyFlowLineC { top: 50%; }
+.myJourneyFlowLineD { top: 66%; }
+.myJourneyFlowLineE { top: 82%; }
+
+.myJourneyFlowDot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.myJourneyFlowDotA {
+  top: calc(18% - 4px);
+  color: #77ecff;
+  background: currentColor;
+  animation: myJourneyFlowMove 2800ms linear infinite;
+}
+
+.myJourneyFlowDotB {
+  top: calc(34% - 4px);
+  color: #ffc875;
+  background: currentColor;
+  animation: myJourneyFlowMove 3200ms linear infinite;
+  animation-delay: 0.35s;
+}
+
+.myJourneyFlowDotC {
+  top: calc(50% - 4px);
+  color: #77ecff;
+  background: currentColor;
+  animation: myJourneyFlowMove 3000ms linear infinite;
+  animation-delay: 0.7s;
+}
+
+.myJourneyFlowDotD {
+  top: calc(66% - 4px);
+  color: #ffc875;
+  background: currentColor;
+  animation: myJourneyFlowMove 3400ms linear infinite;
+  animation-delay: 0.55s;
+}
+
+.myJourneyFlowDotE {
+  top: calc(82% - 4px);
+  color: #77ecff;
+  background: currentColor;
+  animation: myJourneyFlowMove 2900ms linear infinite;
+  animation-delay: 0.2s;
+}
+
+.myJourneyFlowDotF {
+  top: calc(50% - 4px);
+  color: #9fb7ff;
+  background: currentColor;
+  animation: myJourneyFlowMoveReverse 3600ms linear infinite;
+  animation-delay: 0.85s;
+}
+
+.myJourneyRealtimeScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.myJourneyRealtimeField {
+  width: min(94%, 1080px);
+  height: min(78%, 250px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  --myRtY1: 32%;
+  --myRtY2: 50%;
+  --myRtY3: 68%;
+  --myRtX0: 13%;
+  --myRtX1: 26.5%;
+  --myRtX2: 34.7%;
+  --myRtX3: 46.5%;
+  --myRtX4: 54.7%;
+  --myRtX5: 70%;
+  --myRtX6: 78.8%;
+  --myRtX7: 82%;
+}
+
+.myJourneyRealtimeSources {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.myJourneyRealtimeSource {
+  position: absolute;
+  left: 4%;
+  width: 9%;
+  height: 14%;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, #84d8ff 18%, transparent);
+  background: color-mix(in srgb, #123050 42%, transparent);
+  display: grid;
+  place-items: center;
+}
+
+.myJourneyRealtimeSource:nth-child(1) { top: calc(var(--myRtY1) - 7%); }
+.myJourneyRealtimeSource:nth-child(2) { top: calc(var(--myRtY2) - 7%); }
+.myJourneyRealtimeSource:nth-child(3) { top: calc(var(--myRtY3) - 7%); }
+
+.myJourneyRealtimeDbIcon {
+  position: relative;
+  width: clamp(18px, 2vw, 25px);
+  height: clamp(14px, 1.6vw, 19px);
+  border: 2px solid color-mix(in srgb, #74ddff 84%, #fff 16%);
+  border-radius: 48% / 40%;
+  box-sizing: border-box;
+  color: color-mix(in srgb, #74ddff 84%, #fff 16%);
+}
+
+.myJourneyRealtimeDbIcon::before,
+.myJourneyRealtimeDbIcon::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  border: 2px solid currentColor;
+  border-radius: 48% / 40%;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.myJourneyRealtimeDbIcon::before {
+  top: 32%;
+}
+
+.myJourneyRealtimeDbIcon::after {
+  top: 60%;
+}
+
+.myJourneyRealtimePipeline {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.myJourneyRealtimeLine {
+  position: absolute;
+  left: var(--myRtFrom);
+  width: calc(var(--myRtTo) - var(--myRtFrom));
+  top: var(--myRtY);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #8fe4ff 62%, transparent),
+    color-mix(in srgb, #93dbff 84%, transparent) 55%,
+    color-mix(in srgb, #8fe4ff 62%, transparent)
+  );
+  opacity: 0.86;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, #7edfff 42%, transparent));
+}
+
+.myJourneyRealtimeLineA { --myRtFrom: var(--myRtX0); --myRtTo: var(--myRtX1); --myRtY: var(--myRtY1); }
+.myJourneyRealtimeLineB { --myRtFrom: var(--myRtX0); --myRtTo: var(--myRtX1); --myRtY: var(--myRtY2); }
+.myJourneyRealtimeLineC { --myRtFrom: var(--myRtX0); --myRtTo: var(--myRtX1); --myRtY: var(--myRtY3); }
+.myJourneyRealtimeLineD { --myRtFrom: var(--myRtX2); --myRtTo: var(--myRtX3); --myRtY: var(--myRtY1); }
+.myJourneyRealtimeLineE { --myRtFrom: var(--myRtX2); --myRtTo: var(--myRtX3); --myRtY: var(--myRtY2); }
+.myJourneyRealtimeLineF { --myRtFrom: var(--myRtX2); --myRtTo: var(--myRtX3); --myRtY: var(--myRtY3); }
+.myJourneyRealtimeLineG { --myRtFrom: var(--myRtX4); --myRtTo: var(--myRtX5); --myRtY: var(--myRtY1); }
+.myJourneyRealtimeLineH { --myRtFrom: var(--myRtX4); --myRtTo: var(--myRtX5); --myRtY: var(--myRtY2); }
+.myJourneyRealtimeLineI { --myRtFrom: var(--myRtX4); --myRtTo: var(--myRtX5); --myRtY: var(--myRtY3); }
+.myJourneyRealtimeLineJ { --myRtFrom: var(--myRtX6); --myRtTo: var(--myRtX7); --myRtY: var(--myRtY1); }
+.myJourneyRealtimeLineK { --myRtFrom: var(--myRtX6); --myRtTo: var(--myRtX7); --myRtY: var(--myRtY2); }
+.myJourneyRealtimeLineL { --myRtFrom: var(--myRtX6); --myRtTo: var(--myRtX7); --myRtY: var(--myRtY3); }
+
+.myJourneyRealtimeStage,
+.myJourneyRealtimeWarehouse,
+.myJourneyRealtimeTransform {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 12px;
+  z-index: 2;
+}
+
+.myJourneyRealtimeStage {
+  width: 8.2%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, color-mix(in srgb, #2e5d9a 84%, #6f6dff 16%), color-mix(in srgb, #3b5eb9 86%, #5fe6ff 14%));
+  border: 1px solid color-mix(in srgb, #9ad9ff 22%, transparent);
+  box-shadow: 0 5px 16px color-mix(in srgb, #04162c 36%, transparent);
+}
+
+.myJourneyRealtimeStageExtract { left: var(--myRtX1); }
+.myJourneyRealtimeStageLoad { left: var(--myRtX3); }
+
+.myJourneyRealtimePacket {
+  position: absolute;
+  left: var(--myRtFrom);
+  top: var(--myRtY);
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #7de9ff;
+  box-shadow: 0 0 10px color-mix(in srgb, #7de9ff 64%, transparent);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  animation: myJourneyRealtimePacketMove 2200ms linear infinite;
+}
+
+.myJourneyRealtimePacketA { --myRtFrom: var(--myRtX0); --myRtTo: var(--myRtX1); --myRtY: var(--myRtY1); }
+.myJourneyRealtimePacketB {
+  --myRtFrom: var(--myRtX0);
+  --myRtTo: var(--myRtX1);
+  --myRtY: var(--myRtY2);
+  background: #ffc775;
+  box-shadow: 0 0 10px color-mix(in srgb, #ffc775 64%, transparent);
+  animation-delay: 120ms;
+}
+
+.myJourneyRealtimePacketC {
+  --myRtFrom: var(--myRtX0);
+  --myRtTo: var(--myRtX1);
+  --myRtY: var(--myRtY3);
+  animation-delay: 260ms;
+}
+
+.myJourneyRealtimePacketD {
+  --myRtFrom: var(--myRtX2);
+  --myRtTo: var(--myRtX3);
+  --myRtY: var(--myRtY1);
+  animation-delay: 420ms;
+}
+
+.myJourneyRealtimePacketE {
+  --myRtFrom: var(--myRtX4);
+  --myRtTo: var(--myRtX5);
+  --myRtY: var(--myRtY2);
+  background: #ffc775;
+  box-shadow: 0 0 10px color-mix(in srgb, #ffc775 64%, transparent);
+  animation-delay: 680ms;
+}
+
+.myJourneyRealtimePacketF {
+  --myRtFrom: var(--myRtX6);
+  --myRtTo: var(--myRtX7);
+  --myRtY: var(--myRtY3);
+  animation-delay: 940ms;
+}
+
+.myJourneyRealtimeWarehouse {
+  left: var(--myRtX5);
+  width: 8.8%;
+  height: 52%;
+  border: 1px solid color-mix(in srgb, #8ed9ff 20%, transparent);
+  background: color-mix(in srgb, #143252 42%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #9ddfff 14%, transparent);
+  display: grid;
+  place-items: center center;
+  z-index: 2;
+}
+
+.myJourneyRealtimeWarehouseDb {
+  position: relative;
+  width: clamp(25px, 2.8vw, 37px);
+  height: clamp(19px, 2.2vw, 29px);
+  border: 3px solid color-mix(in srgb, #9a84ff 78%, #d2b5ff 22%);
+  border-radius: 48% / 40%;
+  box-sizing: border-box;
+}
+
+.myJourneyRealtimeWarehouseDb::before,
+.myJourneyRealtimeWarehouseDb::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  border: 3px solid color-mix(in srgb, #9a84ff 78%, #d2b5ff 22%);
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 48% / 40%;
+}
+
+.myJourneyRealtimeWarehouseDb::before { top: 34%; }
+.myJourneyRealtimeWarehouseDb::after { top: 66%; }
+
+.myJourneyRealtimeTransform {
+  left: var(--myRtX7);
+  width: 8.8%;
+  height: 56%;
+  border: 1px solid color-mix(in srgb, #a787ff 20%, transparent);
+  background: color-mix(in srgb, #1a2f56 38%, transparent);
+  display: grid;
+  place-items: center center;
+  z-index: 2;
+}
+
+.myJourneyRealtimeGear {
+  position: absolute;
+  border-radius: 999px;
+  box-sizing: border-box;
+  border: 3px solid color-mix(in srgb, #b78fff 76%, #fff 24%);
+  background:
+    radial-gradient(circle, color-mix(in srgb, #2a3f74 86%, transparent) 0 42%, transparent 43%),
+    repeating-conic-gradient(
+      from 0deg,
+      color-mix(in srgb, #b78fff 72%, #fff 28%) 0 12deg,
+      transparent 12deg 30deg
+    );
+}
+
+.myJourneyRealtimeGear::before {
+  content: "";
+  position: absolute;
+  inset: 34%;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, #d6c4ff 72%, #fff 28%);
+  background: color-mix(in srgb, #142f54 88%, transparent);
+}
+
+.myJourneyRealtimeGearLarge {
+  width: clamp(26px, 3vw, 40px);
+  height: clamp(26px, 3vw, 40px);
+  left: 14%;
+  top: 12%;
+  animation: myJourneyRealtimeGearSpinCW 8s linear infinite;
+}
+
+.myJourneyRealtimeGearMedium {
+  width: clamp(22px, 2.6vw, 33px);
+  height: clamp(22px, 2.6vw, 33px);
+  right: 10%;
+  top: 16%;
+  animation: myJourneyRealtimeGearSpinCCW 6.8s linear infinite;
+}
+
+.myJourneyRealtimeGearSmall {
+  width: clamp(18px, 2.2vw, 28px);
+  height: clamp(18px, 2.2vw, 28px);
+  right: 28%;
+  bottom: 12%;
+  animation: myJourneyRealtimeGearSpinCW 5.8s linear infinite;
+}
+
+.myJourneyRealtimePort { display: none; }
+
+@media (max-width: 900px) {
+  .myJourneyRealtimeField {
+    --myRtX0: 13%;
+    --myRtX1: 27.5%;
+    --myRtX2: 35.7%;
+    --myRtX3: 47.5%;
+    --myRtX4: 55.7%;
+    --myRtX5: 71%;
+    --myRtX6: 79.8%;
+    --myRtX7: 83%;
+  }
+
+}
+
+.myJourneyRealtimeGalaxyScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.myJourneyRealtimeGalaxyPanel {
+  width: min(97%, 1160px);
+  height: min(84%, 286px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, #8ce3ff 44%, var(--colorBorder));
+  background:
+    radial-gradient(1px 1px at 5% 16%, color-mix(in srgb, #c9f5ff 82%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 11% 62%, color-mix(in srgb, #c0ecff 72%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 20% 36%, color-mix(in srgb, #d7e3ff 66%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 30% 76%, color-mix(in srgb, #c9f5ff 58%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 43% 20%, color-mix(in srgb, #c8f3ff 66%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 52% 67%, color-mix(in srgb, #d7deff 48%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 63% 30%, color-mix(in srgb, #cbf2ff 64%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 72% 80%, color-mix(in srgb, #c5ecff 56%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 84% 19%, color-mix(in srgb, #dde2ff 52%, transparent), transparent 75%),
+    radial-gradient(1px 1px at 94% 55%, color-mix(in srgb, #cdf6ff 56%, transparent), transparent 75%),
+    radial-gradient(circle at 20% 50%, color-mix(in srgb, #59e4d8 12%, transparent), transparent 52%),
+    radial-gradient(circle at 80% 48%, color-mix(in srgb, #8d8bff 15%, transparent), transparent 56%),
+    linear-gradient(142deg, color-mix(in srgb, #081a35 97%, transparent), color-mix(in srgb, #11274a 93%, transparent));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #a9ecff 28%, transparent),
+    0 16px 34px color-mix(in srgb, #041226 42%, transparent);
+}
+
+.myJourneyRealtimeGalaxyMainLine,
+.myJourneyRealtimeGalaxyBottomLine {
+  position: absolute;
+  left: 9.5%;
+  right: 7.6%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #61f0d6 84%, transparent) 0%,
+    color-mix(in srgb, #81e5ff 92%, transparent) 58%,
+    color-mix(in srgb, #ffbf70 76%, transparent) 100%
+  );
+  filter: drop-shadow(0 0 8px color-mix(in srgb, #96e9ff 52%, transparent));
+}
+
+.myJourneyRealtimeGalaxyMainLine { top: 50%; }
+.myJourneyRealtimeGalaxyBottomLine { top: 80%; }
+
+.myJourneyRealtimeGalaxyRightLink {
+  position: absolute;
+  right: 7.6%;
+  top: 50%;
+  bottom: 20%;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in srgb, #9ea2ff 80%, transparent), color-mix(in srgb, #8fdfff 84%, transparent));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, #96dfff 44%, transparent));
+}
+
+.myJourneyRealtimeGalaxyDrop {
+  position: absolute;
+  width: 2px;
+  top: 50%;
+  height: 30%;
+  background: linear-gradient(180deg, color-mix(in srgb, #78e2ff 78%, transparent), color-mix(in srgb, #71e7d2 82%, transparent));
+  opacity: 0.76;
+}
+
+.myJourneyRealtimeGalaxyDrop1 { left: 10.5%; }
+.myJourneyRealtimeGalaxyDrop2 { left: 24.6%; }
+.myJourneyRealtimeGalaxyDrop3 { left: 38.7%; }
+.myJourneyRealtimeGalaxyDrop4 { left: 52.8%; }
+.myJourneyRealtimeGalaxyDrop5 { left: 66.9%; }
+.myJourneyRealtimeGalaxyDrop6 { left: 81%; }
+.myJourneyRealtimeGalaxyDrop7 { left: 95.1%; }
+
+.myJourneyRealtimeGalaxyPulse,
+.myJourneyRealtimeGalaxyRailDot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: #84e8ff;
+  box-shadow: 0 0 12px color-mix(in srgb, #7ce8ff 66%, transparent);
+}
+
+.myJourneyRealtimeGalaxyPulse {
+  top: 50%;
+  animation: myJourneyRealtimeGalaxyPulse 2600ms ease-in-out infinite;
+}
+
+.myJourneyRealtimeGalaxyPulse1 { left: 17.4%; animation-delay: 0ms; }
+.myJourneyRealtimeGalaxyPulse2 { left: 31.5%; animation-delay: 300ms; }
+.myJourneyRealtimeGalaxyPulse3 { left: 45.6%; animation-delay: 600ms; }
+.myJourneyRealtimeGalaxyPulse4 { left: 59.7%; animation-delay: 900ms; }
+.myJourneyRealtimeGalaxyPulse5 { left: 73.8%; animation-delay: 1200ms; }
+.myJourneyRealtimeGalaxyPulse6 { left: 87.9%; animation-delay: 1500ms; }
+
+.myJourneyRealtimeGalaxyRailDot {
+  top: 80%;
+  animation: myJourneyRealtimeGalaxyRailBlink 3200ms ease-in-out infinite;
+}
+
+.myJourneyRealtimeGalaxyRailDot1 { left: 10.5%; animation-delay: 80ms; }
+.myJourneyRealtimeGalaxyRailDot2 { left: 24.6%; animation-delay: 420ms; }
+.myJourneyRealtimeGalaxyRailDot3 { left: 38.7%; animation-delay: 780ms; }
+.myJourneyRealtimeGalaxyRailDot4 { left: 52.8%; animation-delay: 1060ms; }
+.myJourneyRealtimeGalaxyRailDot5 { left: 66.9%; animation-delay: 1380ms; }
+.myJourneyRealtimeGalaxyRailDot6 { left: 81%; animation-delay: 1700ms; }
+.myJourneyRealtimeGalaxyRailDot7 { left: 95.1%; animation-delay: 2020ms; }
+
+.myJourneyRealtimeGalaxyNode {
+  position: absolute;
+  top: 50%;
+  width: 12.8%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, #84e8ff 82%, transparent);
+  background: color-mix(in srgb, #0f2648 76%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #95e4ff 22%, transparent),
+    0 0 22px color-mix(in srgb, #79dfff 24%, transparent);
+  display: grid;
+  place-items: center;
+}
+
+.myJourneyRealtimeGalaxyNode1 { left: 10.5%; border-color: color-mix(in srgb, #69efd7 86%, transparent); }
+.myJourneyRealtimeGalaxyNode2 { left: 24.6%; }
+.myJourneyRealtimeGalaxyNode3 { left: 38.7%; border-color: color-mix(in srgb, #86b8ff 80%, transparent); }
+.myJourneyRealtimeGalaxyNode4 { left: 52.8%; }
+.myJourneyRealtimeGalaxyNode5 { left: 66.9%; }
+.myJourneyRealtimeGalaxyNode6 { left: 81%; border-color: color-mix(in srgb, #c9a0ff 78%, transparent); }
+
+.myJourneyRealtimeGalaxyNode7 {
+  left: 95.1%;
+  width: 13%;
+  aspect-ratio: 0.84 / 1;
+  border-radius: 20px;
+  border-color: color-mix(in srgb, #b993ff 80%, transparent);
+  background: color-mix(in srgb, #171f4d 78%, transparent);
+}
+
+.myJourneyRealtimeGlyph {
+  font-size: clamp(1.2rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, #b8ecff 86%, #fff 14%);
+  text-shadow: 0 0 14px color-mix(in srgb, #87e4ff 56%, transparent);
+  position: relative;
+  z-index: 2;
+}
+
+.myJourneyRealtimeGlyphIos {
+  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+  letter-spacing: 0.02em;
+}
+
+.myJourneyRealtimeIconChip {
+  width: 44%;
+  height: 44%;
+  border-radius: 10px;
+  border: 2px solid color-mix(in srgb, #8cf6de 86%, transparent);
+  background: color-mix(in srgb, #112f4e 72%, transparent);
+  position: relative;
+  box-shadow: inset 0 0 12px color-mix(in srgb, #7debd5 24%, transparent);
+}
+
+.myJourneyRealtimeIconChip::before,
+.myJourneyRealtimeIconChip::after {
+  content: "";
+  position: absolute;
+  left: -18%;
+  right: -18%;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, #9beedb 74%, transparent) 0 7%, transparent 7% 14%);
+  opacity: 0.88;
+}
+
+.myJourneyRealtimeIconChipCore {
+  position: absolute;
+  inset: 27%;
+  border-radius: 4px;
+  border: 2px solid color-mix(in srgb, #c8fff5 74%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, #8ff2df 54%, transparent);
+}
+
+.myJourneyRealtimeIconLab {
+  position: relative;
+  width: 54%;
+  height: 44%;
+  border-radius: 8px;
+  border: 2px solid color-mix(in srgb, #86ebff 70%, transparent);
+}
+
+.myJourneyRealtimeIconLabFlask {
+  position: absolute;
+  left: 34%;
+  right: 34%;
+  top: 20%;
+  bottom: 8%;
+  border: 2px solid color-mix(in srgb, #99f3ff 84%, transparent);
+  border-top-width: 5px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.myJourneyRealtimeIconTower {
+  position: relative;
+  width: 38%;
+  height: 54%;
+  border-left: 2px solid color-mix(in srgb, #98ecff 82%, transparent);
+  border-right: 2px solid color-mix(in srgb, #98ecff 82%, transparent);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.myJourneyRealtimeIconTowerSignalA,
+.myJourneyRealtimeIconTowerSignalB {
+  position: absolute;
+  top: -18%;
+  left: 50%;
+  width: 170%;
+  height: 170%;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, #86b8ff 64%, transparent);
+  transform: translate(-50%, -50%);
+  clip-path: inset(0 0 48% 0);
+}
+
+.myJourneyRealtimeIconTowerSignalB {
+  width: 230%;
+  height: 230%;
+  opacity: 0.68;
+}
+
+.myJourneyRealtimeIconCloud {
+  position: relative;
+  width: 60%;
+  height: 32%;
+  border-radius: 20px;
+  background: color-mix(in srgb, #79beff 72%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, #7abfff 44%, transparent);
+}
+
+.myJourneyRealtimeIconCloud::before,
+.myJourneyRealtimeIconCloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background: inherit;
+}
+
+.myJourneyRealtimeIconCloud::before {
+  width: 45%;
+  height: 150%;
+  left: 8%;
+  bottom: 48%;
+}
+
+.myJourneyRealtimeIconCloud::after {
+  width: 40%;
+  height: 130%;
+  right: 10%;
+  bottom: 38%;
+}
+
+.myJourneyRealtimeIconCloudDocA,
+.myJourneyRealtimeIconCloudDocB {
+  position: absolute;
+  width: 26%;
+  height: 48%;
+  bottom: -56%;
+  border-radius: 4px;
+  border: 2px solid color-mix(in srgb, #8be6ff 68%, transparent);
+  background: color-mix(in srgb, #102f56 66%, transparent);
+}
+
+.myJourneyRealtimeIconCloudDocA { left: 30%; }
+.myJourneyRealtimeIconCloudDocB { left: 58%; }
+
+.myJourneyRealtimeIconFinalGear {
+  position: absolute;
+  border-radius: 999px;
+  border: 3px solid color-mix(in srgb, #d2a0ff 86%, transparent);
+  background:
+    radial-gradient(circle, color-mix(in srgb, #1d2e5a 88%, transparent) 0 34%, transparent 35%),
+    repeating-conic-gradient(from 0deg, color-mix(in srgb, #d2a0ff 84%, transparent) 0 16deg, transparent 16deg 32deg);
+}
+
+.myJourneyRealtimeIconFinalGearA { width: 33%; height: 33%; left: 10%; top: 44%; }
+.myJourneyRealtimeIconFinalGearB { width: 29%; height: 29%; left: 45%; top: 26%; }
+.myJourneyRealtimeIconFinalGearC { width: 23%; height: 23%; left: 32%; top: 58%; }
+
+.myJourneyRealtimeIconFinalNet {
+  position: absolute;
+  height: 2px;
+  background: color-mix(in srgb, #c49bff 72%, transparent);
+  transform-origin: left center;
+}
+
+.myJourneyRealtimeIconFinalNetA { left: 34%; top: 26%; width: 38%; transform: rotate(36deg); }
+.myJourneyRealtimeIconFinalNetB { left: 22%; top: 58%; width: 34%; transform: rotate(-34deg); }
+.myJourneyRealtimeIconFinalNetC { left: 46%; top: 66%; width: 40%; transform: rotate(-10deg); }
+
+@media (max-width: 900px) {
+  .myJourneyRealtimeGalaxyPanel {
+    height: min(80%, 242px);
+    border-radius: 18px;
+  }
+
+  .myJourneyRealtimeGalaxyNode {
+    width: 13.8%;
+  }
+
+  .myJourneyRealtimeGalaxyNode7 {
+    width: 13.4%;
+  }
+}
+
+.myJourneyCodeScene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.myJourneyCodePanel {
+  width: min(92%, 1040px);
+  height: min(80%, 260px);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--colorPrimary) 20%, var(--colorBorder));
+  background:
+    linear-gradient(165deg, color-mix(in srgb, #173247 54%, transparent), color-mix(in srgb, #162d51 64%, transparent)),
+    color-mix(in srgb, var(--colorSurface) 96%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #9ddfff 18%, transparent),
+    0 16px 36px color-mix(in srgb, #021025 36%, transparent);
+  overflow: hidden;
+  position: relative;
+}
+
+.myJourneyCodeHeader {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.7rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--colorPrimary) 20%, transparent);
+  background: color-mix(in srgb, #0f2238 76%, transparent);
+}
+
+.myJourneyCodeHeaderDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.myJourneyCodeHeaderDotRed {
+  background: color-mix(in srgb, #ff7d8f 76%, #fff 24%);
+}
+
+.myJourneyCodeHeaderDotAmber {
+  background: color-mix(in srgb, #ffc46f 78%, #fff 22%);
+}
+
+.myJourneyCodeHeaderDotGreen {
+  background: color-mix(in srgb, #69e8b1 78%, #fff 22%);
+}
+
+.myJourneyCodeBody {
+  position: absolute;
+  inset: 30px 0 0;
+  padding: 12px 16px 10px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.myJourneyCodeBody::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.myJourneyCodeTypedBlock {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: clamp(0.56rem, 0.72vw, 0.72rem);
+  line-height: 1.28;
+}
+
+.myJourneyCodeTyped {
+  display: inline-block;
+  margin: 0;
+  white-space: pre;
+  color: color-mix(in srgb, #9ee8ff 76%, #b7c4ff 24%);
+  text-shadow: 0 0 8px color-mix(in srgb, #79eaff 24%, transparent);
+  letter-spacing: 0;
+}
+
+.myJourneyCodeTypedRow {
+  margin: 0 0 5px;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  align-items: baseline;
+  column-gap: 10px;
+}
+
+.myJourneyCodeLineNumber {
+  color: color-mix(in srgb, #89a0bf 74%, transparent);
+  text-align: right;
+  user-select: none;
+  opacity: 0.82;
+}
+
+.myJourneyCodeCursorInline {
+  display: inline-block;
+  margin-left: 1px;
+  color: color-mix(in srgb, #8ef3ff 88%, #fff 12%);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, #8ef3ff 52%, transparent));
+  transform: translateY(-1px);
+  animation: myJourneyCodeCursorBlink 920ms steps(1, end) infinite;
+}
+
+.myJourneyGlowField {
+  width: min(94%, 1080px);
+  height: min(78%, 250px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 24% 42%, color-mix(in srgb, #7fe7e0 18%, transparent), transparent 56%),
+    radial-gradient(circle at 78% 34%, color-mix(in srgb, #8ab2ff 18%, transparent), transparent 58%),
+    radial-gradient(circle at 56% 72%, color-mix(in srgb, #65dfff 10%, transparent), transparent 64%);
+}
+
+.myJourneyGlowAura {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(12px);
+  opacity: 0.24;
+}
+
+.myJourneyGlowAuraA {
+  width: 52%;
+  height: 56%;
+  left: -8%;
+  top: 10%;
+  background: radial-gradient(circle, color-mix(in srgb, #79e9ef 44%, transparent) 0%, transparent 70%);
+  animation: myJourneyGlowDriftA 14s ease-in-out infinite alternate;
+}
+
+.myJourneyGlowAuraB {
+  width: 58%;
+  height: 62%;
+  right: -12%;
+  bottom: -10%;
+  background: radial-gradient(circle, color-mix(in srgb, #8ca9ff 42%, transparent) 0%, transparent 72%);
+  animation: myJourneyGlowDriftB 16s ease-in-out infinite alternate;
+}
+
+.myJourneyGlowParticle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #7cecff 78%, #ffd288 22%);
+  opacity: 0.22;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, #83ebff 48%, transparent));
+}
+
+.myJourneyGlowParticleA { left: 10%; top: 64%; animation: myJourneyParticleFloatA 10.4s ease-in-out infinite; }
+.myJourneyGlowParticleB { left: 22%; top: 28%; animation: myJourneyParticleFloatB 12.8s ease-in-out infinite; }
+.myJourneyGlowParticleC { left: 38%; top: 52%; animation: myJourneyParticleFloatA 9.6s ease-in-out infinite; animation-delay: 0.9s; }
+.myJourneyGlowParticleD { left: 58%; top: 36%; animation: myJourneyParticleFloatB 11.4s ease-in-out infinite; animation-delay: 0.4s; }
+.myJourneyGlowParticleE { left: 74%; top: 68%; animation: myJourneyParticleFloatA 10.9s ease-in-out infinite; animation-delay: 1.1s; }
+.myJourneyGlowParticleF { left: 88%; top: 44%; animation: myJourneyParticleFloatB 12.2s ease-in-out infinite; animation-delay: 0.6s; }
+
+.myJourneyNanoSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 16px 30px color-mix(in srgb, var(--colorPrimary) 14%, transparent));
+  color: color-mix(in srgb, var(--colorPrimary) 72%, #86abff);
+}
+
+.myJourneyNanoEmbed {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+.myJourneyNanoField {
+  transform-origin: center;
+  animation: myJourneyNanoLatticeFloat 12s ease-in-out infinite alternate;
+}
+
+.myJourneyNanoAmbient {
+  fill: color-mix(in srgb, #6be0dc 10%, transparent);
+  filter: blur(22px);
+  opacity: 0.38;
+}
+
+.myJourneyNanoAmbientB {
+  fill: color-mix(in srgb, #6fa7ff 10%, transparent);
+  opacity: 0.3;
+}
+
+.myJourneyNanoBond {
+  stroke: color-mix(in srgb, #7fd7ff 68%, transparent);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+
+.myJourneyNanoBondBack {
+  opacity: 0.1;
+  stroke-width: 0.85;
+}
+
+.myJourneyNanoBondMid {
+  opacity: 0.28;
+  stroke-width: 1.1;
+}
+
+.myJourneyNanoBondFront {
+  opacity: 0.64;
+  stroke-width: 1.45;
+}
+
+.myJourneyNanoBondDepth {
+  opacity: 0.16;
+  stroke-width: 0.9;
+  stroke-dasharray: 0 0;
+}
+
+.myJourneyNanoNodeBack {
+  opacity: 0.18;
+}
+
+.myJourneyNanoNodeMid {
+  opacity: 0.58;
+}
+
+.myJourneyNanoNodeFront {
+  opacity: 1;
+}
+
+.myJourneyNanoAtomCd {
+  fill: url(#myNanoCdFill);
+  filter: url(#myNanoGlowCd);
+}
+
+.myJourneyNanoAtomS {
+  fill: url(#myNanoSFill);
+  filter: url(#myNanoGlowS);
+}
+
+.myJourneyNanoNodeBack .myJourneyNanoAtomCd,
+.myJourneyNanoNodeBack .myJourneyNanoAtomS {
+  transform: scale(0.82);
+  transform-origin: center;
+}
+
+.myJourneyNanoNodeMid .myJourneyNanoAtomCd,
+.myJourneyNanoNodeMid .myJourneyNanoAtomS {
+  transform: scale(0.92);
+  transform-origin: center;
+}
+
+.myJourneyNanoElectronHalo {
+  fill: color-mix(in srgb, #8ffcff 34%, transparent);
+  filter: url(#myNanoGlowElectron);
+  opacity: 0.88;
+}
+
+.myJourneyNanoElectronCore {
+  fill: url(#myNanoElectronFill);
+  filter: url(#myNanoGlowElectron);
+}
+
+.myJourneyNanoElectronTunnelHalo,
+.myJourneyNanoElectronTunnelCore {
+  opacity: 0;
+}
+
+.myJourneyCrystalSweep {
+  fill: url(#myJourneyCrystalSweep);
+  opacity: 0.42;
+  animation: myJourneyNanoSweepMove 6.8s ease-in-out infinite alternate;
+}
+
+.myJourneyNanoLabel {
+  position: absolute;
+  top: 1.05rem;
+  left: 1.05rem;
+  z-index: 2;
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.42rem 0.68rem;
+  border: 1px solid color-mix(in srgb, var(--colorPrimary) 24%, var(--colorBorder));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--colorSurface) 78%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.myJourneyNanoLabelTitle {
+  font-size: 0.74rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--colorTextMain);
+}
+
+.myJourneyNanoLabelMeta {
+  font-size: 0.68rem;
+  line-height: 1.1;
+  color: var(--colorTextMuted);
+}
+
+.myJourneyNanoLabelSubtle {
+  font-size: 0.6rem;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--colorPrimary) 42%, var(--colorTextMuted));
+}
+
+.myJourneyCrystalMain {
+  transform-origin: 50% 50%;
+  animation: myJourneyNanoLatticeFloat 9.5s ease-in-out infinite alternate;
+}
+
+.myJourneyCrystalLattice {
+  transform-origin: 50% 50%;
+  animation: myJourneyNanoLatticeFloat 12s ease-in-out infinite alternate;
+}
+
+.myJourneyCrystalGuide {
+  fill: none;
+  stroke: color-mix(in srgb, var(--colorPrimary) 14%, var(--colorBorder));
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.14;
+}
+
+.myJourneyCrystalFade {
+  fill: none;
+  stroke: color-mix(in srgb, var(--colorPrimary) 18%, var(--colorBorder));
+  stroke-width: 1.35;
+  opacity: 0.08;
+}
+
+.myJourneyCrystalField {
+  fill: none;
+  stroke: color-mix(in srgb, var(--colorPrimary) 12%, var(--colorBorder));
+  stroke-width: 1.1;
+  opacity: 0.08;
+}
+
+.myJourneyCrystalBackdrop {
+  fill: color-mix(in srgb, var(--colorSurface) 40%, transparent);
+  stroke: color-mix(in srgb, var(--colorPrimary) 8%, transparent);
+  stroke-width: 1;
+  opacity: 0.32;
+}
+
+.myJourneyCrystalAura {
+  fill: url(#myJourneyCrystalAura);
+  stroke: color-mix(in srgb, #8cbcff 16%, transparent);
+  stroke-width: 1;
+  opacity: 0.34;
+  filter: blur(0.6px);
+  animation: myJourneyNanoHaloPulse 8.4s ease-in-out infinite;
+}
+
+.myJourneyCrystalCell {
+  fill: none;
+  stroke: color-mix(in srgb, #9fdcff 52%, var(--colorPrimary));
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+}
+
+.myJourneyCrystalCellBack {
+  opacity: 0.42;
+}
+
+.myJourneyCrystalCellFront {
+  opacity: 0.82;
+}
+
+.myJourneyCrystalBond {
+  stroke: color-mix(in srgb, #8fd7ff 54%, transparent);
+  stroke-width: 1.22;
+  opacity: 0.72;
+  fill: none;
+}
+
+.myJourneyCrystalBondSoft {
+  opacity: 0.5;
+}
+
+.myJourneyCrystalShell {
+  fill: none;
+  stroke: color-mix(in srgb, #9fdcff 38%, var(--colorPrimary));
+  stroke-width: 1.35;
+  opacity: 0.22;
+}
+
+.myJourneyCrystalShellBack {
+  opacity: 0.12;
+}
+
+.myJourneyCrystalShellFront {
+  opacity: 0.2;
+}
+
+.myJourneyCrystalAxis {
+  fill: none;
+  stroke: color-mix(in srgb, #95c8ff 50%, var(--colorPrimary));
+  stroke-width: 1.85;
+  stroke-linecap: round;
+  opacity: 0.74;
+}
+
+.myJourneyCrystalAxisSoft {
+  stroke-width: 1.05;
+  opacity: 0.34;
+}
+
+.myJourneyCrystalCadmium {
+  fill: #68b4ff;
+  stroke: color-mix(in srgb, #f0fbff 50%, #68b4ff);
+  stroke-width: 1.1;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, #84c6ff 40%, transparent));
+}
+
+.myJourneyCrystalCadmiumInner {
+  opacity: 0.7;
+}
+
+.myJourneyCrystalResponsive {
+  animation: myJourneyCrystalExcitationPulse 7.8s linear infinite;
+}
+
+.myPulseDelay00 { animation-delay: 0s; }
+.myPulseDelay01 { animation-delay: -1.1s; }
+.myPulseDelay02 { animation-delay: -2.2s; }
+.myPulseDelay03 { animation-delay: -3.3s; }
+.myPulseDelay04 { animation-delay: -4.4s; }
+.myPulseDelay05 { animation-delay: -5.2s; }
+.myPulseDelay06 { animation-delay: -6.1s; }
+.myPulseDelay07 { animation-delay: -7s; }
+
+.myJourneyCrystalCadmium.myJourneyCrystalResponsive {
+  transform-origin: center;
+}
+
+.myJourneyCrystalSulfur {
+  fill: #f2d543;
+  stroke: color-mix(in srgb, #fff7c8 48%, #f2d543);
+  stroke-width: 1.05;
+  opacity: 0.98;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, #ffe26b 36%, transparent));
+  transform-origin: center;
+}
+
+.myJourneyCrystalLegend text {
+  fill: color-mix(in srgb, var(--colorTextMain) 78%, var(--colorPrimary));
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  opacity: 0.92;
+}
+
+.myJourneyCrystalAtomLabel {
+  fill: rgba(16, 28, 44, 0.88);
+  font-size: 5.1px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
+.myJourneyCrystalAtomLabelSulfur {
+  fill: rgba(54, 48, 12, 0.92);
+}
+
+.myJourneyCrystalElectronLabel {
+  fill: color-mix(in srgb, #a5ffff 88%, white);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+.myJourneyCrystalAnnotationLine {
+  fill: none;
+  stroke: color-mix(in srgb, var(--colorPrimary) 28%, var(--colorTextMuted));
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.86;
+}
+
+.myJourneyCrystalAnnotationText {
+  fill: color-mix(in srgb, var(--colorTextMain) 82%, var(--colorPrimary));
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.myJourneyCrystalElectronPath {
+  fill: none;
+  stroke: color-mix(in srgb, #b6e4ff 34%, var(--colorPrimary));
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-dasharray: 4 9;
+  opacity: 0.26;
+  animation: myJourneyNanoOrbitDash 7.8s linear infinite;
+}
+
+.myJourneyCrystalElectronTrace {
+  fill: none;
+  stroke: color-mix(in srgb, #8cf7ff 58%, transparent);
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  opacity: 0.42;
+  stroke-dasharray: 3 7;
+}
+
+.myJourneyCrystalElectronTraceSecondary {
+  opacity: 0.22;
+}
+
+.myJourneyNanoElectronGlowSvg {
+  fill: color-mix(in srgb, #9bd8ff 24%, transparent);
+  filter: blur(10px);
+  opacity: 0.82;
+}
+
+.myJourneyNanoElectronSvg {
+  fill: #dff9ff;
+  stroke: color-mix(in srgb, #9de7ff 42%, var(--colorPrimary));
+  stroke-width: 1.3;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, #8fd6ff 44%, transparent));
 }
 
 .myJourneyPreview::before {
@@ -1139,6 +2514,164 @@ a {
   100% {
     background-position: 22% 54%, 66% 36%, 0 0;
     transform: scale(var(--myJourneyPreviewLiftPeak));
+  }
+}
+
+@keyframes myJourneyGlowDriftA {
+  0%,
+  100% {
+    transform: translate3d(-2%, 1%, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate3d(4%, -2%, 0) scale(1.08);
+    opacity: 0.34;
+  }
+}
+
+@keyframes myJourneyFlowMove {
+  0% {
+    left: 4%;
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  10% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  100% {
+    left: 96%;
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+@keyframes myJourneyFlowMoveReverse {
+  0% {
+    right: 4%;
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  10% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  100% {
+    right: 96%;
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+@keyframes myJourneyRealtimeAuraA {
+  0% { transform: translate3d(-3%, -2%, 0) scale(1); opacity: 0.15; }
+  100% { transform: translate3d(3%, 2%, 0) scale(1.08); opacity: 0.28; }
+}
+
+@keyframes myJourneyRealtimeAuraB {
+  0% { transform: translate3d(2%, 3%, 0) scale(1); opacity: 0.14; }
+  100% { transform: translate3d(-3%, -2%, 0) scale(1.1); opacity: 0.24; }
+}
+
+@keyframes myJourneyRealtimePacketMove {
+  0% { left: var(--myRtFrom); opacity: 0; transform: translate(-50%, -50%); }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: var(--myRtTo); opacity: 0; transform: translate(-50%, -50%); }
+}
+
+@keyframes myJourneyRealtimeGearSpinCW {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes myJourneyRealtimeGearSpinCCW {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes myJourneyRealtimeGalaxyPulse {
+  0%, 100% {
+    opacity: 0.42;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.16);
+  }
+}
+
+@keyframes myJourneyRealtimeGalaxyRailBlink {
+  0%, 100% {
+    opacity: 0.34;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  40% {
+    opacity: 0.88;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes myJourneyCodeCursorBlink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  49%,
+  100% {
+    opacity: 0.08;
+  }
+}
+
+@keyframes myJourneyGlowDriftB {
+  0%,
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate3d(-5%, 3%, 0) scale(1.1);
+    opacity: 0.36;
+  }
+}
+
+@keyframes myJourneyParticleFloatA {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.18;
+  }
+  45% {
+    transform: translate3d(10px, -8px, 0) scale(1.18);
+    opacity: 0.58;
+  }
+  70% {
+    transform: translate3d(-6px, 6px, 0) scale(1);
+    opacity: 0.32;
+  }
+}
+
+@keyframes myJourneyParticleFloatB {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.86);
+    opacity: 0.16;
+  }
+  40% {
+    transform: translate3d(-11px, -7px, 0) scale(1.16);
+    opacity: 0.52;
+  }
+  72% {
+    transform: translate3d(7px, 8px, 0) scale(1);
+    opacity: 0.34;
   }
 }
 
@@ -1403,6 +2936,19 @@ a {
   .myJourneyVariantContentReveal .myJourneyContent > * {
     animation: none;
   }
+
+  .myJourneyCrystalMain,
+  .myJourneyCrystalSweep,
+  .myJourneyNanoHalo,
+  .myJourneyCrystalResponsive,
+  .myJourneyCrystalElectronPath {
+    animation: none;
+  }
+
+  .myJourneyNanoElectronGlowSvg,
+  .myJourneyNanoElectronSvg {
+    display: none;
+  }
 }
 
 /* Variant #5: Content Reveal on Selection */
@@ -1636,6 +3182,151 @@ a {
   opacity: 0.74;
 }
 
+[data-theme="light"] .myJourneyVariantAppleStrongCasual .myJourneyPreview {
+  background:
+    radial-gradient(circle at 14% 20%, color-mix(in srgb, #67cfc4 16%, transparent), transparent 58%),
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, #7ca8ff 18%, transparent), transparent 54%),
+    radial-gradient(circle at 56% 82%, color-mix(in srgb, #5fb8ff 12%, transparent), transparent 60%),
+    linear-gradient(138deg, color-mix(in srgb, #59b9e8 10%, transparent), transparent 62%),
+    radial-gradient(130% 52% at 50% 122%, color-mix(in srgb, #61d2c8 18%, transparent), transparent 74%),
+    linear-gradient(148deg, #e2edf4 0%, #d7e6f1 48%, #d4e0ef 100%);
+  border-color: color-mix(in srgb, #66b8d9 42%, var(--colorBorder));
+}
+
+[data-theme="light"] .myJourneyNanoEmbed {
+  filter: contrast(1.08) saturate(1.08) brightness(0.95);
+}
+
+[data-theme="light"] .myJourneyEmbeddedEmbed {
+  filter: contrast(1.1) saturate(1.12) brightness(0.93) drop-shadow(0 8px 16px color-mix(in srgb, #4fa3c9 22%, transparent));
+}
+
+[data-theme="light"] .myJourneyPipelineEmbed {
+  position: relative;
+  z-index: 2;
+  filter: contrast(1.48) saturate(1.34) brightness(0.72) drop-shadow(0 12px 24px color-mix(in srgb, #3f78a5 22%, transparent));
+}
+
+[data-theme="light"] .myJourneyPipelineScene {
+  background:
+    radial-gradient(circle at 20% 34%, color-mix(in srgb, #78cad3 14%, transparent), transparent 60%),
+    radial-gradient(circle at 78% 26%, color-mix(in srgb, #88a9dd 13%, transparent), transparent 62%),
+    linear-gradient(142deg, #d9e8ef 0%, #d2e0eb 48%, #cedaeb 100%);
+}
+
+[data-theme="light"] .myJourneyPipelineScene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 24% 42%, color-mix(in srgb, #6eb9c9 12%, transparent), transparent 62%),
+    radial-gradient(circle at 76% 36%, color-mix(in srgb, #7e9bd1 11%, transparent), transparent 64%),
+    linear-gradient(140deg, color-mix(in srgb, #4f7fa6 8%, transparent), color-mix(in srgb, #6382b5 8%, transparent));
+  opacity: 0.24;
+}
+
+[data-theme="light"] .myJourneyPipelineScene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 82% at 50% 50%, color-mix(in srgb, #2b5f90 20%, transparent), transparent 62%),
+    linear-gradient(90deg, color-mix(in srgb, #3f7298 12%, transparent), transparent 20%, transparent 80%, color-mix(in srgb, #596fa2 12%, transparent));
+  opacity: 0.22;
+}
+
+[data-theme="light"] .myJourneyFlowField {
+  background:
+    radial-gradient(circle at 18% 50%, color-mix(in srgb, #67d7cd 16%, transparent), transparent 56%),
+    radial-gradient(circle at 82% 48%, color-mix(in srgb, #7f9df1 16%, transparent), transparent 60%),
+    linear-gradient(145deg, #dbeff4 0%, #d4e8f4 48%, #d9e3f3 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 62%, transparent),
+    0 8px 20px color-mix(in srgb, #5a98b5 14%, transparent);
+}
+
+[data-theme="light"] .myJourneyFlowLine {
+  opacity: 0.52;
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, #4ea6cc 78%, transparent) 12%, color-mix(in srgb, #5a9fcd 78%, transparent) 88%, transparent 100%);
+}
+
+[data-theme="light"] .myJourneyFlowDot {
+  filter: drop-shadow(0 0 9px color-mix(in srgb, currentColor 42%, transparent));
+}
+
+[data-theme="light"] .myJourneyCodePanel {
+  border-color: color-mix(in srgb, #3f6f96 36%, var(--colorBorder));
+  background:
+    linear-gradient(165deg, color-mix(in srgb, #132f47 78%, transparent), color-mix(in srgb, #1a3758 80%, transparent)),
+    #152f4b;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #9ad7ff 18%, transparent),
+    0 14px 32px color-mix(in srgb, #1d4f72 24%, transparent);
+}
+
+[data-theme="light"] .myJourneyCodeHeader {
+  border-bottom-color: color-mix(in srgb, #6eb5dc 26%, transparent);
+  background: color-mix(in srgb, #102842 88%, transparent);
+}
+
+[data-theme="light"] .myJourneyCodeTyped {
+  color: color-mix(in srgb, #9de7ff 84%, #c0d3ff 16%);
+  text-shadow: 0 0 7px color-mix(in srgb, #8fe0ff 26%, transparent);
+}
+
+[data-theme="light"] .myJourneyCodeLineNumber {
+  color: color-mix(in srgb, #7f98bb 82%, transparent);
+  opacity: 0.86;
+}
+
+[data-theme="light"] .myJourneyNanoSvg {
+  filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--colorPrimary) 10%, transparent));
+}
+
+[data-theme="light"] .myJourneyNanoLabel {
+  background: color-mix(in srgb, var(--colorSurface) 82%, transparent);
+}
+
+[data-theme="light"] .myJourneyCrystalAura {
+  fill: color-mix(in srgb, var(--colorPrimary) 8%, transparent);
+  stroke: color-mix(in srgb, #6e9ef0 20%, transparent);
+}
+
+[data-theme="light"] .myJourneyCrystalGuide {
+  stroke: color-mix(in srgb, var(--colorPrimary) 18%, var(--colorBorder));
+}
+
+[data-theme="light"] .myJourneyCrystalField {
+  stroke: color-mix(in srgb, var(--colorPrimary) 14%, var(--colorBorder));
+}
+
+[data-theme="light"] .myJourneyCrystalCell {
+  stroke: color-mix(in srgb, var(--colorPrimary) 52%, #5d86d8);
+}
+
+[data-theme="light"] .myJourneyCrystalBond {
+  stroke: color-mix(in srgb, var(--colorPrimary) 26%, #7b95ce);
+}
+
+[data-theme="light"] .myJourneyCrystalElectronPath {
+  stroke: color-mix(in srgb, #6d98eb 48%, var(--colorPrimary));
+  opacity: 0.28;
+}
+
+[data-theme="light"] .myJourneyCrystalCadmium {
+  fill: #5aa9ef;
+  stroke: color-mix(in srgb, #effbff 34%, #5aa9ef);
+}
+
+[data-theme="light"] .myJourneyCrystalSulfur {
+  fill: #f0cd36;
+  stroke: color-mix(in srgb, #fff7bf 34%, #f0cd36);
+}
+
 [data-theme="dark"] .myJourneyVariantAppleStrongCasual .myJourneyCard {
   border-color: color-mix(in srgb, var(--colorPrimary) 18%, var(--colorBorder));
   box-shadow: 0 7px 14px color-mix(in srgb, var(--colorPrimary) 3%, transparent);
@@ -1675,12 +3366,145 @@ a {
   opacity: 0.46;
 }
 
+[data-theme="dark"] .myJourneyCrystalCell {
+  stroke: color-mix(in srgb, var(--colorPrimary) 42%, #7db8ff);
+}
+
+[data-theme="dark"] .myJourneyCrystalGuide {
+  opacity: 0.22;
+}
+
+[data-theme="dark"] .myJourneyCrystalField {
+  opacity: 0.1;
+}
+
+[data-theme="dark"] .myJourneyCrystalBond {
+  stroke: color-mix(in srgb, var(--colorPrimary) 20%, #7da5f3);
+}
+
+[data-theme="dark"] .myJourneyCrystalSulfur {
+  opacity: 0.76;
+}
+
+[data-theme="dark"] .myJourneyCrystalElectronPath {
+  opacity: 0.38;
+}
+
 @keyframes myJourneyCardAuraIdle {
   0% {
     transform: translate3d(-1.2%, -0.8%, 0) scale(1);
   }
   100% {
     transform: translate3d(1.2%, 0.9%, 0) scale(1.02);
+  }
+}
+
+@keyframes myJourneyNanoLatticeFloat {
+  0% {
+    transform: translate3d(-4px, 4px, 0) scale(0.992);
+  }
+  50% {
+    transform: translate3d(2px, -3px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(5px, 2px, 0) scale(1.01);
+  }
+}
+
+@keyframes myJourneyNanoHaloPulse {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 0.86;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes myJourneyNanoSweepMove {
+  0% {
+    transform: translateX(-22px);
+    opacity: 0.32;
+  }
+  100% {
+    transform: translateX(22px);
+    opacity: 0.72;
+  }
+}
+
+@keyframes myJourneyCrystalExcitationPulse {
+  0%,
+  8%,
+  100% {
+    opacity: 0.82;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  14% {
+    opacity: 1;
+    transform: scale(1.16);
+    filter: brightness(1.22);
+  }
+  22% {
+    opacity: 0.92;
+    transform: scale(1.04);
+    filter: brightness(1.06);
+  }
+}
+
+@keyframes myJourneyNanoCadmiumPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes myJourneyNanoSulfurPulse {
+  0%,
+  100% {
+    opacity: 0.74;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes myJourneyNanoOrbitDash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -180;
+  }
+}
+
+@keyframes myJourneyNanoElectronOrbit {
+  0% {
+    offset-distance: 0%;
+    transform: scale(0.92);
+  }
+  20% {
+    transform: scale(1.12);
+  }
+  50% {
+    offset-distance: 50%;
+    transform: scale(0.96);
+  }
+  78% {
+    transform: scale(1.14);
+  }
+  100% {
+    offset-distance: 100%;
+    transform: scale(0.92);
   }
 }
 
@@ -1711,6 +3535,77 @@ a {
 
 .myProjectGridWide {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.myProjectCarousel {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.myProjectViewport {
+  overflow: hidden;
+}
+
+.myProjectTrack {
+  display: flex;
+  width: 100%;
+  transition: transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.myProjectPage {
+  min-width: 100%;
+}
+
+.myProjectCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.myProjectCardHead .myProjectTitle {
+  margin-bottom: 0;
+}
+
+.myProjectControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.myProjectControlButton {
+  border: 1px solid var(--colorBorder);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 52%, transparent);
+  color: var(--colorTextMain);
+  min-width: 104px;
+  height: 36px;
+  padding: 0 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 220ms ease, color 220ms ease, background-color 220ms ease, transform 220ms ease;
+}
+
+.myProjectControlButton:hover,
+.myProjectControlButton:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 65%, var(--colorBorder));
+  color: var(--colorPrimary);
+  transform: translateY(-1px);
+}
+
+.myProjectControlButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.myProjectControlInfo {
+  color: var(--colorTextMuted);
+  font-size: 0.95rem;
+  min-width: 58px;
+  text-align: center;
 }
 
 .myExpertiseGrid {
@@ -1776,6 +3671,115 @@ a {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.myTimelineGrid .myTimelineCol::before {
+  display: none;
+}
+
+.myTimelineGrid > .myTimelineItem::before,
+.myTimelineGrid .myTimelineCol > .myTimelineItem::before {
+  display: none;
+}
+
+.myTimelineGrid > .myTimelineItem,
+.myTimelineGrid .myTimelineCol > .myTimelineItem {
+  margin-left: 0;
+}
+
+#myEducation .myTimelineGrid > .myTimelineItem > .myProjectTitle {
+  margin-bottom: 1.25rem;
+}
+
+.myCertificatesList {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.myCertificateItem {
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 78%, transparent);
+  border-radius: 14px;
+  padding: 0.9rem;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 42%, transparent);
+}
+
+.myCertificateHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.myCertificateTitle {
+  margin: 0;
+  font-size: 1.06rem;
+  font-weight: 700;
+  color: var(--colorTextMain);
+}
+
+.myCertificatePreviewButton {
+  margin-top: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--colorPrimary) 58%, var(--colorBorder));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--colorSurface) 70%, transparent);
+  color: var(--colorPrimary);
+  padding: 0.4rem 0.78rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.myCertificatePreviewButton:hover,
+.myCertificatePreviewButton:focus-visible {
+  border-color: var(--colorPrimary);
+  background: color-mix(in srgb, var(--colorPrimary) 12%, var(--colorSurface));
+}
+
+.myCertificateDocumentTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.6rem 0 0.85rem;
+}
+
+.myCertificateDocTab {
+  border: 1px solid var(--colorBorder);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 56%, transparent);
+  color: var(--colorTextMuted);
+  padding: 0.3rem 0.76rem;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.myCertificateDocTabActive {
+  color: var(--colorPrimary);
+  border-color: color-mix(in srgb, var(--colorPrimary) 65%, var(--colorBorder));
+  background: color-mix(in srgb, var(--colorPrimary) 14%, transparent);
+}
+
+.myCertificatePreviewFrame {
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 82%, transparent);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 520px;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 48%, transparent);
+}
+
+.myCertificatePreviewFrame iframe,
+.myCertificatePreviewFrame img {
+  display: block;
+  width: 100%;
+  min-height: 520px;
+  max-height: 72vh;
+  object-fit: contain;
+  border: 0;
+  background: color-mix(in srgb, var(--colorSurface) 64%, transparent);
+}
+
+.myCertificatePreviewActions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .myTimelinePlace {
   margin-top: 0.2rem;
   color: var(--colorPrimary);
@@ -1783,15 +3787,141 @@ a {
 
 .myCtaSection {
   text-align: center;
-  padding-block: 5rem;
+  padding-block: 2.2rem;
 }
 
 .myCtaTitle {
   font-size: clamp(2.4rem, 4.2vw, 4rem);
+  margin-bottom: 1.05rem;
 }
 
 .myCtaButtons {
   justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 0.95rem;
+}
+
+.myCtaButtons .myPrimaryButton,
+.myCtaButtons .mySecondaryButton {
+  min-width: 150px;
+  justify-content: center;
+  border-radius: 18px;
+  padding: 0.82rem 1.28rem;
+  font-size: 1.01rem;
+}
+
+.myContactLayout {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+.myContactCard,
+.myContactMetaCard {
+  border: 1px solid color-mix(in srgb, var(--colorBorder) 80%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--colorSurfaceSoft) 42%, transparent);
+  padding: 1.08rem 1.12rem;
+}
+
+.myContactInfo {
+  margin-top: 0;
+}
+
+.myContactOpportunityList,
+.myContactMessengerList {
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.33rem;
+}
+
+.myContactAddressList {
+  margin: 0.82rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.myContactLine {
+  position: relative;
+  padding-left: 0.95rem;
+}
+
+.myContactLine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.74em;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--colorPrimary) 78%, #84e6ff 22%);
+}
+
+.myContactMeta {
+  margin-top: 0;
+  color: var(--colorTextMain);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.48rem;
+}
+
+.myContactAddress {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.myContactIcon {
+  min-width: 1.08rem;
+  line-height: 1.2;
+  transform: translateY(1px);
+}
+
+.myCtaButtons .myPrimaryButton {
+  background: linear-gradient(135deg, #2bd5c9 0%, #1e9fc3 52%, #2478ba 100%);
+  border-color: color-mix(in srgb, #1e9fc3 76%, #ffffff 24%);
+  color: #ffffff;
+  box-shadow:
+    0 11px 22px color-mix(in srgb, #1e9fc3 24%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #d7fbff 22%, transparent);
+}
+
+.myCtaButtons .myPrimaryButton:hover,
+.myCtaButtons .myPrimaryButton:focus-visible {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 26px color-mix(in srgb, #1e9fc3 32%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #d7fbff 30%, transparent);
+}
+
+.myCtaButtons .mySecondaryButton {
+  background: color-mix(in srgb, var(--colorSurface) 80%, transparent);
+  border-color: color-mix(in srgb, var(--colorBorder) 88%, transparent);
+  color: var(--colorTextMain);
+}
+
+.myCtaButtons .mySecondaryButton:hover,
+.myCtaButtons .mySecondaryButton:focus-visible {
+  border-color: color-mix(in srgb, var(--colorPrimary) 60%, var(--colorBorder));
+  color: var(--colorPrimary);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .myContactCard,
+[data-theme="light"] .myContactMetaCard {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, #ffffff 80%, var(--colorSurfaceSoft) 20%),
+    color-mix(in srgb, #f3f8ff 78%, var(--colorSurfaceSoft) 22%)
+  );
+  border-color: color-mix(in srgb, var(--colorPrimary) 26%, var(--colorBorder) 74%);
 }
 
 @media (max-width: 1120px) {
@@ -1805,6 +3935,10 @@ a {
   .myProjectGridWide,
   .myExpertiseGrid,
   .myTimelineGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .myContactLayout {
     grid-template-columns: 1fr;
   }
 

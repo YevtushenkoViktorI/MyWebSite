@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" style="font-family: sans-serif; overflow: hidden;">
+  <defs>
+    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="glow-red" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <radialGradient id="cd-atom" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#00FFFF" /> <stop offset="100%" stop-color="#0044AA" />
+    </radialGradient>
+    <radialGradient id="s-atom" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFD700" /> <stop offset="100%" stop-color="#D95319" />
+    </radialGradient>
+  </defs>
+
+  <style>
+    .particle { transition: transform 0.15s ease-out; transform-origin: center; }
+    .settled { animation: click-in 0.25s ease-out forwards; }
+    
+    @keyframes click-in {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.8); } /* Збільшено масштаб пульсації */
+      100% { transform: scale(1); }
+    }
+  </style>
+
+  <rect x="80" y="150" width="1040" height="200" rx="10" fill="none" stroke="none" />
+
+  <g transform="translate(120, 200)">
+    <rect x="0" y="0" width="10" height="100" rx="5" fill="#FF4444" filter="url(#glow-red)" />
+    <rect x="12" y="0" width="30" height="100" rx="3" fill="#221A11" stroke="#FFD700" stroke-width="1.5" />
+  </g>
+
+  <g transform="translate(1035, 160)">
+    <rect x="0" y="0" width="15" height="180" rx="2" fill="none" stroke="#00AAFF" stroke-width="3" filter="url(#glow-blue)" />
+  </g>
+
+  <g id="particles-container"></g>
+
+  <script>
+    <![CDATA[
+    const container = document.getElementById('particles-container');
+    const particles = [];
+    
+    // НАЛАШТУВАННЯ ДЛЯ ПРАВИЛЬНОЇ ЛОГІКИ 1:1 ТА ПОМІРНОЇ ШВИДКОСТІ
+    const ATOM_SPAWN_INTERVAL = 25; // Атом з'являється кожні 25 кадрів
+    const SUBSTRATE_X = 1035;
+    const SOURCE_X = 165;
+    const SOURCE_Y_MIN = 210;
+    const SOURCE_Y_MAX = 290;
+    const CHAMBER_Y_MIN = 160;
+    const CHAMBER_Y_MAX = 340;
+    
+    const MAX_LAYERS = 3;
+    const ROWS = 16;
+    const LATTICE_SPACING = 11;
+    const SUBSTRATE_START_Y = 168;
+    
+    let availableSlots = [];
+    let spawnedCount = 0; // Лічильник створених атомів
+    let frameCount = 0;
+    let isResetting = false;
+
+    function initSlots() {
+      availableSlots = [];
+      // Наповнюємо масив слотами так, щоб спочатку йшов перший шар (col 0), потім другий (col 1) і т.д.
+      for (let col = 0; col < MAX_LAYERS; col++) {
+        let layerSlots = [];
+        for (let row = 0; row < ROWS; row++) {
+          layerSlots.push({ col, row });
+        }
+        // Перемішуємо всередині шару для природності
+        for (let i = layerSlots.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [layerSlots[i], layerSlots[j]] = [layerSlots[j], layerSlots[i]];
+        }
+        availableSlots = availableSlots.concat(layerSlots);
+      }
+    }
+
+    function createParticle() {
+      // Кількість слотів = MAX_LAYERS * ROWS
+      const totalSlots = MAX_LAYERS * ROWS;
+      if (spawnedCount >= totalSlots || isResetting) return;
+
+      spawnedCount++;
+      const isCd = Math.random() > 0.5;
+      const radius = isCd ? 6 : 5;
+      const fill = isCd ? 'url(#cd-atom)' : 'url(#s-atom)';
+      const startY = SOURCE_Y_MIN + Math.random() * (SOURCE_Y_MAX - SOURCE_Y_MIN);
+      
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      el.setAttribute("r", radius);
+      el.setAttribute("fill", fill);
+      el.setAttribute("class", "particle");
+      
+      container.appendChild(el);
+
+      particles.push({
+        el: el,
+        x: SOURCE_X,
+        y: startY,
+        vx: 1.8, 
+        vy: (Math.random() - 0.5) * 0.8,
+        state: 'flying',
+        targetSlot: null,
+        waveOffset: Math.random() * Math.PI * 2
+      });
+    }
+
+    function resetAnimation() {
+      isResetting = true;
+      setTimeout(() => {
+        // Видаляємо всі елементи з контейнера
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+        particles.length = 0;
+        spawnedCount = 0; // Скидаємо лічильник
+        initSlots();
+        frameCount = 0;
+        isResetting = false;
+      }, 1500); // Пауза перед очищенням
+    }
+
+    function update() {
+      if (!isResetting) {
+        frameCount++;
+        if (frameCount % ATOM_SPAWN_INTERVAL === 0) {
+          createParticle();
+        }
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (p.state === 'flying') {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.y < CHAMBER_Y_MIN + 8) { p.y = CHAMBER_Y_MIN + 8; p.vy = Math.abs(p.vy); }
+          if (p.y > CHAMBER_Y_MAX - 10) { p.y = CHAMBER_Y_MAX - 10; p.vy = -Math.abs(p.vy); }
+          
+          p.y += Math.sin(p.x * 0.04 + p.waveOffset) * 0.5;
+
+          // Призначаємо перший вільний слот тільки при безпосередньому підльоті до зони напилення
+          if (p.x > 990) {
+            if (availableSlots.length > 0 && p.targetSlot === null) {
+              p.targetSlot = availableSlots.shift(); 
+              p.state = 'settling';
+            }
+          }
+        } 
+        else if (p.state === 'settling') {
+          const targetX = 1040 - (p.targetSlot.col * LATTICE_SPACING);
+          const targetY = SUBSTRATE_START_Y + p.targetSlot.row * LATTICE_SPACING;
+
+          const dx = targetX - p.x;
+          const dy = targetY - p.y;
+          
+          // Більш плавне "прилипання" (0.07 замість 0.1)
+          p.x += dx * 0.07;
+          p.y += dy * 0.07;
+
+          if (Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) {
+            p.x = targetX;
+            p.y = targetY;
+            p.state = 'deposited';
+            p.el.classList.add('settled');
+            p.el.style.transformOrigin = `${p.x}px ${p.y}px`;
+
+            if (spawnedCount >= (MAX_LAYERS * ROWS) && particles.every(pt => pt.state === 'deposited')) {
+              resetAnimation();
+            }
+          }
+        }
+        
+        p.el.setAttribute("cx", p.x);
+        p.el.setAttribute("cy", p.y);
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    initSlots();
+    update();
+    ]]>
+  </script>
+</svg>

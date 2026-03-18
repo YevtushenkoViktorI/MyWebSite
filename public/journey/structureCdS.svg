@@ -1,0 +1,381 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"
+     style="font-family: 'Inter', system-ui, -apple-system, sans-serif; overflow: hidden;">
+<defs>
+  <!-- Atoms Shading -->
+  <radialGradient id="gradCdBase" cx="40%" cy="30%" r="70%">
+    <stop offset="0%"   stop-color="rgba(0, 242, 254, 0.95)" />
+    <stop offset="50%"  stop-color="rgba(79, 172, 254, 0.85)" />
+    <stop offset="100%" stop-color="rgba(10, 60, 110, 0.7)" />
+  </radialGradient>
+  <radialGradient id="gradCdActive" cx="40%" cy="30%" r="70%">
+    <stop offset="0%"   stop-color="#ffffff" />
+    <stop offset="30%"  stop-color="#00f2fe" />
+    <stop offset="100%" stop-color="#4facfe" />
+  </radialGradient>
+
+  <radialGradient id="gradSBase" cx="40%" cy="30%" r="70%">
+    <stop offset="0%"   stop-color="rgba(255, 229, 60, 0.95)" />
+    <stop offset="50%"  stop-color="rgba(255, 137, 0, 0.85)" />
+    <stop offset="100%" stop-color="rgba(120, 30, 0, 0.7)" />
+  </radialGradient>
+  <radialGradient id="gradSActive" cx="40%" cy="30%" r="70%">
+    <stop offset="0%"   stop-color="#ffffff" />
+    <stop offset="30%"  stop-color="#ffe53c" />
+    <stop offset="100%" stop-color="#ff8900" />
+  </radialGradient>
+
+  <radialGradient id="glassShine" cx="30%" cy="25%" r="60%">
+    <stop offset="0%"   stop-color="rgba(255, 255, 255, 0.85)" />
+    <stop offset="40%"  stop-color="rgba(255, 255, 255, 0.15)" />
+    <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+  </radialGradient>
+  <radialGradient id="glassShadow" cx="75%" cy="75%" r="60%">
+    <stop offset="0%"   stop-color="rgba(0, 0, 0, 0.6)" />
+    <stop offset="100%" stop-color="rgba(0, 0, 0, 0)" />
+  </radialGradient>
+
+  <!-- Glowing halo for active atom -->
+  <filter id="glowTarget" x="-200%" y="-200%" width="500%" height="500%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur2" />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur3" />
+    <feColorMatrix in="blur3" type="matrix" values="0 0 0 0 0.5   0 0 0 0 1.0   0 0 0 0 0.8   0 0 0 1.5 0" result="neon" />
+    <feMerge>
+      <feMergeNode in="neon" />
+      <feMergeNode in="blur2" />
+      <feMergeNode in="SourceGraphic" />
+    </feMerge>
+  </filter>
+
+  <!-- Electron Flare -->
+  <filter id="glowElectron" x="-200%" y="-200%" width="500%" height="500%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1" />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur2" />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur3" />
+    <feColorMatrix in="blur3" type="matrix" values="0 0 0 0 0.2  0 0 0 0 1  0 0 0 0 0.9  0 0 0 1.5 0" result="cyanHalo" />
+    <feMerge>
+      <feMergeNode in="cyanHalo" />
+      <feMergeNode in="blur2" />
+      <feMergeNode in="blur1" />
+      <feMergeNode in="SourceGraphic" />
+    </feMerge>
+  </filter>
+
+</defs>
+
+<!-- 3D SCENE -->
+<g id="scene"/>
+
+<!-- ELECTRON LAYER -->
+<g id="eGroup">
+  <circle id="eTrail" r="22" fill="rgba(0, 250, 255, 0.08)" filter="url(#glowElectron)"/>
+  <circle id="eCore"  r="5" fill="#ffffff" filter="url(#glowElectron)"/>
+</g>
+
+<script type="text/javascript"><![CDATA[
+(function(){
+"use strict";
+
+const NS = "http://www.w3.org/2000/svg";
+const scene = document.getElementById("scene");
+const svgElem = scene.ownerSVGElement;
+const domW = svgElem.clientWidth || window.innerWidth || 1400;
+
+svgElem.setAttribute("viewBox", `0 0 ${domW} 600`);
+
+/* ─── CRYSTAL GEOMETRY (Massive Panoramic Wurtzite Block) ─── */
+const SC = 75; // Scale to fit a massive block
+const cA = 1.633; // Ideal Wurtzite c/a ratio
+const uS = 0.375; // Ideal internal parameter
+
+function frac(n1, n2, n3){
+  return {
+    x: (n1 + n3*0.5) * SC,
+    y:  n2 * cA      * SC,
+    z:  n3 * Math.sqrt(3)/2 * SC
+  };
+}
+
+let raw = [];
+let maxX = domW * 0.42;
+let maxZ = 150;
+let maxNx = Math.ceil(maxX / SC);
+let maxNz = Math.ceil(maxZ / SC);
+
+// Generate a horizontal lattice depending on parent view, max 6 layers vertically
+for(let n1 = -maxNx; n1 <= maxNx; n1++) {
+  for(let n2 = -1; n2 <= 0; n2++) { // n2=[-1,0] makes exactly 6 layers (3 Cd, 3 S) with one hanging layer cut
+    for(let n3 = -maxNz; n3 <= maxNz; n3++) {
+      raw.push({ t:"Cd", c: frac(n1,       n2,       n3) });
+      raw.push({ t:"Cd", c: frac(n1 + 1/3, n2 + 0.5, n3 + 1/3) });
+      raw.push({ t:"S",  c: frac(n1,       n2 + uS,  n3) });
+      raw.push({ t:"S",  c: frac(n1 + 1/3, n2 + 0.5 + uS, n3 + 1/3) });
+    }
+  }
+}
+
+// Center the raw lattice
+let cx=0, cy=0, cz=0;
+raw.forEach(a => { cx+=a.c.x; cy+=a.c.y; cz+=a.c.z; });
+cx/=raw.length; cy/=raw.length; cz/=raw.length;
+raw.forEach(a => { a.c.x-=cx; a.c.y-=cy; a.c.z-=cz; });
+
+// Keep the crystal wide and massive
+let clippedAtoms = raw.filter(a => {
+  let x = Math.abs(a.c.x);
+  let z = Math.abs(a.c.z);
+  let y = Math.abs(a.c.y);
+  return x < maxX && z < maxZ && y < 220;
+});
+
+/* ─── BONDS (Ball and stick model) ─── */
+const BMAX = 0.68 * SC; // Exact bond safely grabs 4 neighbors
+let bonds = [];
+for(let i=0; i<clippedAtoms.length; i++){
+  for(let j=i+1; j<clippedAtoms.length; j++){
+    if(clippedAtoms[i].t === clippedAtoms[j].t) continue;
+    let dx = clippedAtoms[i].c.x - clippedAtoms[j].c.x;
+    let dy = clippedAtoms[i].c.y - clippedAtoms[j].c.y;
+    let dz = clippedAtoms[i].c.z - clippedAtoms[j].c.z;
+    if(Math.sqrt(dx*dx + dy*dy + dz*dz) < BMAX) {
+      bonds.push({ i, j });
+    }
+  }
+}
+
+/* ─── SAFE PRUNING TO REMOVE PROTRUDING DANGLING ATOMS ─── */
+let atoms = clippedAtoms;
+let changed = true;
+while (changed) {
+  changed = false;
+  let deg = new Array(atoms.length).fill(0);
+  bonds.forEach(b => { deg[b.i]++; deg[b.j]++; });
+  
+  let newAtoms = [], oldToNew = {};
+  atoms.forEach((a, i) => {
+    if (deg[i] > 1) { // Surface atom with 2, 3, or internal with 4 bonds
+      oldToNew[i] = newAtoms.length;
+      newAtoms.push(a);
+    } else {
+      changed = true; // Cut off the hanging atom
+    }
+  });
+  
+  if (changed) {
+    atoms = newAtoms;
+    bonds = bonds.filter(b => oldToNew[b.i] !== undefined && oldToNew[b.j] !== undefined)
+                 .map(b => ({ i: oldToNew[b.i], j: oldToNew[b.j] }));
+  }
+}
+
+/* ─── ELECTRON PATH ─── */
+let adj = atoms.map(()=>[]);
+bonds.forEach(b => { adj[b.i].push(b.j); adj[b.j].push(b.i); });
+
+let startIdx = 0, bestD = Infinity;
+atoms.forEach((a,i) => {
+  let d = Math.sqrt(a.c.x**2 + a.c.y**2 + a.c.z**2);
+  if(d < bestD && adj[i].length > 0){ bestD=d; startIdx=i; }
+});
+
+function buildPath(start, steps){
+  let path = [start], cur = start, prev = -1;
+  for(let s=0; s<steps; s++){
+    let nbrs = adj[cur].filter(n => n !== prev);
+    if(!nbrs.length) nbrs = adj[cur]; // fallback if cornered
+    let nxt = nbrs[(s * 7 + 2) % nbrs.length]; // robust deterministic walk
+    path.push(nxt);
+    prev = cur; cur = nxt;
+  }
+  path.push(path[0]);
+  return path;
+}
+let ePath = buildPath(startIdx, 45); // VERY Long path traversing internal bonds
+
+/* ─── 3D PROJECTION ENGINE (Panoramic Camera) ─── */
+const CX = domW / 2, CY = 300, FOV = 1100, ZDEPTH = 300;
+const TILT_X = 20 * Math.PI/180;
+const cosTX = Math.cos(TILT_X), sinTX = Math.sin(TILT_X);
+
+function project(p, angX, angY, angZ, floatBase){
+  // 1. Rotation around Z-axis (Roll)
+  let cosZ = Math.cos(angZ), sinZ = Math.sin(angZ);
+  let p1x = cosZ*p.x - sinZ*p.y;
+  let p1y = sinZ*p.x + cosZ*p.y;
+  let p1z = p.z;
+
+  // 2. Rotation around Y-axis (Yaw)
+  let cosY = Math.cos(angY), sinY = Math.sin(angY);
+  let p2x =  cosY*p1x + sinY*p1z;
+  let p2z = -sinY*p1x + cosY*p1z;
+  let p2y = p1y;
+
+  // 3. Rotation around X-axis (Pitch)
+  let cosX = Math.cos(angX), sinX = Math.sin(angX);
+  let p3y = cosX*p2y - sinX*p2z;
+  let p3z = sinX*p2y + cosX*p2z;
+  let p3x = p2x;
+  
+  // Apply final static isometric tilt (TILT_X) so it lays flat towards the camera
+  let ry2 = cosTX*p3y - sinTX*p3z;
+  let rz2 = sinTX*p3y + cosTX*p3z;
+  
+  let d = FOV/(FOV + rz2 + ZDEPTH);
+  let floatY = floatBase * d;
+  return { sx: CX + p3x*d, sy: CY - ry2*d + floatY, sz: rz2, d };
+}
+
+/* ─── DOM GENERATION ─── */
+let bElems = bonds.map(() => {
+  let g = document.createElementNS(NS, "g");
+  let l1 = document.createElementNS(NS, "line");
+  let l2 = document.createElementNS(NS, "line");
+  l1.setAttribute("stroke-linecap", "round");
+  l2.setAttribute("stroke-linecap", "round");
+  g.appendChild(l1);
+  g.appendChild(l2);
+  scene.appendChild(g);
+  return { g, l1, l2 };
+});
+
+let aElems = atoms.map(a => {
+  let g = document.createElementNS(NS, "g");
+  let glowOuter   = document.createElementNS(NS, "circle");
+  let core        = document.createElementNS(NS, "circle");
+
+  core.setAttribute("fill", a.t==="Cd" ? "url(#gradCdBase)" : "url(#gradSBase)");
+  glowOuter.setAttribute("fill", a.t==="Cd" ? "url(#gradCdBase)" : "url(#gradSBase)");
+
+  g.appendChild(glowOuter);
+  g.appendChild(core);
+  scene.appendChild(g);
+  return { g, glowOuter, core, t: a.t, glowAmt: 0 };
+});
+
+const eGroup = document.getElementById("eGroup");
+const eTrail = document.getElementById("eTrail");
+const eCore  = document.getElementById("eCore");
+
+/* ─── ANIMATION LOOP ─── */
+const HOP_T = 1200;
+let angY = 0.5; // Yaw
+let angX = 0.0; // Pitch
+let angZ = 0.0; // Roll
+let lastT = null, hopStart = null, eIdx = 0;
+
+requestAnimationFrame(function frame(ts){
+  if(!lastT){ lastT=ts; hopStart=ts; }
+  let dt = Math.min(34, ts - lastT); // clamp to avoid jumps after frame drops
+  lastT = ts;
+
+  // Time-based angles are smoother than incremental accumulation.
+  angY = 0.5 + ts * 0.0001;
+  angX = 0.05 * Math.sin(ts * 0.0002);
+  angZ = 0.035 * Math.cos(ts * 0.00015);
+  const floatBase = Math.sin(ts * 0.001) * 5;
+
+  let projs = atoms.map(a => project(a.c, angX, angY, angZ, floatBase));
+
+  let hopT = (ts - hopStart) / HOP_T;
+  if(hopT >= 1){ hopT=0; hopStart=ts; eIdx = (eIdx+1) % (ePath.length-1); }
+  
+  // Smootherstep interpolation for softer acceleration/deceleration.
+  let tEase = hopT * hopT * hopT * (hopT * (hopT * 6 - 15) + 10);
+  let iA = ePath[eIdx], iB = ePath[eIdx+1];
+  let pA = projs[iA], pB = projs[iB];
+  
+  let ex = pA.sx + (pB.sx-pA.sx)*tEase;
+  let ey = pA.sy + (pB.sy-pA.sy)*tEase;
+  let ed = pA.d  + (pB.d -pA.d )*tEase;
+  
+  let activeAtomIdx = tEase > 0.5 ? iB : iA; 
+  atoms.forEach((a, i) => {
+    let targetGlow = (i === activeAtomIdx) ? 1.0 : 0.0;
+    aElems[i].glowAmt += (targetGlow - aElems[i].glowAmt) * Math.min(1, dt * 0.015);
+  });
+
+  /* ── 1. RENDER BONDS ── */
+  for (let bi = 0; bi < bonds.length; bi++) {
+    let b = bonds[bi];
+    let p1 = projs[b.i], p2 = projs[b.j];
+    let mz = (p1.sz + p2.sz) * 0.5;
+    
+    let isElectronBond = (ePath[eIdx]===b.i && ePath[eIdx+1]===b.j) || (ePath[eIdx]===b.j && ePath[eIdx+1]===b.i);
+    let mx = (p1.sx + p2.sx) / 2;
+    let my = (p1.sy + p2.sy) / 2;
+
+    let depthAlpha = Math.max(0.1, Math.min(0.85, 0.95 - mz/1000));
+    let alpha = isElectronBond ? 1.0 : depthAlpha;
+    let baseWidth = isElectronBond ? 4.5 * p1.d : 2.5 * p1.d;
+    
+    let color1 = isElectronBond ? `rgba(0, 242, 254, 1)` : (atoms[b.i].t==="Cd" ? `rgba(79, 172, 254, ${alpha})` : `rgba(255, 180, 50, ${alpha})`);
+    let color2 = isElectronBond ? `rgba(0, 242, 254, 1)` : (atoms[b.j].t==="Cd" ? `rgba(79, 172, 254, ${alpha})` : `rgba(255, 180, 50, ${alpha})`);
+
+    let els = bElems[bi];
+    els.l1.setAttribute("x1", p1.sx.toFixed(1)); els.l1.setAttribute("y1", p1.sy.toFixed(1));
+    els.l1.setAttribute("x2", mx.toFixed(1));    els.l1.setAttribute("y2", my.toFixed(1));
+    els.l1.setAttribute("stroke", color1);
+    els.l1.setAttribute("stroke-width", baseWidth.toFixed(1));
+    
+    els.l2.setAttribute("x1", mx.toFixed(1));    els.l2.setAttribute("y1", my.toFixed(1));
+    els.l2.setAttribute("x2", p2.sx.toFixed(1)); els.l2.setAttribute("y2", p2.sy.toFixed(1));
+    els.l2.setAttribute("stroke", color2);
+    els.l2.setAttribute("stroke-width", baseWidth.toFixed(1));
+    
+    if(isElectronBond) {
+      els.l1.setAttribute("filter", "url(#glowElectron)"); 
+      els.l2.setAttribute("filter", "url(#glowElectron)"); 
+    } else {
+      els.l1.removeAttribute("filter");
+      els.l2.removeAttribute("filter");
+    }
+  }
+
+  /* ── 2. RENDER ATOMS ── */
+  let baseRCd = 14, baseRS = 11;
+
+  for (let idx = 0; idx < atoms.length; idx++) {
+    let p = projs[idx];
+    let al = aElems[idx];
+    let gl = al.glowAmt;
+
+    let baseR = (al.t === "Cd" ? baseRCd : baseRS) * p.d;
+    let r = baseR * (1 + gl * 0.4); 
+    
+    let fade = Math.max(0.3, Math.min(1.0, 1.2 - p.sz/800));
+    let finalOpacity = fade * (1.0 + gl * 0.2); 
+
+    if(gl > 0.05) {
+      al.core.setAttribute("fill", al.t==="Cd" ? "url(#gradCdActive)" : "url(#gradSActive)");
+      al.glowOuter.setAttribute("opacity", (0.5 + gl*0.6).toFixed(2));
+      al.glowOuter.removeAttribute("filter");
+    } else {
+      al.core.setAttribute("fill", al.t==="Cd" ? "url(#gradCdBase)" : "url(#gradSBase)");
+      al.glowOuter.setAttribute("opacity", "0");
+      al.glowOuter.removeAttribute("filter");
+    }
+
+    al.glowOuter.setAttribute("cx", p.sx.toFixed(1));
+    al.glowOuter.setAttribute("cy", p.sy.toFixed(1));
+    al.glowOuter.setAttribute("r", (r*1.1).toFixed(1));
+
+    al.core.setAttribute("cx", p.sx.toFixed(1));
+    al.core.setAttribute("cy", p.sy.toFixed(1));
+    al.core.setAttribute("r", r.toFixed(1));
+
+    al.g.setAttribute("opacity", Math.min(1, finalOpacity).toFixed(3));
+  }
+
+  /* ── 3. RENDER ELECTRON ── */
+  let rE = ed * 1.2;
+  eTrail.setAttribute("cx", ex.toFixed(1)); eTrail.setAttribute("cy", ey.toFixed(1));
+  eTrail.setAttribute("r", (24*rE).toFixed(1));
+  
+  eCore.setAttribute("cx", ex.toFixed(1)); eCore.setAttribute("cy", ey.toFixed(1));
+  eCore.setAttribute("r", (5*rE).toFixed(1));
+  
+  requestAnimationFrame(frame);
+});
+
+})();
+]]></script>
+</svg>
