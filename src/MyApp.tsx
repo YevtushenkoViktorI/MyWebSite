@@ -146,12 +146,14 @@ function MyRealtimePulseLegacyPreview() {
   );
 }
 
-function MyRealtimePulsePreview() {
+function MyRealtimePulsePreview({ myIsDarkMode }: { myIsDarkMode: boolean }) {
   return (
     <div className="myJourneyNanoScene myJourneyPipelineScene" aria-hidden="true">
       <object
         className="myJourneyNanoEmbed myJourneyPipelineEmbed"
-        data="/journey/engineering_pipeline_animated_improved.svg"
+        data={myIsDarkMode
+          ? "/journey/engineering_pipeline_animated_improved.svg"
+          : "/journey/engineering_pipeline_animated_improved_light.svg"}
         type="image/svg+xml"
         aria-label="Engineering pipeline animation"
       />
@@ -717,7 +719,7 @@ export function MyApp() {
                   ))}
                 </ul>
                 <div className="myJourneyPreview" aria-hidden="true">
-                  {myRenderJourneyPreview(myActiveJourney.myOrder)}
+                  {myRenderJourneyPreview(myActiveJourney.myOrder, myTheme === "dark")}
                 </div>
               </div>
             </article>
@@ -1071,7 +1073,7 @@ export function MyApp() {
     </div>
   );
 }
-  function myRenderJourneyPreview(myOrder: number) {
+  function myRenderJourneyPreview(myOrder: number, myIsDarkMode: boolean) {
     switch (myOrder) {
       case 0:
         return <MyEmbeddedSystemsPreview />;
@@ -1082,7 +1084,7 @@ export function MyApp() {
       case 5:
         return <MyCodingPreview />;
       case 6:
-        return <MyRealtimePulsePreview />;
+        return <MyRealtimePulsePreview myIsDarkMode={myIsDarkMode} />;
       default:
         return <MyDataFlowPreview />;
     }

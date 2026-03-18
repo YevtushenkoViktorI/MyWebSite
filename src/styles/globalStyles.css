@@ -3204,14 +3204,18 @@ a {
 [data-theme="light"] .myJourneyPipelineEmbed {
   position: relative;
   z-index: 2;
-  filter: contrast(1.48) saturate(1.34) brightness(0.72) drop-shadow(0 12px 24px color-mix(in srgb, #3f78a5 22%, transparent));
+  filter: contrast(1.38) saturate(1.28) brightness(0.93) drop-shadow(0 10px 18px color-mix(in srgb, #4f8dac 18%, transparent));
 }
 
 [data-theme="light"] .myJourneyPipelineScene {
   background:
-    radial-gradient(circle at 20% 34%, color-mix(in srgb, #78cad3 14%, transparent), transparent 60%),
-    radial-gradient(circle at 78% 26%, color-mix(in srgb, #88a9dd 13%, transparent), transparent 62%),
-    linear-gradient(142deg, #d9e8ef 0%, #d2e0eb 48%, #cedaeb 100%);
+    radial-gradient(circle at 20% 34%, color-mix(in srgb, #79cfd8 11%, transparent), transparent 62%),
+    radial-gradient(circle at 78% 26%, color-mix(in srgb, #8aaee4 10%, transparent), transparent 64%),
+    linear-gradient(142deg, #e6eef6 0%, #dde7f1 46%, #d7e2ee 100%);
+  border-color: color-mix(in srgb, #79aecd 48%, var(--colorBorder));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 62%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, #83bad5 28%, transparent);
 }
 
 [data-theme="light"] .myJourneyPipelineScene::before {
@@ -3221,10 +3225,10 @@ a {
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 24% 42%, color-mix(in srgb, #6eb9c9 12%, transparent), transparent 62%),
-    radial-gradient(circle at 76% 36%, color-mix(in srgb, #7e9bd1 11%, transparent), transparent 64%),
-    linear-gradient(140deg, color-mix(in srgb, #4f7fa6 8%, transparent), color-mix(in srgb, #6382b5 8%, transparent));
-  opacity: 0.24;
+    radial-gradient(circle at 24% 42%, color-mix(in srgb, #67b9c9 8%, transparent), transparent 64%),
+    radial-gradient(circle at 76% 36%, color-mix(in srgb, #7997cb 7%, transparent), transparent 66%),
+    linear-gradient(140deg, color-mix(in srgb, #5d8db4 4%, transparent), color-mix(in srgb, #6e92c6 4%, transparent));
+  opacity: 0.12;
 }
 
 [data-theme="light"] .myJourneyPipelineScene::after {
@@ -3234,9 +3238,9 @@ a {
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(120% 82% at 50% 50%, color-mix(in srgb, #2b5f90 20%, transparent), transparent 62%),
-    linear-gradient(90deg, color-mix(in srgb, #3f7298 12%, transparent), transparent 20%, transparent 80%, color-mix(in srgb, #596fa2 12%, transparent));
-  opacity: 0.22;
+    radial-gradient(120% 82% at 50% 50%, color-mix(in srgb, #3f709e 9%, transparent), transparent 66%),
+    linear-gradient(90deg, color-mix(in srgb, #4a7ca8 5%, transparent), transparent 20%, transparent 80%, color-mix(in srgb, #6280b2 5%, transparent));
+  opacity: 0.1;
 }
 
 [data-theme="light"] .myJourneyFlowField {
