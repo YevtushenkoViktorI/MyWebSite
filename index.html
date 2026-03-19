@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Portfolio</title>
+    <script>
+      (function () {
+        var myIsGithubPages = window.location.hostname.endsWith(".github.io");
+        var myProjectBasePath = "/MyWebSite/";
+        if (myIsGithubPages && window.location.pathname === "/") {
+          window.location.replace(myProjectBasePath);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
