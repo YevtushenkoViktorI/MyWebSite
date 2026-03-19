@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: "Sora";
-  src: url("/fonts/Sora-SemiBold.woff2") format("woff2");
+  src: local("Sora SemiBold"), local("Sora-SemiBold");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: "Sora";
-  src: url("/fonts/Sora-Bold.woff2") format("woff2");
+  src: local("Sora Bold"), local("Sora-Bold");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -23,7 +23,7 @@
 
 @font-face {
   font-family: "Manrope";
-  src: url("/fonts/Manrope-Regular.woff2") format("woff2");
+  src: local("Manrope Regular"), local("Manrope-Regular");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -31,7 +31,7 @@
 
 @font-face {
   font-family: "Manrope";
-  src: url("/fonts/Manrope-SemiBold.woff2") format("woff2");
+  src: local("Manrope SemiBold"), local("Manrope-SemiBold");
   font-weight: 600;
   font-style: normal;
   font-display: swap;

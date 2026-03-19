@@ -7,13 +7,22 @@ npm install
 npm run dev
 ```
 
-## Font files
+## Build
 
-Put local fonts into `public/fonts`:
-- `Sora-SemiBold.woff2`
-- `Sora-Bold.woff2`
-- `Manrope-Regular.woff2`
-- `Manrope-SemiBold.woff2`
+```bash
+npm run build
+```
+
+## GitHub Pages
+
+- Use **GitHub Actions** as Pages source.
+- This repo is configured for project path deployment via `.env.production`:
+  - `VITE_BASE_PATH=/MyWebSite/`
+- Do not publish raw `main` source as static site root; publish built `dist` artifact (workflow already does this).
+
+## Fonts
+
+`src/styles/localFonts.css` now uses local/system font fallback for `Sora` and `Manrope`, so missing `/fonts/*.woff2` requests are avoided.
 
 ## Structure
 

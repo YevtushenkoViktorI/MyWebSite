@@ -5,6 +5,7 @@ import { MySectionTitle } from "./components/mySectionTitle";
 import { MyTimelineItem } from "./components/myTimelineItem";
 import { myDefaultLanguage, myLanguageOptions, myTranslations } from "./i18n/myI18n";
 import type { myCertificateItem, myLanguageCode } from "./i18n/myTypes";
+import { myAssetPath } from "./utils/myAssetPath";
 
 const myLanguageStorageKey = "myPortfolioLanguage";
 const myThemeStorageKey = "myPortfolioTheme";
@@ -37,7 +38,7 @@ function MyNanoLatticePreview() {
     <div className="myJourneyNanoScene" aria-hidden="true">
       <object
         className="myJourneyNanoEmbed"
-        data="/journey/structureCdS.svg"
+        data={myAssetPath("/journey/structureCdS.svg")}
         type="image/svg+xml"
         aria-label="Cadmium sulfide crystal structure"
       />
@@ -50,7 +51,7 @@ function MyVacuumDepositionPreview() {
     <div className="myJourneyNanoScene" aria-hidden="true">
       <object
         className="myJourneyNanoEmbed"
-        data="/journey/depositionCdS.svg"
+        data={myAssetPath("/journey/depositionCdS.svg")}
         type="image/svg+xml"
         aria-label="Vacuum deposition process animation"
       />
@@ -63,7 +64,7 @@ function MyEmbeddedSystemsPreview() {
     <div className="myJourneyNanoScene" aria-hidden="true">
       <object
         className="myJourneyNanoEmbed myJourneyEmbeddedEmbed"
-        data="/journey/embeddedSystems.svg"
+        data={myAssetPath("/journey/embeddedSystems.svg")}
         type="image/svg+xml"
         aria-label="Embedded systems and microcontroller animation"
       />
@@ -151,9 +152,9 @@ function MyRealtimePulsePreview({ myIsDarkMode }: { myIsDarkMode: boolean }) {
     <div className="myJourneyNanoScene myJourneyPipelineScene" aria-hidden="true">
       <object
         className="myJourneyNanoEmbed myJourneyPipelineEmbed"
-        data={myIsDarkMode
+        data={myAssetPath(myIsDarkMode
           ? "/journey/engineering_pipeline_animated_improved.svg"
-          : "/journey/engineering_pipeline_animated_improved_light.svg"}
+          : "/journey/engineering_pipeline_animated_improved_light.svg")}
         type="image/svg+xml"
         aria-label="Engineering pipeline animation"
       />
@@ -822,7 +823,7 @@ export function MyApp() {
                   {myActiveProject.myDetailImages.map((myImage, myImageIndex) => (
                     <figure key={`${myActiveProject.myTitle}-image-${myImageIndex}`} className="myJourneyDetailFigure">
                       <img
-                        src={myImage}
+                        src={myAssetPath(myImage)}
                         alt={`${myActiveProject.myTitle} screenshot ${myImageIndex + 1}`}
                         loading="lazy"
                       />
@@ -1013,12 +1014,12 @@ export function MyApp() {
               <div className="myCertificatePreviewFrame">
                 {myActiveCertificateDocument.myFile.toLowerCase().endsWith(".pdf") ? (
                   <iframe
-                    src={myActiveCertificateDocument.myFile}
+                    src={myAssetPath(myActiveCertificateDocument.myFile)}
                     title={`${myActiveCertificate.myTitle} document preview`}
                   />
                 ) : (
                   <img
-                    src={myActiveCertificateDocument.myFile}
+                    src={myAssetPath(myActiveCertificateDocument.myFile)}
                     alt={`${myActiveCertificate.myTitle} document`}
                     loading="lazy"
                   />
@@ -1028,7 +1029,7 @@ export function MyApp() {
               <div className="myCertificatePreviewActions">
                 <a
                   className="myPrimaryButton"
-                  href={myActiveCertificateDocument.myFile}
+                  href={myAssetPath(myActiveCertificateDocument.myFile)}
                   download={myActiveCertificateDocument.myDownloadName}
                 >
                   {myText.myEducationSection.myDownloadLabel}

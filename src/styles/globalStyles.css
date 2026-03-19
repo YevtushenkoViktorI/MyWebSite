@@ -295,7 +295,7 @@ a {
   width: 100%;
   min-height: 560px;
   border-radius: 28px;
-  background-image: linear-gradient(170deg, color-mix(in srgb, var(--colorPrimary) 20%, transparent), transparent 48%), url("/myHeroPortrait.jpg");
+  background-image: linear-gradient(170deg, color-mix(in srgb, var(--colorPrimary) 20%, transparent), transparent 48%), url("../myHeroPortrait.jpg");
   background-size: cover;
   background-position: center;
   border: 1px solid var(--colorBorder);

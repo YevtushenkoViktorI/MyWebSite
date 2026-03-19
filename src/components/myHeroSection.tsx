@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { myAssetPath } from "../utils/myAssetPath";
 
 type myHeroSectionProps = {
   myGreeting: string;
@@ -250,8 +251,8 @@ export function MyHeroSection({
 
           <div className="myButtonRow">
             <a className="myPrimaryButton" href="#myProjects">{myPrimaryButton}</a>
-            <a className="mySecondaryButton" href="/YevtushenkoCV.pdf" download="Viktor-Yevtushenko-CV.pdf">{myDownloadLabel}</a>
-            <a className="mySecondaryButton" href="/Portfolio2026.pdf" download="Viktor-Yevtushenko-Portfolio-2026.pdf">{myPortfolioButton}</a>
+            <a className="mySecondaryButton" href={myAssetPath("/YevtushenkoCV.pdf")} download="Viktor-Yevtushenko-CV.pdf">{myDownloadLabel}</a>
+            <a className="mySecondaryButton" href={myAssetPath("/Portfolio2026.pdf")} download="Viktor-Yevtushenko-Portfolio-2026.pdf">{myPortfolioButton}</a>
             <a className="myLinkButton" href="#myContact">{mySecondaryButton}</a>
           </div>
         </div>
