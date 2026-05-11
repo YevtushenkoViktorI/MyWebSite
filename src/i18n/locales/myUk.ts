@@ -320,6 +320,12 @@ export const myUk: myTranslation = {
         mySummary: "Продовжую вивчення німецької мови на рівні B1, готуючись до довгострокової технічної ролі у Швейцарії. Зосереджений на професійній комунікації для інженерного та програмного середовища."
       },
       {
+        myTitle: "Учасник курсу Business Creation ICT",
+        myPlace: "Innosuisse, Берн / онлайн",
+        myPeriod: "Бер 2026 - Кві 2026",
+        mySummary: "Завершив курс Innosuisse Business Creation ICT, орієнтований на створення та перевірку ICT-бізнес-ідей. Програма поєднувала очні заняття в Берні та онлайн-дні й охоплювала створення стартапу, бізнес-моделювання, перевірку ринку та практичну підготовку до технологічного підприємництва у Швейцарії."
+      },
+      {
         myTitle: "Учасник менторської програми",
         myPlace: "Power Hub Zug, Швейцарія",
         myPeriod: "Сер 2025 - Лис 2025",
@@ -391,6 +397,19 @@ export const myUk: myTranslation = {
       }
     ],
     myCertificates: [
+      {
+        myTitle: "Сертифікат Innosuisse Business Creation ICT",
+        myPlace: "Innosuisse, Берн / онлайн, Швейцарія",
+        myPeriod: "2026",
+        mySummary: "Сертифікат про завершення курсу Business Creation ICT з очними заняттями в Берні та онлайн-днями, присвяченого startup development, бізнес-моделюванню та ICT-підприємництву.",
+        myDocuments: [
+          {
+            myLabel: "Сертифікат",
+            myFile: "/certificates/Innosuisse_Viktor_Yevtushenko.pdf",
+            myDownloadName: "innosuisse-business-creation-ict-viktor-yevtushenko-2026.pdf"
+          }
+        ]
+      },
       {
         myTitle: "Сертифікат Mentoring Program PowerHubZug",
         myPlace: "PowerHubZug, Швейцарія",

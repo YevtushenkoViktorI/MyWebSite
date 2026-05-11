@@ -131,6 +131,12 @@ const myExperienceItemsDe: myTimelineItem[] = [
     mySummary: "Fortlaufendes Deutschlernen auf B1-Niveau als Vorbereitung auf eine langfristige technische Rolle in der Schweiz. Fokus auf professioneller Kommunikation fuer Engineering- und Software-Entwicklungsumfelder."
   },
   {
+    myTitle: "Teilnehmer Business Creation ICT Kurs",
+    myPlace: "Innosuisse, Bern / Online",
+    myPeriod: "Maerz 2026 - Apr 2026",
+    mySummary: "Abgeschlossener Innosuisse Business Creation ICT Kurs mit Fokus auf Aufbau und Validierung von ICT-Geschaeftsideen. Das Programm kombinierte Praesenztage in Bern und Online-Kurstage zu Startup-Aufbau, Business Modelling, Marktvalidierung und praktischer Vorbereitung auf Technologie-Unternehmertum in der Schweiz."
+  },
+  {
     myTitle: "Teilnehmer Mentoring-Programm",
     myPlace: "Power Hub Zug, Schweiz",
     myPeriod: "Aug 2025 - Nov 2025",
@@ -299,6 +305,19 @@ export const myDe: myTranslation = {
       }
     ],
     myCertificates: [
+      {
+        myTitle: "Innosuisse Business Creation ICT Zertifikat",
+        myPlace: "Innosuisse, Bern / Online, Schweiz",
+        myPeriod: "2026",
+        mySummary: "Zertifikat fuer den Abschluss des Business Creation ICT Kurses mit Praesenztagen in Bern und Online-Kurstagen zu Startup-Entwicklung, Business Modelling und ICT-Unternehmertum.",
+        myDocuments: [
+          {
+            myLabel: "Zertifikat",
+            myFile: "/certificates/Innosuisse_Viktor_Yevtushenko.pdf",
+            myDownloadName: "innosuisse-business-creation-ict-viktor-yevtushenko-2026.pdf"
+          }
+        ]
+      },
       {
         myTitle: "PowerHubZug Mentoring Program Zertifikat",
         myPlace: "PowerHubZug, Schweiz",

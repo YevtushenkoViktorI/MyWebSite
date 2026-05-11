@@ -320,6 +320,12 @@ export const myEn: myTranslation = {
         mySummary: "Continuing German language studies at B1 level while preparing for a long-term technical role in Switzerland. Focused on professional communication skills for engineering and software development environments."
       },
       {
+        myTitle: "Business Creation ICT Course Participant",
+        myPlace: "Innosuisse, Bern / Online",
+        myPeriod: "Mar 2026 - Apr 2026",
+        mySummary: "Completed the Innosuisse Business Creation ICT course focused on building and validating ICT business ideas. The program combined onsite sessions in Bern and online course days covering startup creation, business modelling, market validation, and practical preparation for technology entrepreneurship in Switzerland."
+      },
+      {
         myTitle: "Mentoring Program Participant",
         myPlace: "Power Hub Zug, Switzerland",
         myPeriod: "Aug 2025 - Nov 2025",
@@ -391,6 +397,19 @@ export const myEn: myTranslation = {
       }
     ],
     myCertificates: [
+      {
+        myTitle: "Innosuisse Business Creation ICT Certificate",
+        myPlace: "Innosuisse, Bern / Online, Switzerland",
+        myPeriod: "2026",
+        mySummary: "Certificate for completing the Business Creation ICT course with onsite sessions in Bern and online course days focused on startup development, business modelling, and ICT entrepreneurship.",
+        myDocuments: [
+          {
+            myLabel: "Certificate",
+            myFile: "/certificates/Innosuisse_Viktor_Yevtushenko.pdf",
+            myDownloadName: "innosuisse-business-creation-ict-viktor-yevtushenko-2026.pdf"
+          }
+        ]
+      },
       {
         myTitle: "PowerHubZug Mentoring Program Certificate",
         myPlace: "PowerHubZug, Switzerland",
