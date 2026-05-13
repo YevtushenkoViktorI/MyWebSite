@@ -411,6 +411,19 @@ export const myUk: myTranslation = {
         ]
       },
       {
+        myTitle: "Сертифікат волонтера AILM Symposium 2026",
+        myPlace: "An Inclusive Labour Market, Баар, Швейцарія",
+        myPeriod: "2026",
+        mySummary: "Сертифікат подяки за волонтерський внесок і підтримку AILM Symposium 2026, присвяченого інклюзивному ринку праці.",
+        myDocuments: [
+          {
+            myLabel: "Сертифікат",
+            myFile: "/certificates/volunteerСertificate.jpg",
+            myDownloadName: "ailm-symposium-volunteer-certificate-2026.jpg"
+          }
+        ]
+      },
+      {
         myTitle: "Сертифікат Mentoring Program PowerHubZug",
         myPlace: "PowerHubZug, Швейцарія",
         myPeriod: "2025",

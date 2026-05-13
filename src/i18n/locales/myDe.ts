@@ -319,6 +319,19 @@ export const myDe: myTranslation = {
         ]
       },
       {
+        myTitle: "AILM Symposium 2026 Volunteer-Zertifikat",
+        myPlace: "An Inclusive Labour Market, Baar, Schweiz",
+        myPeriod: "2026",
+        mySummary: "Dankeszertifikat fuer den freiwilligen Beitrag und die Unterstuetzung des AILM Symposium 2026 mit Fokus auf den inklusiven Arbeitsmarkt.",
+        myDocuments: [
+          {
+            myLabel: "Zertifikat",
+            myFile: "/certificates/volunteerСertificate.jpg",
+            myDownloadName: "ailm-symposium-volunteer-certificate-2026.jpg"
+          }
+        ]
+      },
+      {
         myTitle: "PowerHubZug Mentoring Program Zertifikat",
         myPlace: "PowerHubZug, Schweiz",
         myPeriod: "2025",
