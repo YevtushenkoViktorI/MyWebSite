@@ -594,7 +594,7 @@ export const myEn: myTranslation = {
     myAddressCityLine: "2562 Port",
     myAddressStreetLine: "Rosenstrasse 12",
     myEmailLabel: "Email",
-    myEmail: "contact-info-on-request@example.com",
+    myEmail: "yevtushenkoviktor26@gmail.com",
     myLocation: "Bern, Switzerland",
     myLinkedinLabel: "LinkedIn",
     myGithubLabel: "GitHub",
