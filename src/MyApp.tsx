@@ -1052,14 +1052,26 @@ export function MyApp() {
             </div>
             <div className="myContactMetaCard">
               <ul className="myContactMessengerList">
-                <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">📱</span>{myText.myContactSection.myMobileLine}</li>
-                <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">✈️</span>{myText.myContactSection.myMessengerTelegram}</li>
-                <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">💬</span>{myText.myContactSection.myMessengerViber}</li>
-                <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">🟢</span>{myText.myContactSection.myMessengerWhatsApp}</li>
+                {myText.myContactSection.myMobileLine ? (
+                  <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">📱</span>{myText.myContactSection.myMobileLine}</li>
+                ) : null}
+                {myText.myContactSection.myMessengerTelegram ? (
+                  <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">✈️</span>{myText.myContactSection.myMessengerTelegram}</li>
+                ) : null}
+                {myText.myContactSection.myMessengerViber ? (
+                  <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">💬</span>{myText.myContactSection.myMessengerViber}</li>
+                ) : null}
+                {myText.myContactSection.myMessengerWhatsApp ? (
+                  <li className="mySectionText myContactMeta"><span className="myContactIcon" aria-hidden="true">🟢</span>{myText.myContactSection.myMessengerWhatsApp}</li>
+                ) : null}
               </ul>
               <ul className="myContactAddressList">
-                <li className="mySectionText myContactMeta myContactAddress"><span className="myContactIcon" aria-hidden="true">📍</span>{myText.myContactSection.myAddressCityLine}</li>
-                <li className="mySectionText myContactMeta myContactAddress"><span className="myContactIcon" aria-hidden="true">🏠</span>{myText.myContactSection.myAddressStreetLine}</li>
+                {myText.myContactSection.myAddressCityLine ? (
+                  <li className="mySectionText myContactMeta myContactAddress"><span className="myContactIcon" aria-hidden="true">📍</span>{myText.myContactSection.myAddressCityLine}</li>
+                ) : null}
+                {myText.myContactSection.myAddressStreetLine ? (
+                  <li className="mySectionText myContactMeta myContactAddress"><span className="myContactIcon" aria-hidden="true">🏠</span>{myText.myContactSection.myAddressStreetLine}</li>
+                ) : null}
               </ul>
             </div>
           </div>
