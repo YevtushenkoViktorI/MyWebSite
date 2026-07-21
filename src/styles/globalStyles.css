@@ -139,10 +139,212 @@ a {
 }
 
 .myLogo {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
   font-family: "Sora", sans-serif;
   font-size: 2rem;
   font-weight: 700;
+  line-height: 1;
   color: var(--colorPrimary);
+}
+
+.myLogoCluster {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  height: 48px;
+}
+
+.myTinyOwl {
+  position: relative;
+  display: block;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 58px;
+  margin: -5px 0 -5px -1px;
+  pointer-events: none;
+}
+
+.myTinyOwlStage {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, 0, 0);
+  transition: transform 720ms cubic-bezier(0.2, 0.78, 0.24, 1);
+  will-change: transform;
+}
+
+.myTinyOwlPosition-1 .myTinyOwlStage {
+  transform: translate3d(-5px, 0, 0);
+}
+
+.myTinyOwlPosition1 .myTinyOwlStage {
+  transform: translate3d(5px, 0, 0);
+}
+
+.myTinyOwlMotion {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 32px;
+  height: 59px;
+  transform: translateX(-50%);
+  transform-origin: 50% 88%;
+  will-change: transform;
+}
+
+.myTinyOwlImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 2px 2px color-mix(in srgb, #000000 28%, transparent));
+  animation: myTinyOwlBreathe 7.2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+  transition: opacity 520ms ease, filter 520ms ease;
+}
+
+.myTinyOwlBlack {
+  opacity: 0;
+}
+
+[data-theme="light"] .myTinyOwlSnowy {
+  opacity: 0;
+}
+
+[data-theme="light"] .myTinyOwlBlack {
+  opacity: 1;
+  filter:
+    drop-shadow(0 2px 2px color-mix(in srgb, #0b1b2b 24%, transparent))
+    drop-shadow(0 0 3px color-mix(in srgb, #ffffff 15%, transparent));
+}
+
+.myPageRoot.myUiTransitionTheme .myTinyOwlImage {
+  transition: opacity 520ms ease, filter 520ms ease;
+}
+
+.myTinyOwlShadow {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 25px;
+  height: 4px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--colorTextMain) 22%, transparent);
+  filter: blur(2px);
+  opacity: 0.42;
+  transform: translateX(-50%);
+  transition: width 260ms ease, opacity 260ms ease;
+}
+
+.myTinyOwlAction-lookLeft .myTinyOwlMotion {
+  animation: myTinyOwlLookLeft 1550ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.myTinyOwlAction-lookRight .myTinyOwlMotion {
+  animation: myTinyOwlLookRight 1450ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.myTinyOwlAction-hopLeft .myTinyOwlMotion,
+.myTinyOwlAction-hopRight .myTinyOwlMotion {
+  animation: myTinyOwlHop 920ms cubic-bezier(0.22, 0.75, 0.24, 1) both;
+}
+
+.myTinyOwlAction-hopLeft .myTinyOwlShadow,
+.myTinyOwlAction-hopRight .myTinyOwlShadow {
+  width: 17px;
+  opacity: 0.25;
+}
+
+.myTinyOwlAction-ruffle .myTinyOwlMotion {
+  animation: myTinyOwlRuffle 1050ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+
+.myLogoCluster:hover .myTinyOwlMotion {
+  animation: myTinyOwlNotice 850ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+
+@keyframes myTinyOwlBreathe {
+  0%,
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+  45% {
+    transform: scale3d(1.012, 0.994, 1);
+  }
+  58% {
+    transform: scale3d(0.997, 1.006, 1);
+  }
+}
+
+@keyframes myTinyOwlLookLeft {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  24%,
+  74% {
+    transform: translateX(calc(-50% - 1px)) rotate(-2.7deg);
+  }
+}
+
+@keyframes myTinyOwlLookRight {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  26%,
+  72% {
+    transform: translateX(calc(-50% + 1px)) rotate(2.5deg);
+  }
+}
+
+@keyframes myTinyOwlHop {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) scaleY(1);
+  }
+  16% {
+    transform: translateX(-50%) translateY(1px) scaleY(0.98);
+  }
+  46% {
+    transform: translateX(-50%) translateY(-7px) scaleY(1.012);
+  }
+  72% {
+    transform: translateX(-50%) translateY(-1px) scaleY(0.99);
+  }
+}
+
+@keyframes myTinyOwlRuffle {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1) rotate(0deg);
+  }
+  24% {
+    transform: translateX(-50%) scale(1.035, 0.985) rotate(-1deg);
+  }
+  42% {
+    transform: translateX(-50%) scale(0.985, 1.025) rotate(1.2deg);
+  }
+  58% {
+    transform: translateX(-50%) scale(1.025, 0.992) rotate(-0.7deg);
+  }
+}
+
+@keyframes myTinyOwlNotice {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  38%,
+  72% {
+    transform: translateX(-50%) translateY(-2px) rotate(1.8deg);
+  }
 }
 
 .myNav {
@@ -367,6 +569,14 @@ a {
 
   .myHeaderRow,
   .myHeaderRow::before {
+    animation: none;
+    transition: none;
+  }
+
+  .myTinyOwlStage,
+  .myTinyOwlMotion,
+  .myTinyOwlImage,
+  .myTinyOwlShadow {
     animation: none;
     transition: none;
   }
@@ -3952,5 +4162,37 @@ a {
 
   .myJourneyDetailGallery {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .myHeaderRow {
+    gap: 0.5rem;
+    padding: 0.72rem 0.82rem;
+  }
+
+  .myLogo {
+    height: 40px;
+    font-size: 1.72rem;
+  }
+
+  .myLogoCluster {
+    height: 43px;
+  }
+
+  .myTinyOwl {
+    flex-basis: 42px;
+    width: 42px;
+    height: 51px;
+    margin-block: -4px;
+  }
+
+  .myTinyOwlMotion {
+    width: 28px;
+    height: 52px;
+  }
+
+  .myHeaderActions {
+    gap: 0.45rem;
   }
 }
