@@ -1,5 +1,3 @@
-const myGaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
 let myHasInitializedAnalytics = false;
 let myLastTrackedLocation = "";
 
@@ -92,32 +90,13 @@ function myInstallClickTracking() {
 }
 
 export function myInitAnalytics() {
-  if (!myGaMeasurementId || myHasInitializedAnalytics) {
+  if (!window.gtag || myHasInitializedAnalytics) {
     return;
   }
 
   myHasInitializedAnalytics = true;
-
-  const myScript = document.createElement("script");
-  myScript.async = true;
-  myScript.src = `https://www.googletagmanager.com/gtag/js?id=${myGaMeasurementId}`;
-  document.head.appendChild(myScript);
-
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...myArgs: unknown[]) {
-    window.dataLayer!.push(myArgs);
-  };
-
-  window.gtag("js", new Date());
-  window.gtag("config", myGaMeasurementId, {
-    send_page_view: false,
-    anonymize_ip: true,
-    allow_google_signals: false,
-    allow_ad_personalization_signals: false,
-    cookie_flags: "SameSite=None;Secure"
-  });
+  myLastTrackedLocation = myGetPageLocation();
 
   myInstallNavigationTracking();
   myInstallClickTracking();
-  myTrackPageView();
 }
