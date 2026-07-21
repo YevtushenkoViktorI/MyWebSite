@@ -4,6 +4,9 @@ import { MyApp } from "./MyApp";
 import "./styles/colorPalette.css";
 import "./styles/localFonts.css";
 import "./styles/globalStyles.css";
+import { myInitAnalytics } from "./utils/myAnalytics";
+
+myInitAnalytics();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
