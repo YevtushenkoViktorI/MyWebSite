@@ -1,4 +1,5 @@
 import { MyLanguageSelect } from "./myLanguageSelect";
+import { MyTinyOwl } from "./myTinyOwl";
 import type { myLanguageCode } from "../i18n/myTypes";
 import type { MouseEvent } from "react";
 
@@ -65,9 +66,12 @@ export function MyHeader({
   return (
     <header className="myHeader">
       <div className="myContainer myHeaderRow">
-        <a className="myLogo" href="#myTop" onClick={(myEvent) => myHandleAnchorClick(myEvent, "#myTop")}>
-          {myLogoText}
-        </a>
+        <div className="myLogoCluster">
+          <a className="myLogo" href="#myTop" onClick={(myEvent) => myHandleAnchorClick(myEvent, "#myTop")}>
+            {myLogoText}
+          </a>
+          <MyTinyOwl />
+        </div>
 
         <nav className="myNav" aria-label="Main">
           <a href="#myOverview" onClick={(myEvent) => myHandleAnchorClick(myEvent, "#myOverview")}>{myNav.myAbout}</a>

@@ -3,7 +3,6 @@ import { MyHeader } from "./components/myHeader";
 import { MyHeroSection } from "./components/myHeroSection";
 import { MySectionTitle } from "./components/mySectionTitle";
 import { MyTimelineItem } from "./components/myTimelineItem";
-import { MyTinyOwl } from "./components/myTinyOwl";
 import { myDefaultLanguage, myLanguageOptions, myTranslations } from "./i18n/myI18n";
 import type { myCertificateItem, myLanguageCode } from "./i18n/myTypes";
 import { myAssetPath } from "./utils/myAssetPath";
@@ -632,7 +631,6 @@ export function MyApp() {
 
   return (
     <div className={`myPageRoot ${myUiTransitionClass}`}>
-      <MyTinyOwl />
       <MyHeader
         myLogoText="VY"
         myNav={myText.myNav}

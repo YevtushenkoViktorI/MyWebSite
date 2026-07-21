@@ -49,130 +49,6 @@ a {
   transition: opacity 280ms ease;
 }
 
-.myTinyOwl {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 38;
-  width: 44px;
-  height: 44px;
-  pointer-events: none;
-  opacity: 0.76;
-  filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--colorShadow) 76%, transparent));
-  transform: translate3d(var(--myOwlX), var(--myOwlY), 0);
-  transition:
-    transform 2600ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 420ms ease,
-    filter 420ms ease;
-  animation: myTinyOwlIdle 5200ms ease-in-out infinite;
-}
-
-.myTinyOwlSvg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.myTinyOwlBody {
-  fill: color-mix(in srgb, var(--colorSurfaceSoft) 72%, var(--colorPrimary) 28%);
-  stroke: color-mix(in srgb, var(--colorPrimary) 58%, var(--colorBorder));
-  stroke-width: 2.2;
-}
-
-.myTinyOwlBrow {
-  fill: color-mix(in srgb, var(--colorSurface) 76%, var(--colorPrimary) 24%);
-}
-
-.myTinyOwlEye {
-  fill: color-mix(in srgb, var(--colorWhite) 92%, var(--colorPrimary) 8%);
-}
-
-.myTinyOwlPupil {
-  fill: var(--colorTextMain);
-  transition: transform 520ms ease;
-}
-
-.myTinyOwlLookLeft .myTinyOwlPupil {
-  transform: translateX(-2px);
-}
-
-.myTinyOwlWing {
-  fill: color-mix(in srgb, var(--colorSurfaceSoft) 66%, var(--colorPrimary) 34%);
-  stroke: color-mix(in srgb, var(--colorPrimary) 44%, var(--colorBorder));
-  stroke-width: 1.6;
-  transform-origin: center;
-  animation: myTinyOwlWingSettle 5200ms ease-in-out infinite;
-}
-
-.myTinyOwlWingRight {
-  animation-delay: 120ms;
-}
-
-.myTinyOwlBeak {
-  fill: #f2b84b;
-}
-
-.myTinyOwlBelly,
-.myTinyOwlFoot {
-  fill: none;
-  stroke: color-mix(in srgb, var(--colorTextMain) 72%, var(--colorPrimary) 28%);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.myTinyOwlBlink {
-  fill: none;
-  stroke: var(--colorTextMain);
-  stroke-width: 2;
-  stroke-linecap: round;
-  opacity: 0;
-  animation: myTinyOwlBlink 6200ms ease-in-out infinite;
-}
-
-@keyframes myTinyOwlIdle {
-  0%,
-  100% {
-    margin-top: 0;
-  }
-  50% {
-    margin-top: -7px;
-  }
-}
-
-@keyframes myTinyOwlBlink {
-  0%,
-  88%,
-  94%,
-  100% {
-    opacity: 0;
-  }
-  90%,
-  92% {
-    opacity: 1;
-  }
-}
-
-@keyframes myTinyOwlWingSettle {
-  0%,
-  82%,
-  100% {
-    transform: rotate(0deg);
-  }
-  88% {
-    transform: rotate(-4deg);
-  }
-  92% {
-    transform: rotate(3deg);
-  }
-}
-
-@media (max-width: 760px) {
-  .myTinyOwl {
-    display: none;
-  }
-}
-
 .myPageRoot.myUiTransitionLanguage .myHeader,
 .myPageRoot.myUiTransitionLanguage .myMainGrid {
   transition: opacity 320ms ease, transform 460ms cubic-bezier(0.22, 1, 0.36, 1), filter 460ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -312,6 +188,13 @@ a {
   gap: 0.7rem;
 }
 
+.myLogoCluster {
+  display: flex;
+  align-items: center;
+  gap: 0.58rem;
+  min-width: max-content;
+}
+
 .myIconButton {
   width: 42px;
   height: 42px;
@@ -324,6 +207,188 @@ a {
 
 .myHeaderCta {
   padding-inline: 1.3rem;
+}
+
+.myTinyOwl {
+  --myOwlBase: url("#myOwlSnowBody");
+  --myOwlFeather: #f6fbff;
+  --myOwlFace: #eef7fd;
+  --myOwlInk: #243342;
+  --myOwlStroke: #9fb2c1;
+  --myOwlGlossOpacity: 0.28;
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  pointer-events: none;
+  transform: translateY(1px);
+  filter:
+    drop-shadow(0 6px 11px color-mix(in srgb, var(--colorShadow) 64%, transparent))
+    drop-shadow(0 0 10px color-mix(in srgb, var(--colorPrimary) 12%, transparent));
+}
+
+[data-theme="light"] .myTinyOwl {
+  --myOwlBase: url("#myOwlDarkBody");
+  --myOwlFeather: #05070a;
+  --myOwlFace: #0a0d12;
+  --myOwlInk: #f3f8ff;
+  --myOwlStroke: #000000;
+  --myOwlGlossOpacity: 0.72;
+  filter:
+    drop-shadow(0 6px 11px color-mix(in srgb, #000000 24%, transparent))
+    drop-shadow(0 0 9px color-mix(in srgb, #0a0f16 34%, transparent));
+}
+
+.myTinyOwlSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.myTinyOwlBreath {
+  transform-origin: 48px 52px;
+  animation: myTinyOwlBreath 5400ms ease-in-out infinite;
+}
+
+.myTinyOwlHead {
+  transform-origin: 48px 44px;
+  transform: rotate(var(--myOwlHeadTilt, 0deg));
+  transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.myTinyOwlShadow {
+  fill: color-mix(in srgb, var(--colorShadow) 62%, transparent);
+  opacity: 0.52;
+  animation: myTinyOwlShadow 5400ms ease-in-out infinite;
+}
+
+.myTinyOwlSilhouette,
+.myTinyOwlEar {
+  fill: var(--myOwlBase);
+  stroke: var(--myOwlStroke);
+  stroke-width: 1.7;
+}
+
+.myTinyOwlWing {
+  fill: color-mix(in srgb, var(--myOwlFeather) 80%, var(--colorPrimary) 20%);
+  stroke: color-mix(in srgb, var(--myOwlStroke) 82%, var(--colorPrimary) 18%);
+  stroke-width: 1.25;
+  transform-origin: center;
+  animation: myTinyOwlFeatherSettle 6800ms ease-in-out infinite;
+}
+
+.myTinyOwlWingRight {
+  animation-delay: 180ms;
+}
+
+.myTinyOwlChest {
+  fill: color-mix(in srgb, var(--myOwlFace) 84%, var(--colorPrimary) 16%);
+  opacity: 0.82;
+}
+
+.myTinyOwlFaceDisc {
+  fill: color-mix(in srgb, var(--myOwlFace) 88%, var(--colorPrimary) 12%);
+  stroke: color-mix(in srgb, var(--myOwlStroke) 62%, transparent);
+  stroke-width: 0.75;
+}
+
+.myTinyOwlBrow,
+.myTinyOwlFeathers {
+  fill: none;
+  stroke: color-mix(in srgb, var(--myOwlInk) 72%, var(--colorPrimary) 28%);
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  opacity: 0.72;
+}
+
+.myTinyOwlEye {
+  fill: url("#myOwlEyeGold");
+  stroke: color-mix(in srgb, #050505 76%, var(--colorPrimary) 24%);
+  stroke-width: 1.35;
+}
+
+.myTinyOwlEyes {
+  transform: translate(var(--myOwlEyeX, 0), var(--myOwlEyeY, 0));
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.myTinyOwlPupil {
+  fill: #050505;
+}
+
+.myTinyOwlEyeSpark {
+  fill: #ffffff;
+  opacity: 0.94;
+}
+
+.myTinyOwlBlink {
+  fill: none;
+  stroke: color-mix(in srgb, var(--myOwlInk) 88%, var(--colorPrimary) 12%);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: myTinyOwlBlink 7200ms ease-in-out infinite;
+}
+
+.myTinyOwlBeak {
+  fill: #c18a25;
+  stroke: color-mix(in srgb, #5e4211 70%, transparent);
+  stroke-width: 0.85;
+}
+
+.myTinyOwlGloss {
+  fill: url("#myOwlGloss");
+  opacity: var(--myOwlGlossOpacity);
+  mix-blend-mode: screen;
+}
+
+@keyframes myTinyOwlBreath {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  48% {
+    transform: translateY(-1.2px) scale(1.018);
+  }
+}
+
+@keyframes myTinyOwlShadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.42;
+  }
+  48% {
+    transform: scaleX(0.84);
+    opacity: 0.28;
+  }
+}
+
+@keyframes myTinyOwlBlink {
+  0%,
+  88%,
+  94%,
+  100% {
+    opacity: 0;
+  }
+  90%,
+  92% {
+    opacity: 1;
+  }
+}
+
+@keyframes myTinyOwlFeatherSettle {
+  0%,
+  80%,
+  100% {
+    transform: rotate(0deg);
+  }
+  86% {
+    transform: rotate(-2.2deg);
+  }
+  91% {
+    transform: rotate(1.6deg);
+  }
 }
 
 .myLanguageWrap {
@@ -479,7 +544,11 @@ a {
   }
 
   .myTinyOwl,
+  .myTinyOwlBreath,
+  .myTinyOwlHead,
+  .myTinyOwlShadow,
   .myTinyOwlWing,
+  .myTinyOwlEyes,
   .myTinyOwlBlink {
     animation: none;
     transition: none;
