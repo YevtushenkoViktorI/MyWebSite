@@ -2,9 +2,9 @@ import { useEffect, useState, type CSSProperties } from "react";
 
 const myOwlGazes = [
   { myEyeX: 0, myEyeY: 0, myHead: 0 },
-  { myEyeX: -1.8, myEyeY: -0.3, myHead: -3 },
-  { myEyeX: 1.7, myEyeY: -0.2, myHead: 3 },
-  { myEyeX: 0.4, myEyeY: 1.1, myHead: 1 }
+  { myEyeX: -0.9, myEyeY: -0.2, myHead: -2.4 },
+  { myEyeX: 0.9, myEyeY: -0.1, myHead: 2.2 },
+  { myEyeX: 0.1, myEyeY: 0.7, myHead: 0.8 }
 ];
 
 export function MyTinyOwl() {
@@ -28,7 +28,7 @@ export function MyTinyOwl() {
       myLookTimer = window.setTimeout(() => {
         setMyGazeIndex((myCurrentIndex) => (myCurrentIndex + 1) % myOwlGazes.length);
         myScheduleLook();
-      }, 2400 + Math.random() * 3600);
+      }, 2600 + Math.random() * 4200);
     };
 
     myScheduleLook();
@@ -38,72 +38,97 @@ export function MyTinyOwl() {
 
   return (
     <span className="myTinyOwl" style={myStyle} aria-hidden="true">
-      <svg className="myTinyOwlSvg" viewBox="0 0 96 96">
+      <svg className="myTinyOwlSvg" viewBox="0 0 120 120">
         <defs>
-          <radialGradient id="myOwlDarkBody" cx="30%" cy="18%" r="86%">
-            <stop offset="0%" stopColor="#4c5664" />
-            <stop offset="28%" stopColor="#111820" />
-            <stop offset="70%" stopColor="#030507" />
+          <radialGradient id="myOwlSnowPlumage" cx="42%" cy="22%" r="76%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="36%" stopColor="#f4f8fb" />
+            <stop offset="74%" stopColor="#c7d3dc" />
+            <stop offset="100%" stopColor="#8a99a6" />
+          </radialGradient>
+          <radialGradient id="myOwlRavenPlumage" cx="32%" cy="18%" r="88%">
+            <stop offset="0%" stopColor="#55606c" />
+            <stop offset="18%" stopColor="#18202a" />
+            <stop offset="58%" stopColor="#05070a" />
             <stop offset="100%" stopColor="#000000" />
           </radialGradient>
-          <radialGradient id="myOwlSnowBody" cx="34%" cy="18%" r="82%">
-            <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="38%" stopColor="#edf5fb" />
-            <stop offset="78%" stopColor="#bccbd7" />
-            <stop offset="100%" stopColor="#8494a3" />
+          <radialGradient id="myOwlEyeIris" cx="48%" cy="48%" r="58%">
+            <stop offset="0%" stopColor="#ffe9a0" />
+            <stop offset="48%" stopColor="#c98718" />
+            <stop offset="78%" stopColor="#6f4a10" />
+            <stop offset="100%" stopColor="#171007" />
           </radialGradient>
-          <linearGradient id="myOwlGloss" x1="18" y1="6" x2="70" y2="82">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.82" />
-            <stop offset="28%" stopColor="#9fdfff" stopOpacity="0.28" />
+          <linearGradient id="myOwlHardGloss" x1="20" y1="14" x2="78" y2="86">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.86" />
+            <stop offset="22%" stopColor="#9ed9ff" stopOpacity="0.34" />
+            <stop offset="58%" stopColor="#ffffff" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
-          <radialGradient id="myOwlEyeGold" cx="48%" cy="46%" r="56%">
-            <stop offset="0%" stopColor="#fff4be" />
-            <stop offset="58%" stopColor="#d8a63b" />
-            <stop offset="100%" stopColor="#76591c" />
-          </radialGradient>
+          <filter id="myOwlFeatherNoise" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="8" result="noise" />
+            <feColorMatrix in="noise" type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.16" />
+            </feComponentTransfer>
+            <feBlend in="SourceGraphic" mode="multiply" />
+          </filter>
         </defs>
 
-        <ellipse className="myTinyOwlShadow" cx="48" cy="89" rx="22" ry="4.6" />
+        <ellipse className="myTinyOwlGroundShadow" cx="60" cy="108" rx="28" ry="5.5" />
 
         <g className="myTinyOwlBreath">
           <g className="myTinyOwlHead">
             <path
-              className="myTinyOwlSilhouette"
-              d="M20 42c0-20 12-32 28-32s28 12 28 32c0 22-10 40-28 40S20 64 20 42z"
+              className="myTinyOwlBodyMass"
+              d="M29 54c0-28 12-45 31-45s31 17 31 45c0 31-12 52-31 52S29 85 29 54z"
             />
-            <path className="myTinyOwlEar myTinyOwlEarLeft" d="M25 22 16 12l2 23z" />
-            <path className="myTinyOwlEar myTinyOwlEarRight" d="M71 22 80 12l-2 23z" />
-            <path className="myTinyOwlWing myTinyOwlWingLeft" d="M25 46c-8 7-9 20-3 29 8-5 13-14 13-26z" />
-            <path className="myTinyOwlWing myTinyOwlWingRight" d="M71 46c8 7 9 20 3 29-8-5-13-14-13-26z" />
+            <path className="myTinyOwlEarLeft" d="M38 25 24 12l4 31c3-8 6-14 10-18z" />
+            <path className="myTinyOwlEarRight" d="M82 25 96 12l-4 31c-3-8-6-14-10-18z" />
             <path
-              className="myTinyOwlChest"
-              d="M32 50c3 12 10 20 16 20s13-8 16-20c-5 4-10 6-16 6s-11-2-16-6z"
+              className="myTinyOwlBackShade"
+              d="M31 54c1-25 13-40 29-40 19 0 29 18 29 42 0 23-8 41-24 48 11-16 12-41 6-58-5-16-18-25-40 8z"
             />
 
-            <g className="myTinyOwlFeathers">
-              <path d="M31 43c4 3 8 4 13 4" />
-              <path d="M52 47c5 0 9-1 13-4" />
-              <path d="M34 58c4 3 8 4 14 4s10-1 14-4" />
-              <path d="M37 68c3 2 7 3 11 3s8-1 11-3" />
+            <g className="myTinyOwlFeatherTexture">
+              <path d="M39 35c8-5 15-6 21-2" />
+              <path d="M60 33c6-4 14-3 21 2" />
+              <path d="M38 71c6 5 13 8 22 8s16-3 22-8" />
+              <path d="M42 84c5 4 11 6 18 6s13-2 18-6" />
+              <path d="M45 95c4 2 9 3 15 3s11-1 15-3" />
             </g>
 
-            <path className="myTinyOwlFaceDisc myTinyOwlFaceDiscLeft" d="M18 31c5-10 15-14 27-11 0 14-8 24-20 27-6-3-8-8-7-16z" />
-            <path className="myTinyOwlFaceDisc myTinyOwlFaceDiscRight" d="M78 31c-5-10-15-14-27-11 0 14 8 24 20 27 6-3 8-8 7-16z" />
-            <path className="myTinyOwlBrow" d="M21 30c8-5 16-6 25-3M75 30c-8-5-16-6-25-3" />
+            <g className="myTinyOwlSpeckles">
+              <circle cx="43" cy="25" r="1.2" />
+              <circle cx="51" cy="22" r="0.9" />
+              <circle cx="68" cy="22" r="0.9" />
+              <circle cx="77" cy="26" r="1.2" />
+              <circle cx="37" cy="58" r="1" />
+              <circle cx="45" cy="64" r="0.9" />
+              <circle cx="56" cy="69" r="1.1" />
+              <circle cx="64" cy="69" r="1.1" />
+              <circle cx="75" cy="64" r="0.9" />
+              <circle cx="83" cy="58" r="1" />
+              <circle cx="48" cy="88" r="1" />
+              <circle cx="60" cy="91" r="0.95" />
+              <circle cx="72" cy="88" r="1" />
+            </g>
+
+            <path className="myTinyOwlFaceMaskLeft" d="M28 42c8-15 20-20 31-15 1 14-8 26-23 30-8-2-11-7-8-15z" />
+            <path className="myTinyOwlFaceMaskRight" d="M92 42c-8-15-20-20-31-15-1 14 8 26 23 30 8-2 11-7 8-15z" />
+            <path className="myTinyOwlFacialRuff" d="M31 42c9-9 18-12 29-9M89 42c-9-9-18-12-29-9" />
 
             <g className="myTinyOwlEyes">
-              <circle className="myTinyOwlEye" cx="36" cy="39" r="9.4" />
-              <circle className="myTinyOwlEye" cx="60" cy="39" r="9.4" />
-              <circle className="myTinyOwlPupil" cx="36" cy="39" r="4.6" />
-              <circle className="myTinyOwlPupil" cx="60" cy="39" r="4.6" />
-              <circle className="myTinyOwlEyeSpark" cx="33.2" cy="35.7" r="1.7" />
-              <circle className="myTinyOwlEyeSpark" cx="57.2" cy="35.7" r="1.7" />
+              <circle className="myTinyOwlIris" cx="48" cy="48" r="7.2" />
+              <circle className="myTinyOwlIris" cx="72" cy="48" r="7.2" />
+              <circle className="myTinyOwlPupil" cx="48" cy="48" r="3.1" />
+              <circle className="myTinyOwlPupil" cx="72" cy="48" r="3.1" />
+              <circle className="myTinyOwlCatchlight" cx="45.8" cy="45.2" r="1.35" />
+              <circle className="myTinyOwlCatchlight" cx="69.8" cy="45.2" r="1.35" />
             </g>
 
-            <path className="myTinyOwlBlink" d="M26.5 39c4.8-4.2 13.4-4.2 18.5 0M51 39c5.1-4.2 13.7-4.2 18.5 0" />
-            <path className="myTinyOwlBeak" d="M48 46 42.5 53.5 48 57l5.5-3.5z" />
-            <path className="myTinyOwlGloss" d="M28 20c8-8 25-9 35 0-9-3-22-1-31 6-5 4-8 10-9 17-3-9-1-17 5-23z" />
+            <path className="myTinyOwlBlink" d="M40 48c4.4-4 11.7-4 16 0M64 48c4.3-4 11.6-4 16 0" />
+            <path className="myTinyOwlBeak" d="M60 55 54.5 63 60 67.5 65.5 63z" />
+            <path className="myTinyOwlGloss" d="M38 20c12-11 32-10 44 1-17-4-32 0-42 12-7 8-9 18-8 28-6-16-4-31 6-41z" />
           </g>
         </g>
       </svg>
