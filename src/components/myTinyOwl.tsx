@@ -1,115 +1,304 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { myAssetPath } from "../utils/myAssetPath";
 
-type myOwlAction = "idle" | "lookLeft" | "lookRight" | "hopLeft" | "hopRight" | "ruffle" | "takeoff";
-type myOwlPosition = -1 | 0 | 1;
+type myOwlAction = "idle" | "lookLeft" | "lookRight" | "watchUp" | "watchDown" | "ruffle" | "takeoff" | "landing";
+type myOwlPhase = "perched" | "preparing" | "flying" | "landing";
+type myOwlCorner = "header" | "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+type myOwlFlightReason = "scroll" | "idle";
+
+type myOwlPerch = {
+  myX: number;
+  myY: number;
+  mySectionId: string;
+  myCorner: myOwlCorner;
+};
+
 type myOwlFlight = {
   myId: number;
-  myStartX: number;
-  myStartY: number;
+  myStart: myOwlPerch;
+  myTarget: myOwlPerch;
   myDuration: number;
 };
 
-const myActionDurations: Record<Exclude<myOwlAction, "idle" | "takeoff">, number> = {
-  lookLeft: 1550,
-  lookRight: 1450,
-  hopLeft: 920,
-  hopRight: 920,
-  ruffle: 1050
-};
+const mySectionIds = ["myOverview", "myEngineering", "myProjects", "mySkills", "myExperience", "myEducation", "myContact"];
+const myIdleCornerOrder: myOwlCorner[] = ["topRight", "bottomRight", "topLeft", "bottomLeft"];
+
+function myClamp(myValue: number, myMinimum: number, myMaximum: number): number {
+  return Math.min(Math.max(myValue, myMinimum), myMaximum);
+}
+
+function myDistance(myStart: myOwlPerch, myTarget: myOwlPerch): number {
+  return Math.hypot(myTarget.myX - myStart.myX, myTarget.myY - myStart.myY);
+}
+
+function myFindActiveSection(): HTMLElement | null {
+  const mySections = Array.from(document.querySelectorAll<HTMLElement>("main .mySection[id]"));
+  const myViewportHeight = window.innerHeight;
+  let myBestSection: HTMLElement | null = null;
+  let myBestScore = -1;
+
+  for (const mySection of mySections) {
+    const myRect = mySection.getBoundingClientRect();
+    const myVisibleHeight = Math.max(0, Math.min(myRect.bottom, myViewportHeight) - Math.max(myRect.top, 0));
+    const myCenterDistance = Math.abs((myRect.top + myRect.bottom) / 2 - myViewportHeight / 2);
+    const myScore = myVisibleHeight - myCenterDistance * 0.12;
+
+    if (myScore > myBestScore) {
+      myBestScore = myScore;
+      myBestSection = mySection;
+    }
+  }
+
+  return myBestSection;
+}
+
+function myGetSectionPerch(mySection: HTMLElement, myCorner: myOwlCorner): myOwlPerch {
+  const myRect = mySection.getBoundingClientRect();
+  const myHeaderBottom = document.querySelector<HTMLElement>(".myHeader")?.getBoundingClientRect().bottom ?? 78;
+  const myViewportWidth = window.innerWidth;
+  const myViewportHeight = window.innerHeight;
+  const myHorizontalInset = myViewportWidth <= 600 ? 25 : 32;
+  const myTopLimit = myHeaderBottom + 28;
+  const myBottomLimit = myViewportHeight - 38;
+  const myVisibleTop = Math.max(myRect.top, myTopLimit);
+  const myVisibleBottom = Math.min(myRect.bottom, myBottomLimit);
+  const myLeft = myClamp(myRect.left + myHorizontalInset, 26, myViewportWidth - 26);
+  const myRight = myClamp(myRect.right - myHorizontalInset, 26, myViewportWidth - 26);
+  const myTop = myClamp(myVisibleTop + 36, myTopLimit, myBottomLimit);
+  const myBottom = myClamp(Math.max(myVisibleTop + 44, myVisibleBottom - 42), myTopLimit, myBottomLimit);
+
+  return {
+    myX: myCorner === "topLeft" || myCorner === "bottomLeft" ? myLeft : myRight,
+    myY: myCorner === "bottomLeft" || myCorner === "bottomRight" ? myBottom : myTop,
+    mySectionId: mySection.id,
+    myCorner
+  };
+}
+
+function myGetScrollCorner(mySectionId: string, myCurrentCorner: myOwlCorner): myOwlCorner {
+  const mySectionIndex = Math.max(0, mySectionIds.indexOf(mySectionId));
+  const myPreferredCorner: myOwlCorner = mySectionIndex % 2 === 0 ? "topRight" : "topLeft";
+
+  if (myPreferredCorner === myCurrentCorner) {
+    return myPreferredCorner === "topRight" ? "topLeft" : "topRight";
+  }
+  return myPreferredCorner;
+}
+
+function myGetNextIdleCorner(myCurrentCorner: myOwlCorner): myOwlCorner {
+  const myCurrentIndex = myIdleCornerOrder.indexOf(myCurrentCorner);
+  return myIdleCornerOrder[(myCurrentIndex + 1 + myIdleCornerOrder.length) % myIdleCornerOrder.length];
+}
 
 export function MyTinyOwl() {
   const [myAction, setMyAction] = useState<myOwlAction>("idle");
-  const [myPosition, setMyPosition] = useState<myOwlPosition>(0);
+  const [myPhase, setMyPhase] = useState<myOwlPhase>("perched");
+  const [myPerch, setMyPerch] = useState<myOwlPerch | null>(null);
   const [myFlight, setMyFlight] = useState<myOwlFlight | null>(null);
-  const myPositionRef = useRef<myOwlPosition>(0);
-  const myPerchedOwlRef = useRef<HTMLSpanElement | null>(null);
+  const myPlaceholderRef = useRef<HTMLSpanElement | null>(null);
   const myFlightBirdRef = useRef<HTMLSpanElement | null>(null);
+  const myPerchRef = useRef<myOwlPerch | null>(null);
+  const myPhaseRef = useRef<myOwlPhase>("perched");
+  const myPendingPerchRef = useRef<{ myPerch: myOwlPerch; myReason: myOwlFlightReason } | null>(null);
+  const myActiveSectionIdRef = useRef("myOverview");
+  const myLastScrollYRef = useRef(0);
+  const myLastInteractionAtRef = useRef(Date.now());
+  const myFlightIdRef = useRef(0);
+  const myReducedMotionRef = useRef(false);
+  const myPrepareTimerRef = useRef(0);
+  const myFlightTimerRef = useRef(0);
+  const myLandingTimerRef = useRef(0);
+  const myActionResetTimerRef = useRef(0);
+  const myBeginFlightRef = useRef<(myTarget: myOwlPerch, myReason: myOwlFlightReason) => void>(() => undefined);
 
-  useEffect(() => {
-    const myReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (myReducedMotion.matches) {
+  const myUpdatePerch = useCallback((myNextPerch: myOwlPerch) => {
+    myPerchRef.current = myNextPerch;
+    setMyPerch(myNextPerch);
+  }, []);
+
+  const myUpdatePhase = useCallback((myNextPhase: myOwlPhase) => {
+    myPhaseRef.current = myNextPhase;
+    setMyPhase(myNextPhase);
+  }, []);
+
+  const myBeginFlight = useCallback((myTarget: myOwlPerch, myReason: myOwlFlightReason) => {
+    const myCurrentPerch = myPerchRef.current;
+    if (!myCurrentPerch || myReducedMotionRef.current) {
       return;
     }
 
-    let myActionTimer = 0;
-    let myResetTimer = 0;
-    let myFlightEndTimer = 0;
-    let myHasFlown = false;
+    if (myPhaseRef.current !== "perched") {
+      myPendingPerchRef.current = { myPerch: myTarget, myReason };
+      return;
+    }
 
-    const myScheduleNextAction = () => {
-      const myDelay = myHasFlown
-        ? 3400 + Math.random() * 5600
-        : 5000 + Math.random() * 2400;
+    const myTravelDistance = myDistance(myCurrentPerch, myTarget);
+    if (myTravelDistance < 42) {
+      myUpdatePerch(myTarget);
+      setMyAction("idle");
+      return;
+    }
 
-      myActionTimer = window.setTimeout(() => {
-        const myChance = Math.random();
+    window.clearTimeout(myActionResetTimerRef.current);
+    myUpdatePhase("preparing");
+    setMyAction("takeoff");
 
-        if (!myHasFlown || myChance < 0.3) {
-          myHasFlown = true;
-          setMyAction("takeoff");
+    myPrepareTimerRef.current = window.setTimeout(() => {
+      const myDuration = myClamp(1500 + myTravelDistance / 145 * 1000, 3200, 6200);
+      const myNextFlight: myOwlFlight = {
+        myId: ++myFlightIdRef.current,
+        myStart: myCurrentPerch,
+        myTarget,
+        myDuration
+      };
 
-          myResetTimer = window.setTimeout(() => {
-            const myPerchRect = myPerchedOwlRef.current?.getBoundingClientRect();
-            if (!myPerchRect) {
-              setMyAction("idle");
-              myScheduleNextAction();
-              return;
-            }
+      setMyFlight(myNextFlight);
+      myUpdatePhase("flying");
+      setMyAction("idle");
 
-            const myDuration = 6600 + Math.random() * 1800;
-            setMyFlight({
-              myId: Date.now(),
-              myStartX: myPerchRect.left + myPerchRect.width / 2,
-              myStartY: myPerchRect.top + myPerchRect.height / 2,
-              myDuration
-            });
-            setMyAction("idle");
+      myFlightTimerRef.current = window.setTimeout(() => {
+        myUpdatePerch(myTarget);
+        setMyFlight(null);
+        myUpdatePhase("landing");
+        setMyAction("landing");
 
-            myFlightEndTimer = window.setTimeout(() => {
-              setMyFlight(null);
-              myScheduleNextAction();
-            }, myDuration);
-          }, 640);
+        myLandingTimerRef.current = window.setTimeout(() => {
+          myUpdatePhase("perched");
+          setMyAction("idle");
+
+          const myPendingPerch = myPendingPerchRef.current;
+          myPendingPerchRef.current = null;
+          if (myPendingPerch && myDistance(myTarget, myPendingPerch.myPerch) >= 42) {
+            window.setTimeout(() => myBeginFlightRef.current(myPendingPerch.myPerch, myPendingPerch.myReason), 500);
+          }
+        }, 980);
+      }, myDuration);
+    }, 880);
+  }, [myUpdatePerch, myUpdatePhase]);
+
+  myBeginFlightRef.current = myBeginFlight;
+
+  useLayoutEffect(() => {
+    const myPlaceholder = myPlaceholderRef.current;
+    if (!myPlaceholder) {
+      return;
+    }
+
+    const myRect = myPlaceholder.getBoundingClientRect();
+    myUpdatePerch({
+      myX: myRect.left + myRect.width / 2,
+      myY: myRect.top + myRect.height / 2,
+      mySectionId: "myHeader",
+      myCorner: "header"
+    });
+    myLastScrollYRef.current = window.scrollY;
+  }, [myUpdatePerch]);
+
+  useEffect(() => {
+    myReducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (myReducedMotionRef.current) {
+      return;
+    }
+
+    let myScrollStopTimer = 0;
+    let myMicroActionTimer = 0;
+    let myIdleTravelTimer = 0;
+
+    const myScheduleMicroAction = () => {
+      window.clearTimeout(myMicroActionTimer);
+      myMicroActionTimer = window.setTimeout(() => {
+        if (myPhaseRef.current === "perched" && Date.now() - myLastInteractionAtRef.current > 1400) {
+          const myChance = Math.random();
+          const myNextAction: myOwlAction = myChance < 0.4
+            ? "lookLeft"
+            : myChance < 0.8
+              ? "lookRight"
+              : "ruffle";
+          const myActionDuration = myNextAction === "ruffle" ? 1800 : 3000 + Math.random() * 1400;
+
+          setMyAction(myNextAction);
+          window.clearTimeout(myActionResetTimerRef.current);
+          myActionResetTimerRef.current = window.setTimeout(() => setMyAction("idle"), myActionDuration);
+        }
+        myScheduleMicroAction();
+      }, 4800 + Math.random() * 5200);
+    };
+
+    const myScheduleIdleTravel = () => {
+      window.clearTimeout(myIdleTravelTimer);
+      myIdleTravelTimer = window.setTimeout(() => {
+        if (myPhaseRef.current === "perched" && Date.now() - myLastInteractionAtRef.current >= 15000) {
+          const myActiveSection = document.getElementById(myActiveSectionIdRef.current) ?? myFindActiveSection();
+          const myCurrentPerch = myPerchRef.current;
+          if (myActiveSection && myCurrentPerch) {
+            const myNextCorner = myGetNextIdleCorner(myCurrentPerch.myCorner);
+            myBeginFlightRef.current(myGetSectionPerch(myActiveSection, myNextCorner), "idle");
+          }
+        }
+        myScheduleIdleTravel();
+      }, 16000 + Math.random() * 12000);
+    };
+
+    const myHandleScroll = () => {
+      const myCurrentScrollY = window.scrollY;
+      const myIsScrollingDown = myCurrentScrollY >= myLastScrollYRef.current;
+      myLastScrollYRef.current = myCurrentScrollY;
+      myLastInteractionAtRef.current = Date.now();
+
+      if (myPhaseRef.current === "perched") {
+        setMyAction(myIsScrollingDown ? "watchDown" : "watchUp");
+      }
+
+      window.clearTimeout(myScrollStopTimer);
+      window.clearTimeout(myIdleTravelTimer);
+      myScrollStopTimer = window.setTimeout(() => {
+        const myActiveSection = myFindActiveSection();
+        const myCurrentPerch = myPerchRef.current;
+        if (!myActiveSection || !myCurrentPerch) {
           return;
         }
 
-        let myNextAction: Exclude<myOwlAction, "idle" | "takeoff">;
-
-        if (myChance < 0.48) {
-          myNextAction = "lookLeft";
-        } else if (myChance < 0.66) {
-          myNextAction = "lookRight";
-        } else if (myChance < 0.8) {
-          myNextAction = "ruffle";
-        } else {
-          const myCanMoveLeft = myPositionRef.current > -1;
-          const myCanMoveRight = myPositionRef.current < 1;
-          const myMoveRight = !myCanMoveLeft || (myCanMoveRight && Math.random() > 0.5);
-          const myNextPosition = (myPositionRef.current + (myMoveRight ? 1 : -1)) as myOwlPosition;
-
-          myPositionRef.current = myNextPosition;
-          setMyPosition(myNextPosition);
-          myNextAction = myMoveRight ? "hopRight" : "hopLeft";
-        }
-
-        setMyAction(myNextAction);
-        myResetTimer = window.setTimeout(() => {
-          setMyAction("idle");
-          myScheduleNextAction();
-        }, myActionDurations[myNextAction]);
-      }, myDelay);
+        myActiveSectionIdRef.current = myActiveSection.id;
+        const myTargetCorner = myGetScrollCorner(myActiveSection.id, myCurrentPerch.myCorner);
+        myBeginFlightRef.current(myGetSectionPerch(myActiveSection, myTargetCorner), "scroll");
+        myScheduleIdleTravel();
+      }, 680);
     };
 
-    myScheduleNextAction();
+    const myHandleResize = () => {
+      const myCurrentPerch = myPerchRef.current;
+      if (!myCurrentPerch || myPhaseRef.current !== "perched") {
+        return;
+      }
+
+      if (myCurrentPerch.myCorner === "header") {
+        const myRect = myPlaceholderRef.current?.getBoundingClientRect();
+        if (myRect) {
+          myUpdatePerch({ ...myCurrentPerch, myX: myRect.left + myRect.width / 2, myY: myRect.top + myRect.height / 2 });
+        }
+        return;
+      }
+
+      const mySection = document.getElementById(myCurrentPerch.mySectionId);
+      if (mySection) {
+        myUpdatePerch(myGetSectionPerch(mySection, myCurrentPerch.myCorner));
+      }
+    };
+
+    window.addEventListener("scroll", myHandleScroll, { passive: true });
+    window.addEventListener("resize", myHandleResize);
+    myScheduleMicroAction();
+    myScheduleIdleTravel();
 
     return () => {
-      window.clearTimeout(myActionTimer);
-      window.clearTimeout(myResetTimer);
-      window.clearTimeout(myFlightEndTimer);
+      window.removeEventListener("scroll", myHandleScroll);
+      window.removeEventListener("resize", myHandleResize);
+      window.clearTimeout(myScrollStopTimer);
+      window.clearTimeout(myMicroActionTimer);
+      window.clearTimeout(myIdleTravelTimer);
     };
-  }, []);
+  }, [myUpdatePerch]);
 
   useEffect(() => {
     const myBird = myFlightBirdRef.current;
@@ -117,114 +306,125 @@ export function MyTinyOwl() {
       return;
     }
 
-    const myViewportWidth = window.innerWidth;
-    const myViewportHeight = window.innerHeight;
-    const myStartX = myFlight.myStartX;
-    const myStartY = myFlight.myStartY;
-    const myFirstX = Math.min(myViewportWidth - 70, Math.max(myStartX + 90, myViewportWidth * 0.32));
-    const myFarX = Math.min(myViewportWidth - 58, Math.max(myFirstX + 80, myViewportWidth * (0.72 + Math.random() * 0.12)));
-    const myMiddleX = Math.min(myViewportWidth - 78, Math.max(myStartX + 120, myViewportWidth * (0.43 + Math.random() * 0.13)));
-    const myFlightDepth = Math.min(270, Math.max(145, myViewportHeight * 0.3));
-    const myFirstY = Math.min(myFlightDepth, 76 + Math.random() * 70);
-    const myFarY = Math.min(myFlightDepth, 125 + Math.random() * 110);
-    const myMiddleY = Math.min(myFlightDepth, 66 + Math.random() * 95);
+    const myStart = myFlight.myStart;
+    const myTarget = myFlight.myTarget;
+    const myDeltaX = myTarget.myX - myStart.myX;
+    const myDeltaY = myTarget.myY - myStart.myY;
+    const myTravelDistance = Math.hypot(myDeltaX, myDeltaY);
+    const myDirection = Math.sign(myDeltaX || 1);
+    const myLift = myClamp(myTravelDistance * 0.2, 72, 175);
+    const myNeedsSideArc = Math.abs(myDeltaX) < 120;
+    const mySideArc = myNeedsSideArc ? (myTarget.myX > window.innerWidth / 2 ? -92 : 92) : 0;
+    const myControlOne = {
+      myX: myStart.myX + myDeltaX * 0.3 + mySideArc,
+      myY: Math.min(myStart.myY, myTarget.myY) - myLift
+    };
+    const myControlTwo = {
+      myX: myTarget.myX - myDeltaX * 0.24 + mySideArc,
+      myY: Math.min(myStart.myY, myTarget.myY) - myLift * 0.78
+    };
+    const myKeyframes: Keyframe[] = [];
+    const myFrameCount = 72;
 
-    const myAnimation = myBird.animate(
-      [
-        {
-          offset: 0,
-          opacity: 0.2,
-          transform: "translate3d(0, 0, 0) rotate(0deg) scale(0.28)"
-        },
-        {
-          offset: 0.09,
-          opacity: 1,
-          transform: "translate3d(24px, -34px, 0) rotate(-8deg) scale(0.68)",
-          easing: "cubic-bezier(0.18, 0.72, 0.24, 1)"
-        },
-        {
-          offset: 0.24,
-          opacity: 1,
-          transform: `translate3d(${myFirstX - myStartX}px, ${myFirstY - myStartY}px, 0) rotate(-4deg) scale(0.88)`,
-          easing: "cubic-bezier(0.3, 0.05, 0.2, 1)"
-        },
-        {
-          offset: 0.47,
-          opacity: 1,
-          transform: `translate3d(${myFarX - myStartX}px, ${myFarY - myStartY}px, 0) rotate(7deg) scale(1)`,
-          easing: "cubic-bezier(0.34, 0.02, 0.2, 1)"
-        },
-        {
-          offset: 0.69,
-          opacity: 1,
-          transform: `translate3d(${myMiddleX - myStartX}px, ${myMiddleY - myStartY}px, 0) rotate(-7deg) scale(0.9)`,
-          easing: "cubic-bezier(0.32, 0, 0.22, 1)"
-        },
-        {
-          offset: 0.86,
-          opacity: 1,
-          transform: `translate3d(${Math.min(100, myViewportWidth * 0.22)}px, ${Math.max(24, 82 - myStartY)}px, 0) rotate(8deg) scale(0.68)`,
-          easing: "cubic-bezier(0.25, 0.02, 0.18, 1)"
-        },
-        {
-          offset: 0.97,
-          opacity: 1,
-          transform: "translate3d(4px, -8px, 0) rotate(0deg) scale(0.34)"
-        },
-        {
-          offset: 1,
-          opacity: 0,
-          transform: "translate3d(0, 0, 0) rotate(0deg) scale(0.28)"
-        }
-      ],
-      {
-        duration: myFlight.myDuration,
-        fill: "both",
-        easing: "linear"
-      }
-    );
+    for (let myIndex = 0; myIndex <= myFrameCount; myIndex += 1) {
+      const myProgress = myIndex / myFrameCount;
+      const myCurveProgress = myProgress * myProgress * (3 - 2 * myProgress);
+      const myInverse = 1 - myCurveProgress;
+      const myX = myInverse ** 3 * myStart.myX
+        + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myX
+        + 3 * myInverse * myCurveProgress ** 2 * myControlTwo.myX
+        + myCurveProgress ** 3 * myTarget.myX;
+      const myY = myInverse ** 3 * myStart.myY
+        + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myY
+        + 3 * myInverse * myCurveProgress ** 2 * myControlTwo.myY
+        + myCurveProgress ** 3 * myTarget.myY;
+      const myFlightPresence = Math.sin(Math.PI * myProgress) ** 0.58;
+      const myScale = 0.3 + 0.52 * myFlightPresence;
+      const myBank = myDirection * Math.sin(Math.PI * myProgress) * 4.2 + Math.sin(Math.PI * 2 * myProgress) * 1.5;
+      const myOpacity = myClamp(Math.min(myProgress / 0.045, (1 - myProgress) / 0.045), 0, 1);
+
+      myKeyframes.push({
+        offset: myProgress,
+        opacity: myOpacity,
+        transform: `translate3d(${myX - myStart.myX}px, ${myY - myStart.myY}px, 0) rotate(${myBank}deg) scale(${myScale})`
+      });
+    }
+
+    const myAnimation = myBird.animate(myKeyframes, {
+      duration: myFlight.myDuration,
+      fill: "both",
+      easing: "linear"
+    });
 
     return () => myAnimation.cancel();
   }, [myFlight]);
 
+  useEffect(() => () => {
+    window.clearTimeout(myPrepareTimerRef.current);
+    window.clearTimeout(myFlightTimerRef.current);
+    window.clearTimeout(myLandingTimerRef.current);
+    window.clearTimeout(myActionResetTimerRef.current);
+  }, []);
+
+  const myPerchedLayer = myPerch ? createPortal(
+    <span
+      className={`myOwlPerchedAnchor myOwlPerchedPhase-${myPhase} myOwlPerchedAction-${myAction}`}
+      style={{ left: myPerch.myX, top: myPerch.myY }}
+      aria-hidden="true"
+    >
+      <span className="myOwlPerchedShadow" />
+      <span className="myOwlPerchedMotion">
+        <span className="myOwlPerchedBody">
+          <img
+            className="myOwlPerchedImage myOwlPerchedSnowy"
+            src={myAssetPath("/mascot/owl-snowy.png")}
+            alt=""
+            width="209"
+            height="384"
+          />
+          <img
+            className="myOwlPerchedImage myOwlPerchedBlack"
+            src={myAssetPath("/mascot/owl-black.png")}
+            alt=""
+            width="202"
+            height="384"
+          />
+          <span className="myOwlPerchedHead">
+            <img
+              className="myOwlPerchedHeadImage myOwlPerchedSnowy"
+              src={myAssetPath("/mascot/owl-snowy.png")}
+              alt=""
+              width="209"
+              height="384"
+            />
+            <img
+              className="myOwlPerchedHeadImage myOwlPerchedBlack"
+              src={myAssetPath("/mascot/owl-black.png")}
+              alt=""
+              width="202"
+              height="384"
+            />
+          </span>
+        </span>
+      </span>
+    </span>,
+    document.body
+  ) : null;
+
   const myFlightLayer = myFlight ? createPortal(
     <span
       className="myOwlFlightAnchor"
-      style={{ left: myFlight.myStartX, top: myFlight.myStartY }}
+      style={{ left: myFlight.myStart.myX, top: myFlight.myStart.myY }}
       aria-hidden="true"
     >
       <span ref={myFlightBirdRef} className="myOwlFlightBird">
         <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
-          <img
-            className="myOwlFlightFrame myOwlFlightFrameUp"
-            src={myAssetPath("/mascot/owl-snowy-flight-up.png")}
-            alt=""
-            width="512"
-            height="384"
-          />
-          <img
-            className="myOwlFlightFrame myOwlFlightFrameDown"
-            src={myAssetPath("/mascot/owl-snowy-flight-down.png")}
-            alt=""
-            width="512"
-            height="384"
-          />
+          <img className="myOwlFlightFrame myOwlFlightFrameUp" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
+          <img className="myOwlFlightFrame myOwlFlightFrameDown" src={myAssetPath("/mascot/owl-snowy-flight-down.png")} alt="" width="512" height="384" />
         </span>
         <span className="myOwlFlightTheme myOwlFlightThemeBlack">
-          <img
-            className="myOwlFlightFrame myOwlFlightFrameUp"
-            src={myAssetPath("/mascot/owl-black-flight-up.png")}
-            alt=""
-            width="512"
-            height="384"
-          />
-          <img
-            className="myOwlFlightFrame myOwlFlightFrameDown"
-            src={myAssetPath("/mascot/owl-black-flight-down.png")}
-            alt=""
-            width="512"
-            height="384"
-          />
+          <img className="myOwlFlightFrame myOwlFlightFrameUp" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
+          <img className="myOwlFlightFrame myOwlFlightFrameDown" src={myAssetPath("/mascot/owl-black-flight-down.png")} alt="" width="512" height="384" />
         </span>
       </span>
     </span>,
@@ -233,31 +433,7 @@ export function MyTinyOwl() {
 
   return (
     <>
-      <span
-        className={`myTinyOwl myTinyOwlPosition${myPosition} myTinyOwlAction-${myAction}${myFlight ? " myTinyOwlInFlight" : ""}`}
-        aria-hidden="true"
-      >
-        <span className="myTinyOwlStage">
-          <span className="myTinyOwlShadow" />
-          <span ref={myPerchedOwlRef} className="myTinyOwlMotion">
-            <img
-              className="myTinyOwlImage myTinyOwlSnowy"
-              src={myAssetPath("/mascot/owl-snowy.png")}
-              alt=""
-              width="209"
-              height="384"
-              decoding="async"
-            />
-            <img
-              className="myTinyOwlImage myTinyOwlBlack"
-              src={myAssetPath("/mascot/owl-black.png")}
-              alt=""
-              width="202"
-              height="384"
-              decoding="async"
-            />
-          </span>
-        </span>
+      <span ref={myPlaceholderRef} className="myTinyOwl" aria-hidden="true">
         <span className="myOwlFlightPreload">
           <img src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" />
           <img src={myAssetPath("/mascot/owl-snowy-flight-down.png")} alt="" />
@@ -265,6 +441,7 @@ export function MyTinyOwl() {
           <img src={myAssetPath("/mascot/owl-black-flight-down.png")} alt="" />
         </span>
       </span>
+      {myPerchedLayer}
       {myFlightLayer}
     </>
   );

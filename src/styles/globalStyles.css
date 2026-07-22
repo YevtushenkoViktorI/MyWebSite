@@ -472,6 +472,256 @@ a {
   }
 }
 
+.myOwlPerchedAnchor {
+  position: fixed;
+  z-index: 62;
+  width: 32px;
+  height: 59px;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition:
+    left 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    top 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms ease;
+  will-change: left, top, opacity;
+}
+
+.myOwlPerchedPhase-flying {
+  opacity: 0;
+}
+
+.myOwlPerchedPhase-landing {
+  transition: opacity 260ms ease;
+}
+
+.myOwlPerchedMotion,
+.myOwlPerchedBody,
+.myOwlPerchedImage,
+.myOwlPerchedHead,
+.myOwlPerchedHeadImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.myOwlPerchedMotion {
+  transform-origin: 50% 90%;
+  will-change: transform;
+}
+
+.myOwlPerchedBody {
+  animation: myOwlPerchedBreathe 8.8s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+.myOwlPerchedImage,
+.myOwlPerchedHeadImage {
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 2px 2px color-mix(in srgb, #000000 28%, transparent));
+  transition: opacity 520ms ease, filter 520ms ease;
+}
+
+.myOwlPerchedBlack {
+  opacity: 0;
+}
+
+[data-theme="light"] .myOwlPerchedSnowy {
+  opacity: 0;
+}
+
+[data-theme="light"] .myOwlPerchedBlack {
+  opacity: 1;
+  filter:
+    drop-shadow(0 2px 2px color-mix(in srgb, #0b1b2b 24%, transparent))
+    drop-shadow(0 0 3px color-mix(in srgb, #ffffff 15%, transparent));
+}
+
+.myOwlPerchedHead {
+  clip-path: inset(0 0 53% 0);
+  transform-origin: 50% 42%;
+  transition: transform 1450ms cubic-bezier(0.22, 0.78, 0.22, 1);
+  will-change: transform;
+}
+
+.myOwlPerchedAction-lookLeft .myOwlPerchedHead {
+  transform: translate3d(-1px, 0, 0) rotate(-4.6deg) scale(1.018);
+}
+
+.myOwlPerchedAction-lookRight .myOwlPerchedHead {
+  transform: translate3d(1px, 0, 0) rotate(4.6deg) scale(1.018);
+}
+
+.myOwlPerchedAction-watchUp .myOwlPerchedHead,
+.myOwlPerchedAction-watchDown .myOwlPerchedHead {
+  transition-duration: 880ms;
+}
+
+.myOwlPerchedAction-watchUp .myOwlPerchedHead {
+  transform: translate3d(0, -1px, 0) rotate(-1deg) scale(1.012);
+}
+
+.myOwlPerchedAction-watchDown .myOwlPerchedHead {
+  transform: translate3d(0, 1.4px, 0) rotate(1deg) scale(1.012);
+}
+
+.myOwlPerchedAction-ruffle .myOwlPerchedMotion {
+  animation: myOwlPerchedRuffle 1800ms cubic-bezier(0.22, 0.7, 0.22, 1) both;
+}
+
+.myOwlPerchedAction-takeoff .myOwlPerchedMotion {
+  animation: myOwlPerchedTakeoff 880ms cubic-bezier(0.22, 0.72, 0.22, 1) both;
+}
+
+.myOwlPerchedAction-landing .myOwlPerchedMotion {
+  animation: myOwlPerchedLanding 980ms cubic-bezier(0.2, 0.78, 0.22, 1) both;
+}
+
+.myOwlPerchedShadow {
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 25px;
+  height: 4px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--colorTextMain) 22%, transparent);
+  filter: blur(2px);
+  opacity: 0.38;
+  transform: translateX(-50%);
+  transition: width 420ms ease, opacity 420ms ease;
+}
+
+.myOwlPerchedAction-takeoff .myOwlPerchedShadow {
+  width: 15px;
+  opacity: 0.18;
+}
+
+.myOwlPerchedAction-landing .myOwlPerchedShadow {
+  animation: myOwlPerchedShadowLanding 980ms ease both;
+}
+
+@keyframes myOwlPerchedBreathe {
+  0%,
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+  44% {
+    transform: scale3d(1.009, 0.996, 1);
+  }
+  60% {
+    transform: scale3d(0.998, 1.004, 1);
+  }
+}
+
+@keyframes myOwlPerchedRuffle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  28% {
+    transform: scale(1.025, 0.99) rotate(-0.6deg);
+  }
+  48% {
+    transform: scale(0.992, 1.018) rotate(0.8deg);
+  }
+  68% {
+    transform: scale(1.014, 0.996) rotate(-0.35deg);
+  }
+}
+
+@keyframes myOwlPerchedTakeoff {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  48% {
+    transform: translateY(2px) scale(1.035, 0.955);
+  }
+  76% {
+    transform: translateY(-2px) scale(0.99, 1.02);
+  }
+  100% {
+    transform: translateY(-7px) scale(0.95, 1.04);
+  }
+}
+
+@keyframes myOwlPerchedLanding {
+  0% {
+    opacity: 0;
+    transform: translateY(-9px) scale(0.96, 1.03);
+  }
+  38% {
+    opacity: 1;
+    transform: translateY(1px) scale(1.025, 0.97);
+  }
+  68% {
+    transform: translateY(-1px) scale(0.995, 1.008);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes myOwlPerchedShadowLanding {
+  0% {
+    width: 12px;
+    opacity: 0.08;
+  }
+  42% {
+    width: 28px;
+    opacity: 0.44;
+  }
+  100% {
+    width: 25px;
+    opacity: 0.38;
+  }
+}
+
+.myOwlFlightAnchor {
+  width: clamp(108px, 9.5vw, 142px);
+}
+
+.myOwlFlightFrameUp,
+.myOwlFlightFrameDown {
+  animation-duration: 1040ms;
+  animation-timing-function: linear;
+}
+
+@keyframes myOwlFlightWingsUp {
+  0%,
+  18% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  45%,
+  68% {
+    opacity: 0;
+    transform: translateY(1px) scale(0.988);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes myOwlFlightWingsDown {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translateY(1px) scale(0.988);
+  }
+  45%,
+  68% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(1px) scale(0.988);
+  }
+}
+
 .myNav {
   display: flex;
   gap: 1.2rem;
@@ -702,6 +952,11 @@ a {
   .myTinyOwlMotion,
   .myTinyOwlImage,
   .myTinyOwlShadow,
+  .myOwlPerchedAnchor,
+  .myOwlPerchedMotion,
+  .myOwlPerchedBody,
+  .myOwlPerchedHead,
+  .myOwlPerchedShadow,
   .myOwlFlightBird,
   .myOwlFlightFrame {
     animation: none;
