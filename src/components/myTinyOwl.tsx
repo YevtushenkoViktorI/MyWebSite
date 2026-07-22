@@ -313,6 +313,8 @@ export function MyTinyOwl() {
     const myTravelDistance = Math.hypot(myDeltaX, myDeltaY);
     const myDirection = Math.sign(myDeltaX || 1);
     const myLift = myClamp(myTravelDistance * 0.2, 72, 175);
+    const myFlightWidth = myBird.parentElement?.getBoundingClientRect().width ?? 124;
+    const myFlightHeight = myFlightWidth * 0.75;
     const myNeedsSideArc = Math.abs(myDeltaX) < 120;
     const mySideArc = myNeedsSideArc ? (myTarget.myX > window.innerWidth / 2 ? -92 : 92) : 0;
     const myControlOne = {
@@ -330,16 +332,20 @@ export function MyTinyOwl() {
       const myProgress = myIndex / myFrameCount;
       const myCurveProgress = myProgress * myProgress * (3 - 2 * myProgress);
       const myInverse = 1 - myCurveProgress;
-      const myX = myInverse ** 3 * myStart.myX
+      const myRawX = myInverse ** 3 * myStart.myX
         + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myX
         + 3 * myInverse * myCurveProgress ** 2 * myControlTwo.myX
         + myCurveProgress ** 3 * myTarget.myX;
-      const myY = myInverse ** 3 * myStart.myY
+      const myRawY = myInverse ** 3 * myStart.myY
         + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myY
         + 3 * myInverse * myCurveProgress ** 2 * myControlTwo.myY
         + myCurveProgress ** 3 * myTarget.myY;
       const myFlightPresence = Math.sin(Math.PI * myProgress) ** 0.58;
       const myScale = 0.3 + 0.52 * myFlightPresence;
+      const myHorizontalSafety = myFlightWidth * myScale * 0.5 + 7;
+      const myVerticalSafety = myFlightHeight * myScale * 0.5 + 7;
+      const myX = myClamp(myRawX, myHorizontalSafety, window.innerWidth - myHorizontalSafety);
+      const myY = myClamp(myRawY, myVerticalSafety, window.innerHeight - myVerticalSafety);
       const myBank = myDirection * Math.sin(Math.PI * myProgress) * 4.2 + Math.sin(Math.PI * 2 * myProgress) * 1.5;
       const myOpacity = myClamp(Math.min(myProgress / 0.045, (1 - myProgress) / 0.045), 0, 1);
 
@@ -417,16 +423,18 @@ export function MyTinyOwl() {
       style={{ left: myFlight.myStart.myX, top: myFlight.myStart.myY }}
       aria-hidden="true"
     >
-      <span ref={myFlightBirdRef} className="myOwlFlightBird">
-        <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
-          <img className="myOwlFlightFrame myOwlFlightFrameUp" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
-          <img className="myOwlFlightFrame myOwlFlightFrameDown" src={myAssetPath("/mascot/owl-snowy-flight-down.png")} alt="" width="512" height="384" />
+        <span ref={myFlightBirdRef} className="myOwlFlightBird">
+          <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
+            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingLeft" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
+            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingRight" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
+            <img className="myOwlFlightPart myOwlFlightBodyPart" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
+          </span>
+          <span className="myOwlFlightTheme myOwlFlightThemeBlack">
+            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingLeft" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
+            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingRight" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
+            <img className="myOwlFlightPart myOwlFlightBodyPart" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
+          </span>
         </span>
-        <span className="myOwlFlightTheme myOwlFlightThemeBlack">
-          <img className="myOwlFlightFrame myOwlFlightFrameUp" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
-          <img className="myOwlFlightFrame myOwlFlightFrameDown" src={myAssetPath("/mascot/owl-black-flight-down.png")} alt="" width="512" height="384" />
-        </span>
-      </span>
     </span>,
     document.body
   ) : null;
@@ -436,9 +444,7 @@ export function MyTinyOwl() {
       <span ref={myPlaceholderRef} className="myTinyOwl" aria-hidden="true">
         <span className="myOwlFlightPreload">
           <img src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" />
-          <img src={myAssetPath("/mascot/owl-snowy-flight-down.png")} alt="" />
           <img src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" />
-          <img src={myAssetPath("/mascot/owl-black-flight-down.png")} alt="" />
         </span>
       </span>
       {myPerchedLayer}

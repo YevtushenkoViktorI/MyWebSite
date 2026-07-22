@@ -722,6 +722,138 @@ a {
   }
 }
 
+.myOwlFlightTheme {
+  filter:
+    drop-shadow(0 5px 5px color-mix(in srgb, #000000 28%, transparent))
+    drop-shadow(0 10px 14px color-mix(in srgb, #000000 16%, transparent));
+}
+
+.myOwlFlightPart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  will-change: transform;
+}
+
+.myOwlFlightWing {
+  z-index: 1;
+  animation-duration: 1080ms;
+  animation-iteration-count: infinite;
+}
+
+.myOwlFlightWingLeft {
+  clip-path: polygon(0 0, 51.5% 0, 51.5% 62%, 38% 74%, 0 77%);
+  transform-origin: 49% 53%;
+  animation-name: myOwlFlightWingLeftContinuous;
+}
+
+.myOwlFlightWingRight {
+  clip-path: polygon(48.5% 0, 100% 0, 100% 77%, 62% 74%, 48.5% 62%);
+  transform-origin: 51% 53%;
+  animation-name: myOwlFlightWingRightContinuous;
+}
+
+.myOwlFlightBodyPart {
+  z-index: 2;
+  clip-path: polygon(36% 27%, 64% 27%, 72% 100%, 28% 100%);
+  transform-origin: 50% 62%;
+  animation: myOwlFlightBodyContinuous 1080ms linear infinite;
+}
+
+@keyframes myOwlFlightWingLeftContinuous {
+  0%,
+  100% {
+    transform: rotate(0deg) scaleY(1);
+    animation-timing-function: cubic-bezier(0.28, 0.02, 0.34, 1);
+  }
+  8% {
+    transform: rotate(3deg) scaleY(1.006);
+    animation-timing-function: cubic-bezier(0.18, 0.02, 0.3, 1);
+  }
+  24% {
+    transform: rotate(-18deg) scaleY(0.993);
+    animation-timing-function: cubic-bezier(0.18, 0.08, 0.32, 1);
+  }
+  40% {
+    transform: rotate(-43deg) scaleY(0.975);
+    animation-timing-function: cubic-bezier(0.18, 0.16, 0.3, 1);
+  }
+  50% {
+    transform: rotate(-50deg) scaleY(0.968);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  63% {
+    transform: rotate(-37deg) scaleY(0.978);
+    animation-timing-function: cubic-bezier(0.24, 0.18, 0.3, 1);
+  }
+  78% {
+    transform: rotate(-19deg) scaleY(0.99);
+    animation-timing-function: cubic-bezier(0.2, 0.2, 0.28, 1);
+  }
+  91% {
+    transform: rotate(-5deg) scaleY(0.998);
+  }
+}
+
+@keyframes myOwlFlightWingRightContinuous {
+  0%,
+  100% {
+    transform: rotate(0deg) scaleY(1);
+    animation-timing-function: cubic-bezier(0.28, 0.02, 0.34, 1);
+  }
+  8% {
+    transform: rotate(-3deg) scaleY(1.006);
+    animation-timing-function: cubic-bezier(0.18, 0.02, 0.3, 1);
+  }
+  24% {
+    transform: rotate(18deg) scaleY(0.993);
+    animation-timing-function: cubic-bezier(0.18, 0.08, 0.32, 1);
+  }
+  40% {
+    transform: rotate(43deg) scaleY(0.975);
+    animation-timing-function: cubic-bezier(0.18, 0.16, 0.3, 1);
+  }
+  50% {
+    transform: rotate(50deg) scaleY(0.968);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  63% {
+    transform: rotate(37deg) scaleY(0.978);
+    animation-timing-function: cubic-bezier(0.24, 0.18, 0.3, 1);
+  }
+  78% {
+    transform: rotate(19deg) scaleY(0.99);
+    animation-timing-function: cubic-bezier(0.2, 0.2, 0.28, 1);
+  }
+  91% {
+    transform: rotate(5deg) scaleY(0.998);
+  }
+}
+
+@keyframes myOwlFlightBodyContinuous {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  12% {
+    transform: translateY(0.5px) rotate(-0.3deg) scale(0.998, 1.002);
+  }
+  28% {
+    transform: translateY(-0.8px) rotate(0.25deg) scale(1.004, 0.997);
+  }
+  48% {
+    transform: translateY(-2px) rotate(0deg) scale(1.008, 0.992);
+  }
+  66% {
+    transform: translateY(-0.7px) rotate(-0.2deg) scale(1.003, 0.998);
+  }
+  84% {
+    transform: translateY(0.4px) rotate(0.18deg) scale(0.998, 1.002);
+  }
+}
+
 .myNav {
   display: flex;
   gap: 1.2rem;
