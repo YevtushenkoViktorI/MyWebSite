@@ -407,6 +407,7 @@ a {
 }
 
 .myOwlFlightTheme {
+  isolation: isolate;
   transition: opacity 420ms ease;
 }
 
@@ -724,6 +725,7 @@ a {
 
 .myOwlFlightSequenceFrame {
   opacity: 0;
+  mix-blend-mode: plus-lighter;
   transform-origin: 50% 50%;
   animation-duration: 1080ms;
   animation-iteration-count: infinite;
