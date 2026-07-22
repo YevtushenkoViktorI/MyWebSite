@@ -26,8 +26,8 @@ type myOwlFlight = {
 const myPerchedOwlHeight = 47;
 const myTakeoffLaunchDelay = 860;
 const myTakeoffHandoffDelay = 1440;
-const myLandingOverlapDuration = 260;
-const myLandingSettleDuration = 1440;
+const myLandingOverlapDuration = 300;
+const myLandingSettleDuration = 1600;
 const mySnowyTakeoffAnimation = "/mascot/owl-snowy-takeoff-dense-sprite.webp";
 const myBlackTakeoffAnimation = "/mascot/owl-black-takeoff-dense-sprite.webp";
 const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-dense-sprite.webp";
@@ -437,8 +437,8 @@ export function MyTinyOwl() {
     };
     const myKeyframes: Keyframe[] = [];
     const myFrameCount = 120;
-    const myTakeoffBlend = myClamp(440 / myFlight.myDuration, 0.1, 0.22);
-    const myLandingBlend = myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.16, 0.34);
+    const myTakeoffBlend = myClamp(480 / myFlight.myDuration, 0.12, 0.24);
+    const myLandingBlend = myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.08, 0.22);
 
     for (let myIndex = 0; myIndex <= myFrameCount; myIndex += 1) {
       const myProgress = myIndex / myFrameCount;
@@ -454,8 +454,8 @@ export function MyTinyOwl() {
         + myCurveProgress ** 3 * myTarget.myY
         + Math.sin(Math.PI * 4 * myProgress) * Math.sin(Math.PI * myProgress) * 2.2;
       const myCruiseScale = 0.84;
-      const myStartScale = myFlight.myFadeIn ? 0.3 : 0.78;
-      const myEndScale = myFlight.myFadeOut ? 0.3 : 0.78;
+      const myStartScale = myFlight.myFadeIn ? 0.56 : 0.78;
+      const myEndScale = myFlight.myFadeOut ? 0.58 : 0.78;
       const myRise = mySmoothStep(myProgress / 0.24);
       const myFall = mySmoothStep((1 - myProgress) / 0.24);
       const myScale = myProgress < 0.24

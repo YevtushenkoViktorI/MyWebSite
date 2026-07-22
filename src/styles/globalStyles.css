@@ -852,9 +852,10 @@ a {
     opacity: 0;
   }
   8%,
-  84% {
+  56% {
     opacity: 1;
   }
+  82%,
   100% {
     opacity: 0;
   }
@@ -864,10 +865,11 @@ a {
   0% {
     opacity: 0;
   }
-  9%,
-  88% {
+  14%,
+  72% {
     opacity: 1;
   }
+  96%,
   100% {
     opacity: 0;
   }
@@ -920,11 +922,11 @@ a {
 
 @keyframes myOwlPerchedLanding {
   0%,
-  76% {
+  70% {
     opacity: 0;
     transform: translateY(-3px) scale(0.96, 1.03);
   }
-  88% {
+  84% {
     opacity: 0.74;
     transform: translateY(1px) scale(1.02, 0.97);
   }
