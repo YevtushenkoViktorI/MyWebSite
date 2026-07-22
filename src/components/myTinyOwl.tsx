@@ -24,12 +24,16 @@ type myOwlFlight = {
 };
 
 const myPerchedOwlHeight = 47;
-const myTakeoffLaunchDelay = 620;
-const myTakeoffHandoffDelay = 1080;
-const myLandingOverlapDuration = 620;
-const myLandingSettleDuration = 1120;
-const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-observing-60fps.webp";
-const myBlackFlightAnimation = "/mascot/owl-black-flight-observing-60fps.webp";
+const myTakeoffLaunchDelay = 860;
+const myTakeoffHandoffDelay = 1360;
+const myLandingOverlapDuration = 260;
+const myLandingSettleDuration = 1360;
+const mySnowyTakeoffAnimation = "/mascot/owl-snowy-takeoff-cinematic-60fps.webp";
+const myBlackTakeoffAnimation = "/mascot/owl-black-takeoff-cinematic-60fps.webp";
+const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-cinematic-60fps.webp";
+const myBlackFlightAnimation = "/mascot/owl-black-flight-cinematic-60fps.webp";
+const mySnowyLandingAnimation = "/mascot/owl-snowy-landing-cinematic-60fps.webp";
+const myBlackLandingAnimation = "/mascot/owl-black-landing-cinematic-60fps.webp";
 const myFrameSelector = [
   "main .mySection",
   "main .myHeroPhoto",
@@ -583,16 +587,61 @@ export function MyTinyOwl() {
     document.body
   ) : null;
 
+  const myTransitionMode = myPhase === "preparing"
+    ? "takeoff"
+    : myPhase === "landing"
+      ? "landing"
+      : null;
+  const myTransitionLayer = myPerch && myTransitionMode ? createPortal(
+    <span
+      className={`myOwlTransitionAnchor myOwlTransitionMode-${myTransitionMode}`}
+      style={{ left: myPerch.myX, top: myPerch.myY }}
+      aria-hidden="true"
+    >
+      <span className="myOwlTransitionTheme myOwlTransitionThemeSnowy">
+        <img
+          key={`snowy-${myTransitionMode}`}
+          className="myOwlTransitionAnimation"
+          src={myAssetPath(myTransitionMode === "takeoff" ? mySnowyTakeoffAnimation : mySnowyLandingAnimation)}
+          alt=""
+          width="320"
+          height="240"
+        />
+      </span>
+      <span className="myOwlTransitionTheme myOwlTransitionThemeBlack">
+        <img
+          key={`black-${myTransitionMode}`}
+          className="myOwlTransitionAnimation"
+          src={myAssetPath(myTransitionMode === "takeoff" ? myBlackTakeoffAnimation : myBlackLandingAnimation)}
+          alt=""
+          width="320"
+          height="240"
+        />
+      </span>
+    </span>,
+    document.body
+  ) : null;
+
+  const myAnimationAssets = [
+    mySnowyTakeoffAnimation,
+    myBlackTakeoffAnimation,
+    mySnowyFlightAnimation,
+    myBlackFlightAnimation,
+    mySnowyLandingAnimation,
+    myBlackLandingAnimation
+  ];
+
   return (
     <>
       <span ref={myPlaceholderRef} className="myTinyOwl" aria-hidden="true">
         <span className="myOwlFlightPreload">
-          {[mySnowyFlightAnimation, myBlackFlightAnimation].map((myAnimation) => (
+          {myAnimationAssets.map((myAnimation) => (
             <img key={myAnimation} src={myAssetPath(myAnimation)} alt="" />
           ))}
         </span>
       </span>
       {myPerchedLayer}
+      {myTransitionLayer}
       {myFlightLayer}
     </>
   );
