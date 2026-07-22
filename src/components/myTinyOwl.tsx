@@ -23,8 +23,8 @@ type myOwlFlight = {
 
 const mySectionIds = ["myOverview", "myEngineering", "myProjects", "mySkills", "myExperience", "myEducation", "myContact"];
 const myIdleCornerOrder: myOwlCorner[] = ["topRight", "bottomRight", "topLeft", "bottomLeft"];
-const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-24fps.webp";
-const myBlackFlightAnimation = "/mascot/owl-black-flight-24fps.webp";
+const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-60fps.webp";
+const myBlackFlightAnimation = "/mascot/owl-black-flight-60fps.webp";
 
 function myClamp(myValue: number, myMinimum: number, myMaximum: number): number {
   return Math.min(Math.max(myValue, myMinimum), myMaximum);
