@@ -724,9 +724,66 @@ a {
 
 .myOwlFlightSequenceFrame {
   opacity: 0;
-  animation-duration: 840ms;
+  transform-origin: 50% 50%;
+  animation-duration: 1080ms;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-0 {
+  transform: translate(-0.7%, -0.35%) scale(0.874);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-1 {
+  transform: translate(-0.4%, -2.08%) scale(0.948);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-2 {
+  transform: translate(-0.89%, 2.6%) scale(0.963);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-3 {
+  transform: translate(0.06%, 4.33%) scale(1.083);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-4 {
+  transform: translate(-0.57%, 5.25%) scale(0.996);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-5 {
+  transform: translate(-0.58%, 7.04%) scale(0.987);
+}
+
+.myOwlFlightThemeSnowy .myOwlFlightSequenceFrame-6 {
+  transform: translate(-0.29%, 2.47%) scale(0.836);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-0 {
+  transform: translate(-1.61%, -5.09%) scale(0.816);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-1 {
+  transform: translate(-0.27%, -2.2%) scale(1.049);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-2 {
+  transform: translate(0.33%, -6.06%) scale(1.049);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-3 {
+  transform: translate(-0.28%, -2.15%) scale(1.044);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-4 {
+  transform: translate(-0.15%, 1.8%) scale(0.987);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-5 {
+  transform: translate(-0.13%, 1.65%) scale(1.009);
+}
+
+.myOwlFlightThemeBlack .myOwlFlightSequenceFrame-6 {
+  transform: translate(0.15%, -2.03%) scale(0.786);
 }
 
 .myOwlFlightSequenceFrame-0 {
@@ -759,111 +816,95 @@ a {
 
 @keyframes myOwlFlightSequence0 {
   0%,
-  4.16%,
-  95.84%,
   100% {
     opacity: 1;
   }
-  4.17%,
-  95.83% {
+  8.333%,
+  91.667% {
     opacity: 0;
   }
 }
 
 @keyframes myOwlFlightSequence1 {
   0%,
-  4.16%,
-  12.5%,
-  87.5%,
-  95.84%,
+  16.667%,
+  83.333%,
   100% {
     opacity: 0;
   }
-  4.17%,
-  12.49%,
-  87.51%,
-  95.83% {
+  8.333%,
+  91.667% {
     opacity: 1;
   }
 }
 
 @keyframes myOwlFlightSequence2 {
   0%,
-  12.49%,
-  20.84%,
-  79.16%,
-  87.51%,
+  8.333%,
+  25%,
+  75%,
+  91.667%,
   100% {
     opacity: 0;
   }
-  12.5%,
-  20.83%,
-  79.17%,
-  87.5% {
+  16.667%,
+  83.333% {
     opacity: 1;
   }
 }
 
 @keyframes myOwlFlightSequence3 {
   0%,
-  20.83%,
-  29.17%,
-  70.83%,
-  79.17%,
+  16.667%,
+  33.333%,
+  66.667%,
+  83.333%,
   100% {
     opacity: 0;
   }
-  20.84%,
-  29.16%,
-  70.84%,
-  79.16% {
+  25%,
+  75% {
     opacity: 1;
   }
 }
 
 @keyframes myOwlFlightSequence4 {
   0%,
-  29.16%,
-  37.5%,
-  62.49%,
-  70.84%,
+  25%,
+  41.667%,
+  58.333%,
+  75%,
   100% {
     opacity: 0;
   }
-  29.17%,
-  37.49%,
-  62.5%,
-  70.83% {
+  33.333%,
+  66.667% {
     opacity: 1;
   }
 }
 
 @keyframes myOwlFlightSequence5 {
   0%,
-  37.49%,
-  45.84%,
-  54.16%,
-  62.5%,
+  33.333%,
+  50%,
+  66.667%,
   100% {
     opacity: 0;
   }
-  37.5%,
-  45.83%,
-  54.17%,
-  62.49% {
+  41.667%,
+  58.333% {
     opacity: 1;
   }
 }
 
 @keyframes myOwlFlightSequence6 {
   0%,
-  45.83%,
-  54.17%,
+  41.667%,
+  58.333%,
   100% {
     opacity: 0;
   }
-  45.84%,
-  54.16% {
+  50% {
     opacity: 1;
   }
 }
