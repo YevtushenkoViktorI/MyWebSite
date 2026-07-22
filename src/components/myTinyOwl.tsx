@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { myAssetPath } from "../utils/myAssetPath";
 
@@ -438,7 +438,11 @@ export function MyTinyOwl() {
   const myFlightLayer = myFlight ? createPortal(
     <span
       className="myOwlFlightAnchor"
-      style={{ left: myFlight.myStart.myX, top: myFlight.myStart.myY }}
+      style={{
+        left: myFlight.myStart.myX,
+        top: myFlight.myStart.myY,
+        "--myOwlFlightDuration": `${myFlight.myDuration}ms`
+      } as CSSProperties}
       aria-hidden="true"
     >
         <span ref={myFlightBirdRef} className="myOwlFlightBird">
