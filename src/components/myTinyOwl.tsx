@@ -23,6 +23,24 @@ type myOwlFlight = {
 
 const mySectionIds = ["myOverview", "myEngineering", "myProjects", "mySkills", "myExperience", "myEducation", "myContact"];
 const myIdleCornerOrder: myOwlCorner[] = ["topRight", "bottomRight", "topLeft", "bottomLeft"];
+const mySnowyFlightFrames = [
+  "/mascot/owl-snowy-flight-up.png",
+  "/mascot/owl-snowy-flight-frame-1.png",
+  "/mascot/owl-snowy-flight-mid-high.png",
+  "/mascot/owl-snowy-flight-frame-2.png",
+  "/mascot/owl-snowy-flight-mid-low.png",
+  "/mascot/owl-snowy-flight-frame-5.png",
+  "/mascot/owl-snowy-flight-down.png"
+];
+const myBlackFlightFrames = [
+  "/mascot/owl-black-flight-up.png",
+  "/mascot/owl-black-flight-frame-1.png",
+  "/mascot/owl-black-flight-mid-high.png",
+  "/mascot/owl-black-flight-frame-2.png",
+  "/mascot/owl-black-flight-mid-low.png",
+  "/mascot/owl-black-flight-frame-5.png",
+  "/mascot/owl-black-flight-down.png"
+];
 
 function myClamp(myValue: number, myMinimum: number, myMaximum: number): number {
   return Math.min(Math.max(myValue, myMinimum), myMaximum);
@@ -425,14 +443,28 @@ export function MyTinyOwl() {
     >
         <span ref={myFlightBirdRef} className="myOwlFlightBird">
           <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
-            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingLeft" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
-            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingRight" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
-            <img className="myOwlFlightPart myOwlFlightBodyPart" src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" width="512" height="384" />
+            {mySnowyFlightFrames.map((myFrame, myIndex) => (
+              <img
+                key={myFrame}
+                className={`myOwlFlightFrame myOwlFlightSequenceFrame myOwlFlightSequenceFrame-${myIndex}`}
+                src={myAssetPath(myFrame)}
+                alt=""
+                width="512"
+                height="384"
+              />
+            ))}
           </span>
           <span className="myOwlFlightTheme myOwlFlightThemeBlack">
-            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingLeft" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
-            <img className="myOwlFlightPart myOwlFlightWing myOwlFlightWingRight" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
-            <img className="myOwlFlightPart myOwlFlightBodyPart" src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" width="512" height="384" />
+            {myBlackFlightFrames.map((myFrame, myIndex) => (
+              <img
+                key={myFrame}
+                className={`myOwlFlightFrame myOwlFlightSequenceFrame myOwlFlightSequenceFrame-${myIndex}`}
+                src={myAssetPath(myFrame)}
+                alt=""
+                width="512"
+                height="384"
+              />
+            ))}
           </span>
         </span>
     </span>,
@@ -443,8 +475,9 @@ export function MyTinyOwl() {
     <>
       <span ref={myPlaceholderRef} className="myTinyOwl" aria-hidden="true">
         <span className="myOwlFlightPreload">
-          <img src={myAssetPath("/mascot/owl-snowy-flight-up.png")} alt="" />
-          <img src={myAssetPath("/mascot/owl-black-flight-up.png")} alt="" />
+          {[...mySnowyFlightFrames, ...myBlackFlightFrames].map((myFrame) => (
+            <img key={myFrame} src={myAssetPath(myFrame)} alt="" />
+          ))}
         </span>
       </span>
       {myPerchedLayer}
