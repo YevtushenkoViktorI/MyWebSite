@@ -25,15 +25,15 @@ type myOwlFlight = {
 
 const myPerchedOwlHeight = 47;
 const myTakeoffLaunchDelay = 860;
-const myTakeoffHandoffDelay = 1360;
+const myTakeoffHandoffDelay = 1440;
 const myLandingOverlapDuration = 260;
-const myLandingSettleDuration = 1360;
-const mySnowyTakeoffAnimation = "/mascot/owl-snowy-takeoff-cinematic-60fps.webp";
-const myBlackTakeoffAnimation = "/mascot/owl-black-takeoff-cinematic-60fps.webp";
-const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-cinematic-60fps.webp";
-const myBlackFlightAnimation = "/mascot/owl-black-flight-cinematic-60fps.webp";
-const mySnowyLandingAnimation = "/mascot/owl-snowy-landing-cinematic-60fps.webp";
-const myBlackLandingAnimation = "/mascot/owl-black-landing-cinematic-60fps.webp";
+const myLandingSettleDuration = 1440;
+const mySnowyTakeoffAnimation = "/mascot/owl-snowy-takeoff-dense-sprite.webp";
+const myBlackTakeoffAnimation = "/mascot/owl-black-takeoff-dense-sprite.webp";
+const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-dense-sprite.webp";
+const myBlackFlightAnimation = "/mascot/owl-black-flight-dense-sprite.webp";
+const mySnowyLandingAnimation = "/mascot/owl-snowy-landing-dense-sprite.webp";
+const myBlackLandingAnimation = "/mascot/owl-black-landing-dense-sprite.webp";
 const myFrameSelector = [
   "main .mySection",
   "main .myHeroPhoto",
@@ -565,21 +565,15 @@ export function MyTinyOwl() {
         }}
       >
         <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
-          <img
+          <span
             className="myOwlFlightAnimation"
-            src={myAssetPath(mySnowyFlightAnimation)}
-            alt=""
-            width="256"
-            height="192"
+            style={{ backgroundImage: `url(${myAssetPath(mySnowyFlightAnimation)})` }}
           />
         </span>
         <span className="myOwlFlightTheme myOwlFlightThemeBlack">
-          <img
+          <span
             className="myOwlFlightAnimation"
-            src={myAssetPath(myBlackFlightAnimation)}
-            alt=""
-            width="256"
-            height="192"
+            style={{ backgroundImage: `url(${myAssetPath(myBlackFlightAnimation)})` }}
           />
         </span>
       </span>
@@ -599,23 +593,21 @@ export function MyTinyOwl() {
       aria-hidden="true"
     >
       <span className="myOwlTransitionTheme myOwlTransitionThemeSnowy">
-        <img
+        <span
           key={`snowy-${myTransitionMode}`}
           className="myOwlTransitionAnimation"
-          src={myAssetPath(myTransitionMode === "takeoff" ? mySnowyTakeoffAnimation : mySnowyLandingAnimation)}
-          alt=""
-          width="320"
-          height="240"
+          style={{
+            backgroundImage: `url(${myAssetPath(myTransitionMode === "takeoff" ? mySnowyTakeoffAnimation : mySnowyLandingAnimation)})`
+          }}
         />
       </span>
       <span className="myOwlTransitionTheme myOwlTransitionThemeBlack">
-        <img
+        <span
           key={`black-${myTransitionMode}`}
           className="myOwlTransitionAnimation"
-          src={myAssetPath(myTransitionMode === "takeoff" ? myBlackTakeoffAnimation : myBlackLandingAnimation)}
-          alt=""
-          width="320"
-          height="240"
+          style={{
+            backgroundImage: `url(${myAssetPath(myTransitionMode === "takeoff" ? myBlackTakeoffAnimation : myBlackLandingAnimation)})`
+          }}
         />
       </span>
     </span>,
