@@ -23,6 +23,10 @@ type myOwlFlight = {
 
 const mySectionIds = ["myOverview", "myEngineering", "myProjects", "mySkills", "myExperience", "myEducation", "myContact"];
 const myIdleCornerOrder: myOwlCorner[] = ["topRight", "bottomRight", "topLeft", "bottomLeft"];
+const myTakeoffLaunchDelay = 620;
+const myTakeoffHandoffDelay = 1080;
+const myLandingOverlapDuration = 620;
+const myLandingSettleDuration = 1120;
 const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-seamless-60fps.webp";
 const myBlackFlightAnimation = "/mascot/owl-black-flight-seamless-60fps.webp";
 
@@ -109,7 +113,9 @@ export function MyTinyOwl() {
   const myFlightIdRef = useRef(0);
   const myReducedMotionRef = useRef(false);
   const myPrepareTimerRef = useRef(0);
+  const myTakeoffHandoffTimerRef = useRef(0);
   const myFlightTimerRef = useRef(0);
+  const myFlightEndTimerRef = useRef(0);
   const myLandingTimerRef = useRef(0);
   const myActionResetTimerRef = useRef(0);
   const myBeginFlightRef = useRef<(myTarget: myOwlPerch, myReason: myOwlFlightReason) => void>(() => undefined);
@@ -156,27 +162,34 @@ export function MyTinyOwl() {
       };
 
       setMyFlight(myNextFlight);
-      myUpdatePhase("flying");
-      setMyAction("idle");
-
       myFlightTimerRef.current = window.setTimeout(() => {
         myUpdatePerch(myTarget);
-        setMyFlight(null);
         myUpdatePhase("landing");
         setMyAction("landing");
+      }, myDuration - myLandingOverlapDuration);
 
-        myLandingTimerRef.current = window.setTimeout(() => {
-          myUpdatePhase("perched");
-          setMyAction("idle");
-
-          const myPendingPerch = myPendingPerchRef.current;
-          myPendingPerchRef.current = null;
-          if (myPendingPerch && myDistance(myTarget, myPendingPerch.myPerch) >= 42) {
-            window.setTimeout(() => myBeginFlightRef.current(myPendingPerch.myPerch, myPendingPerch.myReason), 500);
-          }
-        }, 980);
+      myFlightEndTimerRef.current = window.setTimeout(() => {
+        setMyFlight(null);
       }, myDuration);
-    }, 880);
+
+      myLandingTimerRef.current = window.setTimeout(() => {
+        myUpdatePhase("perched");
+        setMyAction("idle");
+
+        const myPendingPerch = myPendingPerchRef.current;
+        myPendingPerchRef.current = null;
+        if (myPendingPerch && myDistance(myTarget, myPendingPerch.myPerch) >= 42) {
+          window.setTimeout(() => myBeginFlightRef.current(myPendingPerch.myPerch, myPendingPerch.myReason), 500);
+        }
+      }, myDuration - myLandingOverlapDuration + myLandingSettleDuration);
+    }, myTakeoffLaunchDelay);
+
+    myTakeoffHandoffTimerRef.current = window.setTimeout(() => {
+      if (myPhaseRef.current === "preparing") {
+        myUpdatePhase("flying");
+        myActionResetTimerRef.current = window.setTimeout(() => setMyAction("idle"), 360);
+      }
+    }, myTakeoffHandoffDelay);
   }, [myUpdatePerch, myUpdatePhase]);
 
   myBeginFlightRef.current = myBeginFlight;
@@ -329,6 +342,8 @@ export function MyTinyOwl() {
     };
     const myKeyframes: Keyframe[] = [];
     const myFrameCount = 72;
+    const myTakeoffBlend = myClamp(420 / myFlight.myDuration, 0.065, 0.14);
+    const myLandingBlend = myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.1, 0.2);
 
     for (let myIndex = 0; myIndex <= myFrameCount; myIndex += 1) {
       const myProgress = myIndex / myFrameCount;
@@ -349,7 +364,10 @@ export function MyTinyOwl() {
       const myX = myClamp(myRawX, myHorizontalSafety, window.innerWidth - myHorizontalSafety);
       const myY = myClamp(myRawY, myVerticalSafety, window.innerHeight - myVerticalSafety);
       const myBank = myDirection * Math.sin(Math.PI * myProgress) * 4.2 + Math.sin(Math.PI * 2 * myProgress) * 1.5;
-      const myOpacity = myClamp(Math.min(myProgress / 0.045, (1 - myProgress) / 0.045), 0, 1);
+      const myTakeoffVisibility = myClamp(myProgress / myTakeoffBlend, 0, 1);
+      const myLandingVisibility = myClamp((1 - myProgress) / myLandingBlend, 0, 1);
+      const myVisibility = Math.min(myTakeoffVisibility, myLandingVisibility);
+      const myOpacity = myVisibility * myVisibility * (3 - 2 * myVisibility);
 
       myKeyframes.push({
         offset: myProgress,
@@ -369,7 +387,9 @@ export function MyTinyOwl() {
 
   useEffect(() => () => {
     window.clearTimeout(myPrepareTimerRef.current);
+    window.clearTimeout(myTakeoffHandoffTimerRef.current);
     window.clearTimeout(myFlightTimerRef.current);
+    window.clearTimeout(myFlightEndTimerRef.current);
     window.clearTimeout(myLandingTimerRef.current);
     window.clearTimeout(myActionResetTimerRef.current);
   }, []);
