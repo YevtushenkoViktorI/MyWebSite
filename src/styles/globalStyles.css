@@ -424,6 +424,7 @@ a {
 
 .myOwlFlightAnimation {
   animation: myOwlFlightFrames 1440ms steps(1, end) infinite;
+  animation-direction: alternate;
   background-position: 0 0;
   background-repeat: no-repeat;
   background-size: 1200% 1000%;
