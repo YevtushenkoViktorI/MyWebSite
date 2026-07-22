@@ -1,4 +1,4 @@
-import { type CSSProperties, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { myAssetPath } from "../utils/myAssetPath";
 
@@ -23,24 +23,8 @@ type myOwlFlight = {
 
 const mySectionIds = ["myOverview", "myEngineering", "myProjects", "mySkills", "myExperience", "myEducation", "myContact"];
 const myIdleCornerOrder: myOwlCorner[] = ["topRight", "bottomRight", "topLeft", "bottomLeft"];
-const mySnowyFlightFrames = [
-  "/mascot/owl-snowy-flight-up.png",
-  "/mascot/owl-snowy-flight-frame-1.png",
-  "/mascot/owl-snowy-flight-mid-high.png",
-  "/mascot/owl-snowy-flight-frame-2.png",
-  "/mascot/owl-snowy-flight-mid-low.png",
-  "/mascot/owl-snowy-flight-frame-5.png",
-  "/mascot/owl-snowy-flight-down.png"
-];
-const myBlackFlightFrames = [
-  "/mascot/owl-black-flight-up.png",
-  "/mascot/owl-black-flight-frame-1.png",
-  "/mascot/owl-black-flight-mid-high.png",
-  "/mascot/owl-black-flight-frame-2.png",
-  "/mascot/owl-black-flight-mid-low.png",
-  "/mascot/owl-black-flight-frame-5.png",
-  "/mascot/owl-black-flight-down.png"
-];
+const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-24fps.webp";
+const myBlackFlightAnimation = "/mascot/owl-black-flight-24fps.webp";
 
 function myClamp(myValue: number, myMinimum: number, myMaximum: number): number {
   return Math.min(Math.max(myValue, myMinimum), myMaximum);
@@ -440,35 +424,28 @@ export function MyTinyOwl() {
       className="myOwlFlightAnchor"
       style={{
         left: myFlight.myStart.myX,
-        top: myFlight.myStart.myY,
-        "--myOwlFlightDuration": `${myFlight.myDuration}ms`
-      } as CSSProperties}
+        top: myFlight.myStart.myY
+      }}
       aria-hidden="true"
     >
         <span ref={myFlightBirdRef} className="myOwlFlightBird">
           <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
-            {mySnowyFlightFrames.map((myFrame, myIndex) => (
-              <img
-                key={myFrame}
-                className={`myOwlFlightFrame myOwlFlightSequenceFrame myOwlFlightSequenceFrame-${myIndex}`}
-                src={myAssetPath(myFrame)}
-                alt=""
-                width="512"
-                height="384"
-              />
-            ))}
+            <img
+              className="myOwlFlightAnimation"
+              src={myAssetPath(mySnowyFlightAnimation)}
+              alt=""
+              width="256"
+              height="192"
+            />
           </span>
           <span className="myOwlFlightTheme myOwlFlightThemeBlack">
-            {myBlackFlightFrames.map((myFrame, myIndex) => (
-              <img
-                key={myFrame}
-                className={`myOwlFlightFrame myOwlFlightSequenceFrame myOwlFlightSequenceFrame-${myIndex}`}
-                src={myAssetPath(myFrame)}
-                alt=""
-                width="512"
-                height="384"
-              />
-            ))}
+            <img
+              className="myOwlFlightAnimation"
+              src={myAssetPath(myBlackFlightAnimation)}
+              alt=""
+              width="256"
+              height="192"
+            />
           </span>
         </span>
     </span>,
@@ -479,8 +456,8 @@ export function MyTinyOwl() {
     <>
       <span ref={myPlaceholderRef} className="myTinyOwl" aria-hidden="true">
         <span className="myOwlFlightPreload">
-          {[...mySnowyFlightFrames, ...myBlackFlightFrames].map((myFrame) => (
-            <img key={myFrame} src={myAssetPath(myFrame)} alt="" />
+          {[mySnowyFlightAnimation, myBlackFlightAnimation].map((myAnimation) => (
+            <img key={myAnimation} src={myAssetPath(myAnimation)} alt="" />
           ))}
         </span>
       </span>
