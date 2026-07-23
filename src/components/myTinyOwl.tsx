@@ -26,14 +26,14 @@ type myOwlFlight = {
 const myPerchedOwlHeight = 47;
 const myTakeoffLaunchDelay = 140;
 const myTakeoffHandoffDelay = 680;
-const myLandingOverlapDuration = 520;
+const myLandingOverlapDuration = 720;
 const myLandingSettleDuration = 860;
-const myFlightTakeoffScale = 0.42;
-const myFlightLandingScale = 0.46;
-const myFlightApproachScale = 0.78;
-const myFlightCruiseScale = 0.84;
-const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-dense-sprite.webp";
-const myBlackFlightAnimation = "/mascot/owl-black-flight-dense-sprite.webp";
+const myFlightTakeoffScale = 1;
+const myFlightLandingScale = 1;
+const myFlightApproachScale = 1;
+const myFlightCruiseScale = 1;
+const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-natural-sprite-v2.png";
+const myBlackFlightAnimation = "/mascot/owl-black-flight-natural-sprite-v2.png";
 const myFrameSelector = [
   "main .mySection",
   "main .myHeroPhoto",
