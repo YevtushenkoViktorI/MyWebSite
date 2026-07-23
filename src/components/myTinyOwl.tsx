@@ -24,16 +24,20 @@ type myOwlFlight = {
 };
 
 const myPerchedOwlHeight = 47;
-const myTakeoffLaunchDelay = 140;
-const myTakeoffHandoffDelay = 680;
-const myLandingOverlapDuration = 720;
-const myLandingSettleDuration = 860;
-const myFlightTakeoffScale = 1;
-const myFlightLandingScale = 1;
-const myFlightApproachScale = 1;
-const myFlightCruiseScale = 1;
+const myTakeoffLaunchDelay = 700;
+const myTakeoffHandoffDelay = 900;
+const myLandingOverlapDuration = 520;
+const myLandingSettleDuration = 900;
+const myTransitionDuration = 900;
+const myFlightCycleDuration = 2000;
+const myFlightTakeoffScale = 0.74;
+const myFlightLandingScale = 0.74;
+const myFlightApproachScale = 0.74;
+const myFlightCruiseScale = 0.74;
 const mySnowyFlightAnimation = "/mascot/owl-snowy-flight-natural-sprite-v2.png";
 const myBlackFlightAnimation = "/mascot/owl-black-flight-natural-sprite-v2.png";
+const mySnowyRowDirections = [true, false, false, false, true, false, false, true, false, false];
+const myBlackRowDirections = [true, true, false, true, false, true, true, true, true, false];
 const myFrameSelector = [
   "main .mySection",
   "main .myHeroPhoto",
@@ -52,6 +56,72 @@ function mySmoothStep(myValue: number): number {
   const myProgress = myClamp(myValue, 0, 1);
   return myProgress * myProgress * (3 - 2 * myProgress);
 }
+
+function myBuildSpriteSequence(myRowDirections: boolean[], myFirstRow = 0, myLastRow = 9): number[] {
+  const myFrames: number[] = [];
+  for (let myRow = myFirstRow; myRow <= myLastRow; myRow += 1) {
+    const myColumns = Array.from({ length: 12 }, (_, myColumn) => myRow * 12 + myColumn);
+    myFrames.push(...(myRowDirections[myRow] ? myColumns : myColumns.reverse()));
+  }
+  return myFrames;
+}
+
+function myRotateSpriteSequence(myFrames: number[], myStartFrame: number): number[] {
+  const myStartIndex = myFrames.indexOf(myStartFrame);
+  if (myStartIndex <= 0) {
+    return myFrames;
+  }
+  return [...myFrames.slice(myStartIndex), ...myFrames.slice(0, myStartIndex)];
+}
+
+function mySpritePosition(myFrame: number): string {
+  const myColumn = myFrame % 12;
+  const myRow = Math.floor(myFrame / 12);
+  return `${myColumn / 11 * 100}% ${myRow / 9 * 100}%`;
+}
+
+function myAnimateSprite(
+  myElement: HTMLElement | null,
+  myFrames: number[],
+  myDuration: number,
+  myIterations: number
+): Animation | null {
+  if (!myElement || myFrames.length < 2) {
+    return null;
+  }
+
+  const myAnimationFrames = myIterations === Infinity
+    ? [...myFrames, myFrames[0]]
+    : myFrames;
+  const myLastIndex = myAnimationFrames.length - 1;
+  const myKeyframes: Keyframe[] = myAnimationFrames.map((myFrame, myIndex) => ({
+    offset: myIndex / myLastIndex,
+    backgroundPosition: mySpritePosition(myFrame),
+    easing: "steps(1, end)"
+  }));
+
+  return myElement.animate(myKeyframes, {
+    duration: myDuration,
+    iterations: myIterations,
+    fill: "both",
+    easing: "linear"
+  });
+}
+
+const mySnowyFullSequence = myBuildSpriteSequence(mySnowyRowDirections);
+const myBlackFullSequence = myBuildSpriteSequence(myBlackRowDirections);
+const mySnowyTakeoffSequence = myBuildSpriteSequence(mySnowyRowDirections, 3, 7);
+const myBlackTakeoffSequence = myBuildSpriteSequence(myBlackRowDirections, 3, 7);
+const mySnowyLandingSequence = [...mySnowyTakeoffSequence].reverse();
+const myBlackLandingSequence = [...myBlackTakeoffSequence].reverse();
+const mySnowyFlightSequence = myRotateSpriteSequence(
+  mySnowyFullSequence,
+  mySnowyTakeoffSequence[mySnowyTakeoffSequence.length - 1]
+);
+const myBlackFlightSequence = myRotateSpriteSequence(
+  myBlackFullSequence,
+  myBlackTakeoffSequence[myBlackTakeoffSequence.length - 1]
+);
 
 function myDistance(myStart: myOwlPerch, myTarget: myOwlPerch): number {
   return Math.hypot(myTarget.myX - myStart.myX, myTarget.myY - myStart.myY);
@@ -162,6 +232,10 @@ export function MyTinyOwl() {
   const [myFlight, setMyFlight] = useState<myOwlFlight | null>(null);
   const myPlaceholderRef = useRef<HTMLSpanElement | null>(null);
   const myFlightBirdRef = useRef<HTMLSpanElement | null>(null);
+  const mySnowyFlightRef = useRef<HTMLSpanElement | null>(null);
+  const myBlackFlightRef = useRef<HTMLSpanElement | null>(null);
+  const mySnowyTransitionRef = useRef<HTMLSpanElement | null>(null);
+  const myBlackTransitionRef = useRef<HTMLSpanElement | null>(null);
   const myPerchRef = useRef<myOwlPerch | null>(null);
   const myPhaseRef = useRef<myOwlPhase>("perched");
   const myLandingTargetRef = useRef<myOwlPerch | null>(null);
@@ -185,6 +259,12 @@ export function MyTinyOwl() {
     myFadeOut: boolean
   ) => void>(() => undefined);
   const myBeginScrollFlightRef = useRef<() => void>(() => undefined);
+  const myTransitionMode = myPhase === "preparing"
+    ? "takeoff"
+    : myPhase === "landing"
+      ? "landing"
+      : null;
+  const myHasFlight = myFlight !== null;
 
   const myUpdatePerch = useCallback((myNextPerch: myOwlPerch) => {
     myPerchRef.current = myNextPerch;
@@ -437,8 +517,8 @@ export function MyTinyOwl() {
     };
     const myKeyframes: Keyframe[] = [];
     const myFrameCount = 120;
-    const myTakeoffBlend = myClamp(460 / myFlight.myDuration, 0.14, 0.26);
-    const myLandingBlend = myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.16, 0.3);
+    const myTakeoffBlend = myClamp(200 / myFlight.myDuration, 0.07, 0.12);
+    const myLandingBlend = myClamp(320 / myFlight.myDuration, 0.12, 0.2);
 
     for (let myIndex = 0; myIndex <= myFrameCount; myIndex += 1) {
       const myProgress = myIndex / myFrameCount;
@@ -491,6 +571,42 @@ export function MyTinyOwl() {
 
     return () => myAnimation.cancel();
   }, [myFlight]);
+
+  useEffect(() => {
+    if (!myHasFlight) {
+      return;
+    }
+
+    const myAnimations = [
+      myAnimateSprite(mySnowyFlightRef.current, mySnowyFlightSequence, myFlightCycleDuration, Infinity),
+      myAnimateSprite(myBlackFlightRef.current, myBlackFlightSequence, myFlightCycleDuration, Infinity)
+    ];
+
+    return () => {
+      myAnimations.forEach((myAnimation) => myAnimation?.cancel());
+    };
+  }, [myHasFlight]);
+
+  useEffect(() => {
+    if (!myTransitionMode) {
+      return;
+    }
+
+    const mySnowySequence = myTransitionMode === "takeoff"
+      ? mySnowyTakeoffSequence
+      : mySnowyLandingSequence;
+    const myBlackSequence = myTransitionMode === "takeoff"
+      ? myBlackTakeoffSequence
+      : myBlackLandingSequence;
+    const myAnimations = [
+      myAnimateSprite(mySnowyTransitionRef.current, mySnowySequence, myTransitionDuration, 1),
+      myAnimateSprite(myBlackTransitionRef.current, myBlackSequence, myTransitionDuration, 1)
+    ];
+
+    return () => {
+      myAnimations.forEach((myAnimation) => myAnimation?.cancel());
+    };
+  }, [myTransitionMode]);
 
   useEffect(() => () => {
     window.clearTimeout(myPrepareTimerRef.current);
@@ -566,16 +682,42 @@ export function MyTinyOwl() {
       >
         <span className="myOwlFlightTheme myOwlFlightThemeSnowy">
           <span
+            ref={mySnowyFlightRef}
             className="myOwlFlightAnimation"
             style={{ backgroundImage: `url(${myAssetPath(mySnowyFlightAnimation)})` }}
           />
         </span>
         <span className="myOwlFlightTheme myOwlFlightThemeBlack">
           <span
+            ref={myBlackFlightRef}
             className="myOwlFlightAnimation"
             style={{ backgroundImage: `url(${myAssetPath(myBlackFlightAnimation)})` }}
           />
         </span>
+      </span>
+    </span>,
+    document.body
+  ) : null;
+
+  const myTransitionLayer = myPerch && myTransitionMode ? createPortal(
+    <span
+      className={`myOwlTransitionAnchor myOwlTransitionMode-${myTransitionMode}`}
+      style={{ left: myPerch.myX, top: myPerch.myY }}
+      aria-hidden="true"
+    >
+      <span className="myOwlTransitionTheme myOwlTransitionThemeSnowy">
+        <span
+          ref={mySnowyTransitionRef}
+          className="myOwlTransitionAnimation"
+          style={{ backgroundImage: `url(${myAssetPath(mySnowyFlightAnimation)})` }}
+        />
+      </span>
+      <span className="myOwlTransitionTheme myOwlTransitionThemeBlack">
+        <span
+          ref={myBlackTransitionRef}
+          className="myOwlTransitionAnimation"
+          style={{ backgroundImage: `url(${myAssetPath(myBlackFlightAnimation)})` }}
+        />
       </span>
     </span>,
     document.body
@@ -596,6 +738,7 @@ export function MyTinyOwl() {
         </span>
       </span>
       {myPerchedLayer}
+      {myTransitionLayer}
       {myFlightLayer}
     </>
   );

@@ -385,7 +385,7 @@ a {
 .myOwlFlightAnchor {
   position: fixed;
   z-index: 62;
-  width: clamp(120px, 9.5vw, 142px);
+  width: clamp(108px, 9.5vw, 142px);
   aspect-ratio: 4 / 3;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -423,7 +423,6 @@ a {
 }
 
 .myOwlFlightAnimation {
-  animation: myOwlFlightFramesNatural 2000ms steps(1, end) -1000ms infinite;
   background-position: 0 0;
   background-repeat: no-repeat;
   background-size: 1200% 1000%;
@@ -441,7 +440,7 @@ a {
   aspect-ratio: 4 / 3;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, calc(-94.2% + 23.5px));
+  transform: translate(-50%, calc(-100% + 23.5px));
   will-change: opacity;
 }
 
@@ -470,22 +469,23 @@ a {
 }
 
 .myOwlTransitionAnimation {
-  animation: myOwlTransitionFrames 1440ms steps(1, end) both;
   background-position: 0 0;
   background-repeat: no-repeat;
-  background-size: 1200% 800%;
+  background-size: 1200% 1000%;
   filter:
     drop-shadow(0 4px 4px color-mix(in srgb, #000000 27%, transparent))
     drop-shadow(0 8px 12px color-mix(in srgb, #000000 13%, transparent));
+  transform: scale(0.74);
+  transform-origin: 50% 50%;
   will-change: background-position;
 }
 
 .myOwlTransitionMode-takeoff {
-  animation: myOwlTransitionTakeoff 1440ms linear both;
+  animation: myOwlTransitionTakeoff 900ms linear both;
 }
 
 .myOwlTransitionMode-landing {
-  animation: myOwlTransitionLanding 1440ms linear both;
+  animation: myOwlTransitionLanding 900ms linear both;
 }
 
 @keyframes myOwlFlightFrames {
@@ -936,11 +936,11 @@ a {
 }
 
 .myOwlPerchedAction-takeoff .myOwlPerchedMotion {
-  animation: myOwlPerchedTakeoff 680ms cubic-bezier(0.2, 0.74, 0.22, 1) both;
+  animation: myOwlPerchedTakeoff 900ms linear both;
 }
 
 .myOwlPerchedAction-landing .myOwlPerchedMotion {
-  animation: myOwlPerchedLanding 860ms cubic-bezier(0.2, 0.74, 0.22, 1) both;
+  animation: myOwlPerchedLanding 900ms linear both;
 }
 
 .myOwlPerchedAction-takeoff .myOwlPerchedHead {
@@ -963,36 +963,35 @@ a {
 }
 
 .myOwlPerchedAction-takeoff .myOwlPerchedShadow {
-  animation: myOwlPerchedShadowTakeoff 680ms cubic-bezier(0.2, 0.74, 0.22, 1) both;
+  animation: myOwlPerchedShadowTakeoff 900ms linear both;
 }
 
 .myOwlPerchedAction-landing .myOwlPerchedShadow {
-  animation: myOwlPerchedShadowLanding 860ms cubic-bezier(0.2, 0.74, 0.22, 1) both;
+  animation: myOwlPerchedShadowLanding 900ms linear both;
 }
 
 @keyframes myOwlTransitionTakeoff {
   0% {
     opacity: 0;
   }
-  8%,
-  56% {
+  12%,
+  76% {
     opacity: 1;
   }
-  82%,
   100% {
     opacity: 0;
   }
 }
 
 @keyframes myOwlTransitionLanding {
-  0% {
+  0%,
+  28% {
     opacity: 0;
   }
-  14%,
-  72% {
+  42%,
+  76% {
     opacity: 1;
   }
-  96%,
   100% {
     opacity: 0;
   }
@@ -1032,36 +1031,34 @@ a {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-  22% {
+  16% {
     opacity: 1;
     transform: translateY(1px) scale(1.018, 0.982);
   }
-  52% {
-    opacity: 0.42;
-    transform: translateY(-3px) scale(0.995, 1.008);
+  32% {
+    opacity: 0.34;
+    transform: translateY(-1px) scale(1.006, 0.994);
   }
+  44%,
   100% {
     opacity: 0;
-    transform: translateY(-7px) scale(0.985, 1.015);
+    transform: translateY(-5px) scale(0.99, 1.01);
   }
 }
 
 @keyframes myOwlPerchedLanding {
-  0% {
+  0%,
+  54% {
     opacity: 0;
     transform: translateY(-7px) scale(0.985, 1.015);
   }
-  34% {
-    opacity: 0.34;
+  68% {
+    opacity: 0.22;
     transform: translateY(-3px) scale(0.995, 1.008);
   }
-  62% {
-    opacity: 0.92;
+  84% {
+    opacity: 0.9;
     transform: translateY(1px) scale(1.018, 0.982);
-  }
-  82% {
-    opacity: 1;
-    transform: translateY(-0.5px) scale(0.997, 1.003);
   }
   100% {
     opacity: 1;
