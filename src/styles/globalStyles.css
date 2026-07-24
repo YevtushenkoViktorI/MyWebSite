@@ -431,7 +431,7 @@ a {
 
 .myOwlPerchedPhase-landing {
   opacity: 1;
-  transition: none;
+  transition: opacity 220ms ease-out;
 }
 
 .myOwlPerchedMotion,
