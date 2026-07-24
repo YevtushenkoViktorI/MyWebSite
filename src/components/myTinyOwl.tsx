@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import { myAssetPath } from "../utils/myAssetPath";
 
 type myOwlAction = "idle" | "lookLeft" | "lookRight" | "watchUp" | "watchDown" | "ruffle" | "takeoff" | "landing";
@@ -7,6 +7,11 @@ type myOwlPhase = "perched" | "preparing" | "flying" | "landing";
 type myOwlCorner = "header" | "topLeft" | "topRight";
 type myOwlFlightMode = "patrol" | "landing";
 type myOwlVisualTheme = "snowy" | "black";
+
+type myOwlVector = {
+  myX: number;
+  myY: number;
+};
 
 type myOwlPerch = {
   myX: number;
@@ -22,9 +27,12 @@ type myOwlFlight = {
   myMode: myOwlFlightMode;
   myFadeIn: boolean;
   myFadeOut: boolean;
+  myStartVelocity: myOwlVector;
+  myEndVelocity: myOwlVector;
 };
 
 const myPerchedOwlHeight = 47;
+const myPerchClearance = 3;
 const myTakeoffLaunchDelay = 80;
 const myTakeoffHandoffDelay = 650;
 const myLandingOverlapDuration = 480;
@@ -110,7 +118,7 @@ function myFindTopVisibleFrame(myCurrentPerch: myOwlPerch | null): myOwlPerch | 
   return {
     myX: myPreferLeft ? myLeft : myRight,
     myY: myClamp(
-      myRect.top - myPerchedOwlHeight / 2 + 1,
+      myRect.top - myPerchedOwlHeight / 2 - myPerchClearance,
       myPerchedOwlHeight / 2 + 4,
       myViewportHeight - myPerchedOwlHeight / 2 - 4
     ),
@@ -174,15 +182,15 @@ export function MyTinyOwl() {
   const myLastScrollYRef = useRef(0);
   const myLastInteractionAtRef = useRef(Date.now());
   const myAirSegmentIndexRef = useRef(0);
+  const myFlightVelocityRef = useRef<myOwlVector>({ myX: 0, myY: 0 });
   const myIsScrollingRef = useRef(false);
   const myReducedMotionRef = useRef(false);
   const myPrepareTimerRef = useRef(0);
   const myTakeoffHandoffTimerRef = useRef(0);
-  const myFlightTimerRef = useRef(0);
-  const myFlightEndTimerRef = useRef(0);
   const myLandingTimerRef = useRef(0);
   const myLandingSettleTimerRef = useRef(0);
   const myActionResetTimerRef = useRef(0);
+  const myFlightCompleteRef = useRef<(() => void) | null>(null);
   const myStartFlightSegmentRef = useRef<(
     myStart: myOwlPerch,
     myTarget: myOwlPerch,
@@ -230,23 +238,46 @@ export function MyTinyOwl() {
     const myDuration = myMode === "patrol"
       ? myClamp(1950 + myTravelDistance / 350 * 1000, 2300, 3300)
       : myClamp(1550 + myTravelDistance / 420 * 850, 1850, 2750);
+    const myStartVelocity = myFadeIn
+      ? { myX: 0, myY: 0 }
+      : { ...myFlightVelocityRef.current };
+    let myEndVelocity: myOwlVector = { myX: 0, myY: 0 };
+
+    if (myMode === "patrol") {
+      const myPreviewTarget = myGetAirborneTarget(myTarget, myAirSegmentIndexRef.current + 1);
+      const myTangentX = myPreviewTarget.myX - myStart.myX;
+      const myTangentY = myPreviewTarget.myY - myStart.myY;
+      const myTangentLength = Math.hypot(myTangentX, myTangentY) || 1;
+      const myTargetSpeed = myClamp(myTravelDistance / myDuration * 1.12, 0.09, 0.18);
+      myEndVelocity = {
+        myX: myTangentX / myTangentLength * myTargetSpeed,
+        myY: myTangentY / myTangentLength * myTargetSpeed
+      };
+    }
+
+    myFlightVelocityRef.current = myEndVelocity;
     const myNextFlight: myOwlFlight = {
       myStart,
       myTarget,
       myDuration,
       myMode,
       myFadeIn,
-      myFadeOut
+      myFadeOut,
+      myStartVelocity,
+      myEndVelocity
     };
 
-    window.clearTimeout(myFlightTimerRef.current);
-    window.clearTimeout(myFlightEndTimerRef.current);
     window.clearTimeout(myLandingTimerRef.current);
     window.clearTimeout(myLandingSettleTimerRef.current);
-    setMyFlight(myNextFlight);
+    myFlightCompleteRef.current = null;
+    if (myFadeIn) {
+      setMyFlight(myNextFlight);
+    } else {
+      flushSync(() => setMyFlight(myNextFlight));
+    }
 
     if (myMode === "patrol") {
-      myFlightTimerRef.current = window.setTimeout(() => {
+      myFlightCompleteRef.current = () => {
         if (myIsScrollingRef.current) {
           const myNextTarget = myGetAirborneTarget(myTarget, ++myAirSegmentIndexRef.current);
           myStartFlightSegmentRef.current(myTarget, myNextTarget, "patrol", false, false);
@@ -260,7 +291,7 @@ export function MyTinyOwl() {
         if (myLandingTarget) {
           myStartFlightSegmentRef.current(myTarget, myLandingTarget, "landing", false, true);
         }
-      }, myDuration);
+      };
       return;
     }
 
@@ -271,14 +302,15 @@ export function MyTinyOwl() {
       setMyAction("landing");
     }, myLandingStartDelay);
 
-    myFlightEndTimerRef.current = window.setTimeout(() => {
+    myFlightCompleteRef.current = () => {
       setMyFlight(null);
-    }, myDuration);
+    };
 
     myLandingSettleTimerRef.current = window.setTimeout(() => {
       myUpdatePhase("perched");
       setMyAction("idle");
       myLandingTargetRef.current = null;
+      myFlightVelocityRef.current = { myX: 0, myY: 0 };
 
       if (myIsScrollingRef.current) {
         window.requestAnimationFrame(() => myBeginScrollFlightRef.current());
@@ -299,6 +331,7 @@ export function MyTinyOwl() {
     window.clearTimeout(myTakeoffHandoffTimerRef.current);
     myLandingTargetRef.current = null;
     myAirSegmentIndexRef.current = 0;
+    myFlightVelocityRef.current = { myX: 0, myY: 0 };
     myUpdatePhase("preparing");
     setMyAction("takeoff");
 
@@ -438,7 +471,7 @@ export function MyTinyOwl() {
     };
   }, [myGetHeaderPerch, myUpdatePerch]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const myBird = myFlightBirdRef.current;
     if (!myFlight || !myBird) {
       return;
@@ -455,33 +488,65 @@ export function MyTinyOwl() {
     const myFlightHeight = myFlightWidth * 0.75;
     const myNeedsSideArc = Math.abs(myDeltaX) < 140;
     const mySideArc = myNeedsSideArc ? (myTarget.myX > window.innerWidth / 2 ? -94 : 94) : 0;
-    const myControlOne = {
-      myX: myStart.myX + myDeltaX * 0.3 + mySideArc,
-      myY: Math.min(myStart.myY, myTarget.myY) - myLift
-    };
-    const myControlTwo = {
-      myX: myTarget.myX - myDeltaX * 0.24 + mySideArc,
-      myY: Math.min(myStart.myY, myTarget.myY) - myLift * 0.76
-    };
     const myKeyframes: Keyframe[] = [];
     const myFrameCount = 120;
     const myTakeoffBlend = myClamp(460 / myFlight.myDuration, 0.16, 0.25);
     const myLandingBlend = myClamp(360 / myFlight.myDuration, 0.14, 0.22);
+    const myTakeoffHold = myFlight.myFadeIn
+      ? myClamp(320 / myFlight.myDuration, 0.12, 0.2)
+      : 0;
+    const myLandingHold = myFlight.myFadeOut
+      ? myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.18, 0.3)
+      : 0;
+    const myMovementDuration = myFlight.myDuration * (1 - myTakeoffHold - myLandingHold);
+    const myHandoffAdvance = myFlight.myFadeIn
+      ? 0
+      : myClamp(24 / myMovementDuration, 0, 0.018);
+    const myControlSafetyX = myFlightWidth * myFlightCruiseScale * 0.5 + 8;
+    const myControlSafetyY = myFlightHeight * myFlightCruiseScale * 0.5 + 8;
+    const myControlOne = {
+      myX: myFlight.myFadeIn
+        ? myStart.myX + myDeltaX * 0.3 + mySideArc
+        : myStart.myX + myFlight.myStartVelocity.myX * myMovementDuration / 3,
+      myY: myFlight.myFadeIn
+        ? Math.min(myStart.myY, myTarget.myY) - myLift
+        : myStart.myY + myFlight.myStartVelocity.myY * myMovementDuration / 3
+    };
+    const myControlTwo = {
+      myX: myTarget.myX - myFlight.myEndVelocity.myX * myMovementDuration / 3,
+      myY: myTarget.myY - myFlight.myEndVelocity.myY * myMovementDuration / 3
+    };
+    myControlOne.myX = myClamp(
+      myControlOne.myX,
+      myControlSafetyX,
+      window.innerWidth - myControlSafetyX
+    );
+    myControlOne.myY = myClamp(
+      myControlOne.myY,
+      myControlSafetyY,
+      window.innerHeight - myControlSafetyY
+    );
+    myControlTwo.myX = myClamp(
+      myControlTwo.myX,
+      myControlSafetyX,
+      window.innerWidth - myControlSafetyX
+    );
+    myControlTwo.myY = myClamp(
+      myControlTwo.myY,
+      myControlSafetyY,
+      window.innerHeight - myControlSafetyY
+    );
 
     for (let myIndex = 0; myIndex <= myFrameCount; myIndex += 1) {
       const myProgress = myIndex / myFrameCount;
-      const myTakeoffHold = myFlight.myFadeIn
-        ? myClamp(320 / myFlight.myDuration, 0.12, 0.2)
-        : 0;
-      const myLandingHold = myFlight.myFadeOut
-        ? myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.18, 0.3)
-        : 0;
       const myMotionProgress = myClamp(
         (myProgress - myTakeoffHold) / (1 - myTakeoffHold - myLandingHold),
         0,
         1
       );
-      const myCurveProgress = mySmoothStep(myMotionProgress);
+      const myCurveProgress = myFlight.myFadeIn
+        ? myMotionProgress * myMotionProgress * (2 - myMotionProgress)
+        : myHandoffAdvance + (1 - myHandoffAdvance) * myMotionProgress;
       const myInverse = 1 - myCurveProgress;
       const myRawX = myInverse ** 3 * myStart.myX
         + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myX
@@ -529,18 +594,25 @@ export function MyTinyOwl() {
       fill: "both",
       easing: "linear"
     });
+    myAnimation.onfinish = () => {
+      const myCompleteFlight = myFlightCompleteRef.current;
+      myFlightCompleteRef.current = null;
+      myCompleteFlight?.();
+    };
 
-    return () => myAnimation.cancel();
+    return () => {
+      myAnimation.onfinish = null;
+      myAnimation.cancel();
+    };
   }, [myFlight]);
 
   useEffect(() => () => {
     window.clearTimeout(myPrepareTimerRef.current);
     window.clearTimeout(myTakeoffHandoffTimerRef.current);
-    window.clearTimeout(myFlightTimerRef.current);
-    window.clearTimeout(myFlightEndTimerRef.current);
     window.clearTimeout(myLandingTimerRef.current);
     window.clearTimeout(myLandingSettleTimerRef.current);
     window.clearTimeout(myActionResetTimerRef.current);
+    myFlightCompleteRef.current = null;
   }, []);
 
   const myPerchedLayer = myPerch ? createPortal(
