@@ -37,23 +37,15 @@ const myTakeoffLaunchDelay = 80;
 const myTakeoffHandoffDelay = 360;
 const myTakeoffDuration = 1360;
 const myLandingDuration = 1360;
-const myLandingOverlapDuration = 240;
-const myLandingSettleDuration = 320;
+const myLandingOverlapDuration = 360;
+const myLandingSettleDuration = 720;
 const myFlightTakeoffScale = 0.74;
 const myFlightLandingScale = 0.74;
 const myFlightApproachScale = 0.76;
 const myFlightCruiseScale = 0.78;
 const myOwlFlightAssets = {
-  snowy: {
-    takeoff: "/mascot/owl-snowy-takeoff-cinematic-60fps.webp",
-    flight: "/mascot/owl-snowy-flight-cinematic-60fps.webp",
-    landing: "/mascot/owl-snowy-landing-cinematic-60fps.webp"
-  },
-  black: {
-    takeoff: "/mascot/owl-black-takeoff-cinematic-60fps.webp",
-    flight: "/mascot/owl-black-flight-cinematic-60fps.webp",
-    landing: "/mascot/owl-black-landing-cinematic-60fps.webp"
-  }
+  snowy: "/mascot/owl-snowy-flight-seamless-60fps.webp",
+  black: "/mascot/owl-black-flight-seamless-60fps.webp"
 } as const;
 const myFrameSelector = [
   "main .mySection",
@@ -266,12 +258,7 @@ export function MyTinyOwl() {
     myFadeOut: boolean
   ) => void>(() => undefined);
   const myBeginScrollFlightRef = useRef<() => void>(() => undefined);
-  const myThemeFlightAssets = myOwlFlightAssets[myVisualTheme];
-  const myFlightAnimation = myFlight?.myMode === "takeoff"
-    ? myThemeFlightAssets.takeoff
-    : myFlight?.myMode === "landing"
-      ? myThemeFlightAssets.landing
-      : myThemeFlightAssets.flight;
+  const myFlightAnimation = myOwlFlightAssets[myVisualTheme];
 
   const myUpdatePerch = useCallback((myNextPerch: myOwlPerch) => {
     myPerchRef.current = myNextPerch;
@@ -481,42 +468,14 @@ export function MyTinyOwl() {
   }, []);
 
   useEffect(() => {
-    let myCancelled = false;
-    const myPreloadedImages: HTMLImageElement[] = [];
-
-    const myPreloadAnimations = async () => {
-      for (const myAsset of [
-        myThemeFlightAssets.takeoff,
-        myThemeFlightAssets.flight,
-        myThemeFlightAssets.landing
-      ]) {
-        if (myCancelled) {
-          return;
-        }
-
-        const myPreloadedImage = new Image();
-        myPreloadedImages.push(myPreloadedImage);
-        const myLoaded = new Promise<void>((myResolve) => {
-          myPreloadedImage.onload = () => myResolve();
-          myPreloadedImage.onerror = () => myResolve();
-        });
-        myPreloadedImage.src = myAssetPath(myAsset);
-        await myLoaded;
-        await myPreloadedImage.decode().catch(() => undefined);
-        await new Promise<void>((myResolve) => window.setTimeout(myResolve, 0));
-      }
-    };
-
-    void myPreloadAnimations();
+    const myPreloadedImage = new Image();
+    myPreloadedImage.src = myAssetPath(myFlightAnimation);
+    void myPreloadedImage.decode().catch(() => undefined);
 
     return () => {
-      myCancelled = true;
-      myPreloadedImages.forEach((myPreloadedImage) => {
-        myPreloadedImage.onload = null;
-        myPreloadedImage.onerror = null;
-      });
+      myPreloadedImage.src = "";
     };
-  }, [myThemeFlightAssets]);
+  }, [myFlightAnimation]);
 
   useEffect(() => {
     myReducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -640,9 +599,6 @@ export function MyTinyOwl() {
       ? myClamp(myLandingOverlapDuration / myFlight.myDuration, 0.18, 0.3)
       : 0;
     const myMovementDuration = myFlight.myDuration * (1 - myTakeoffHold - myLandingHold);
-    const myHandoffAdvance = myFlight.myFadeIn
-      ? 0
-      : myClamp(24 / myMovementDuration, 0, 0.018);
     const myControlSafetyX = myFlightWidth * myFlightCruiseScale * 0.5 + 8;
     const myControlSafetyY = myFlightHeight * myFlightCruiseScale * 0.5 + 8;
     const myControlOne = {
@@ -687,7 +643,7 @@ export function MyTinyOwl() {
       );
       const myCurveProgress = myFlight.myFadeIn
         ? myMotionProgress * myMotionProgress * (2 - myMotionProgress)
-        : myHandoffAdvance + (1 - myHandoffAdvance) * myMotionProgress;
+        : myMotionProgress;
       const myInverse = 1 - myCurveProgress;
       const myRawX = myInverse ** 3 * myStart.myX
         + 3 * myInverse ** 2 * myCurveProgress * myControlOne.myX
