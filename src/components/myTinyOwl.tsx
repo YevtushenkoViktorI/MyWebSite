@@ -37,7 +37,7 @@ const myTakeoffLaunchDelay = 80;
 const myTakeoffHandoffDelay = 360;
 const myTakeoffDuration = 1360;
 const myLandingDuration = 1360;
-const myLandingOverlapDuration = 360;
+const myLandingOverlapDuration = 720;
 const myLandingSettleDuration = 720;
 const myFlightTakeoffScale = 0.74;
 const myFlightLandingScale = 0.62;
@@ -50,6 +50,10 @@ const myOwlFlightAssets = {
 const myOwlLandingAssets = {
   snowy: "/mascot/owl-snowy-landing-cinematic-60fps.webp",
   black: "/mascot/owl-black-landing-cinematic-60fps.webp"
+} as const;
+const myOwlPerchedAssets = {
+  snowy: "/mascot/owl-snowy.png",
+  black: "/mascot/owl-black.png"
 } as const;
 const myFrameSelector = [
   "main .mySection",
@@ -264,6 +268,7 @@ export function MyTinyOwl() {
   const myBeginScrollFlightRef = useRef<() => void>(() => undefined);
   const myFlightAnimation = myOwlFlightAssets[myVisualTheme];
   const myLandingAnimation = myOwlLandingAssets[myVisualTheme];
+  const myLandingPose = myOwlPerchedAssets[myVisualTheme];
 
   const myUpdatePerch = useCallback((myNextPerch: myOwlPerch) => {
     myPerchRef.current = myNextPerch;
@@ -473,7 +478,11 @@ export function MyTinyOwl() {
   }, []);
 
   useEffect(() => {
-    const myPreloadedImages = [myFlightAnimation, myLandingAnimation].map((myAnimation) => {
+    const myPreloadedImages = [
+      myFlightAnimation,
+      myLandingAnimation,
+      myLandingPose
+    ].map((myAnimation) => {
       const myPreloadedImage = new Image();
       myPreloadedImage.src = myAssetPath(myAnimation);
       void myPreloadedImage.decode().catch(() => undefined);
@@ -485,7 +494,7 @@ export function MyTinyOwl() {
         myPreloadedImage.src = "";
       });
     };
-  }, [myFlightAnimation, myLandingAnimation]);
+  }, [myFlightAnimation, myLandingAnimation, myLandingPose]);
 
   useEffect(() => {
     myReducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -801,15 +810,26 @@ export function MyTinyOwl() {
           draggable={false}
         />
         {myFlight.myMode === "landing" ? (
-          <img
-            className="myOwlFlightImage myOwlLandingSequenceImage"
-            src={myAssetPath(myLandingAnimation)}
-            alt=""
-            width="256"
-            height="192"
-            decoding="async"
-            draggable={false}
-          />
+          <>
+            <img
+              className="myOwlFlightImage myOwlLandingSequenceImage"
+              src={myAssetPath(myLandingAnimation)}
+              alt=""
+              width="256"
+              height="192"
+              decoding="async"
+              draggable={false}
+            />
+            <img
+              className="myOwlFlightImage myOwlLandingPoseImage"
+              src={myAssetPath(myLandingPose)}
+              alt=""
+              width={myVisualTheme === "snowy" ? 209 : 202}
+              height="384"
+              decoding="async"
+              draggable={false}
+            />
+          </>
         ) : null}
       </span>
     </span>,
