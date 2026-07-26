@@ -410,6 +410,37 @@ a {
   transform-origin: 50% 52%;
 }
 
+.myOwlFlightLoopImage {
+  opacity: 1;
+}
+
+.myOwlLandingSequenceImage {
+  opacity: 0;
+  animation: myOwlLandingSequenceReveal 340ms cubic-bezier(0.22, 0.7, 0.22, 1) both;
+}
+
+.myOwlFlightMode-landing .myOwlFlightLoopImage {
+  animation: myOwlFlightLoopConceal 340ms cubic-bezier(0.22, 0.7, 0.22, 1) both;
+}
+
+@keyframes myOwlFlightLoopConceal {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes myOwlLandingSequenceReveal {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .myOwlPerchedAnchor {
   position: fixed;
   z-index: 72;
