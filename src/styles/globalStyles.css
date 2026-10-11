@@ -416,13 +416,17 @@ a {
 
 .myOwlLandingSequenceImage {
   opacity: 0;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 1200% 800%;
+  transform-origin: 0 0;
   animation: myOwlLandingSequenceBlend 1360ms linear both;
 }
 
 .myOwlLandingPoseImage {
   opacity: 0;
   filter: drop-shadow(0 2px 2px color-mix(in srgb, #000000 28%, transparent));
-  transform: scale(0.65);
+  transform: scale(0.36);
   animation: myOwlLandingPoseReveal 1360ms linear both;
 }
 
@@ -445,10 +449,10 @@ a {
     opacity: 0;
   }
   20%,
-  24% {
+  72% {
     opacity: 1;
   }
-  57%,
+  90%,
   100% {
     opacity: 0;
   }
@@ -456,21 +460,17 @@ a {
 
 @keyframes myOwlLandingPoseReveal {
   0%,
-  24% {
+  72% {
     opacity: 0;
-    transform: scale(0.65);
+    transform: scale(0.36);
   }
-  57% {
-    opacity: 1;
-    transform: scale(0.65);
-  }
-  78% {
+  90% {
     opacity: 1;
     transform: scale(0.65);
   }
   100% {
     opacity: 1;
-    transform: scale(0.82);
+    transform: scale(0.81);
   }
 }
 
@@ -664,21 +664,9 @@ a {
 
 @keyframes myOwlPerchedLanding {
   0%,
-  44% {
+  100% {
     opacity: 0;
     transform: translateY(-7px) scale(0.985, 1.015);
-  }
-  62% {
-    opacity: 0.34;
-    transform: translateY(-4px) scale(0.994, 1.009);
-  }
-  82% {
-    opacity: 0.82;
-    transform: translateY(0.7px) scale(1.012, 0.988);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
