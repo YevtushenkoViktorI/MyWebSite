@@ -1,3 +1,5 @@
 User-agent: *
+Allow: /
 Disallow: /certificates/
-Disallow: /MyWebSite/certificates/
+
+Sitemap: https://viktoryevtushenko.com/sitemap.xml

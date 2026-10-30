@@ -13,12 +13,18 @@ npm run dev
 npm run build
 ```
 
-## GitHub Pages
+## Cloudflare Pages
 
-- Use **GitHub Actions** as Pages source.
-- This repo is configured for project path deployment via `.env.production`:
-  - `VITE_BASE_PATH=/MyWebSite/`
-- Do not publish raw `main` source as static site root; publish built `dist` artifact (workflow already does this).
+The production site is built for `https://viktoryevtushenko.com/` and deployed
+from the private GitHub repository through Cloudflare Pages Git integration.
+
+- Production branch: `main`
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Root directory: repository root
+- Production base path: `/`
+
+Cloudflare Pages rebuilds and deploys the site after each push to `main`.
 
 ## Fonts
 
