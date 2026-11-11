@@ -286,6 +286,12 @@ export const myDe: myTranslation = {
     myClosePreviewLabel: "Vorschau schliessen",
     myItems: [
       {
+        myTitle: "Precision Engineering",
+        myPlace: "Universitaet Bern (UniBern), Schweiz",
+        myPeriod: "2026 - heute",
+        mySummary: "Aktuelles Studium in Precision Engineering an der Universitaet Bern zur Vertiefung fortgeschrittener Engineering-Kenntnisse und praktischer Problemloesungskompetenzen."
+      },
+      {
         myTitle: "Bachelor of Applied Science (BASc), Nanotechnologie",
         myPlace: "Nationale Technische Universitaet \"Kharkiv Polytechnic Institute\", Ukraine",
         myPeriod: "Sep 2010 - Jun 2014",

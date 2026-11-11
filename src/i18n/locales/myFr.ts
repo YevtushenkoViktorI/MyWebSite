@@ -286,6 +286,12 @@ export const myFr: myTranslation = {
     myClosePreviewLabel: "Fermer l'apercu",
     myItems: [
       {
+        myTitle: "Precision Engineering",
+        myPlace: "Universite de Berne (UniBern), Suisse",
+        myPeriod: "2026 - aujourd'hui",
+        mySummary: "Etudes actuelles en Precision Engineering a l'Universite de Berne afin d'approfondir les connaissances en ingenierie et les competences pratiques de resolution de problemes."
+      },
+      {
         myTitle: "Bachelor of Applied Science (BASc), Nanotechnologie",
         myPlace: "National Technical University \"Kharkiv Polytechnic Institute\", Ukraine",
         myPeriod: "Sep 2010 - Jun 2014",

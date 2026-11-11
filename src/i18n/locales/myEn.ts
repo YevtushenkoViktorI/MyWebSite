@@ -378,6 +378,12 @@ export const myEn: myTranslation = {
     myClosePreviewLabel: "Close preview",
     myItems: [
       {
+        myTitle: "Precision Engineering",
+        myPlace: "University of Bern (UniBern), Switzerland",
+        myPeriod: "2026 - Present",
+        mySummary: "Currently studying Precision Engineering at the University of Bern, strengthening advanced engineering knowledge and practical problem-solving skills."
+      },
+      {
         myTitle: "Bachelor of Applied Science (BASc), Nanotechnology",
         myPlace: "National Technical University \"Kharkiv Polytechnic Institute\"",
         myPeriod: "Sep 2010 - Jun 2014",

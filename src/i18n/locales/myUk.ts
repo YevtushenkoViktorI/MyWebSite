@@ -378,6 +378,12 @@ export const myUk: myTranslation = {
     myClosePreviewLabel: "Закрити перегляд",
     myItems: [
       {
+        myTitle: "Precision Engineering",
+        myPlace: "Бернський університет (UniBern), Швейцарія",
+        myPeriod: "2026 - дотепер",
+        mySummary: "Наразі навчаюся за спеціальністю Precision Engineering у Бернському університеті, поглиблюючи інженерні знання та практичні навички розв'язання технічних задач."
+      },
+      {
         myTitle: "Бакалавр прикладних наук (BASc), Нанотехнології",
         myPlace: "Національний технічний університет «Харківський політехнічний інститут»",
         myPeriod: "Вер 2010 - Чер 2014",
